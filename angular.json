@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "proyecto-instituto-san-cristan-pictogramas": {
+    "proyecto-instituto-sacristan-pictogramas": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -58,10 +58,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "proyecto-instituto-san-cristan-pictogramas:build:production"
+              "buildTarget": "proyecto-instituto-sacristan-pictogramas:build:production"
             },
             "development": {
-              "buildTarget": "proyecto-instituto-san-cristan-pictogramas:build:development"
+              "buildTarget": "proyecto-instituto-sacristan-pictogramas:build:development"
             }
           },
           "defaultConfiguration": "development"
