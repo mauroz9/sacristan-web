@@ -94,3 +94,17 @@
 .btn-dark-blue:hover {
     background-color: #162e6b;
 }
+
+.step-card[draggable="true"] {
+    cursor: grab;
+}
+
+.step-card.dragging {
+    opacity: 0.4;
+    border: 2px dashed #999;
+    background-color: #f0f0f0;
+}
+
+.step-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}

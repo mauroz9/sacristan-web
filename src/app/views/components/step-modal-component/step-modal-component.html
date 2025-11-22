@@ -16,6 +16,7 @@
                         <div class="mb-3">
                             <label class="form-label text-primary-blue">Nombre del Paso</label>
                             <input type="text" class="form-control custom-input" formControlName="name">
+                            <!-- Añadir la comprobación del validator -->
                         </div>
 
                         <div class="mb-3">
@@ -29,6 +30,7 @@
                                 @for (cat of categories; track cat) {
                                     <span class="text-muted small pt-1">{{ cat }}</span>
                                 }
+                                <!-- Añadir la comprobación del validator -->
                             </div>
                         </div>
 
@@ -41,6 +43,7 @@
                                     <img [src]="imgUrl" alt="icon">
                                 </div>
                             }
+                            <!-- Añadir la comprobación del validator -->
                         </div>
 
                     </form>

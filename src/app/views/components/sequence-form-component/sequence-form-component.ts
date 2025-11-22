@@ -18,7 +18,8 @@ export class SequenceFormComponent {
     category: new FormControl('', Validators.required),
     steps: new FormArray([])
   });
-
+  
+  draggedIndex: number | null = null;
   showModal = false;
 
   constructor(private router: Router) {}
@@ -49,10 +50,35 @@ export class SequenceFormComponent {
     this.steps.removeAt(index);
   }
 
+  //Move Steps
+  onDragStart(index: number) {
+    this.draggedIndex = index;
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+    
+  moveStep(fromIndex: number, toIndex: number) {
+    const stepControl = this.steps.at(fromIndex);
+    this.steps.removeAt(fromIndex);
+    this.steps.insert(toIndex, stepControl);
+  }
+
+  onDrop(dropIndex: number) {
+    if (this.draggedIndex !== null && this.draggedIndex !== dropIndex) {
+      this.moveStep(this.draggedIndex, dropIndex);
+    }
+    this.draggedIndex = null;
+  }
+
+  //Save sequence
   onSubmit(){
     if(this.sequenceForm.valid){
       console.log(this.sequenceForm.value);
       this.router.navigate(["/sequences"]);
+    }else{
+      this.sequenceForm.markAllAsTouched();
     }
   }
 }
