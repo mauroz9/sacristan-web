@@ -5,6 +5,10 @@ export const routes: Routes = [
         path: 'sequences', 
         component: ContentListPage
     },
+        {
+        path: 'students/new',
+        component: ContentListPage
+    },
     {
         path: 'students',
         component: ContentListPage

@@ -56,6 +56,7 @@ export class ContentListPage {
 
   contentSequence: Content = {
     kind: "secuencia",
+    url: "/sequences",
     title: "Secuencia de pasos",
     subTitle: "Gestiona las secuencias de pictogramas para los estudiantes",
     gender: 0,
@@ -64,6 +65,7 @@ export class ContentListPage {
 
   contentAlumno: Content = {
     kind: "alumno",
+    url: "/students",
     title: "Listado de alumnos",
     subTitle: "Gestiona los alumnos del centro",
     gender: 1,
