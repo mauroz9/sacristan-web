@@ -10,7 +10,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class StepModalComponent {
   isVisible = input<Boolean>(false);
   close = output<void>();
-  save = output<{name: string, imageUrl: string}>();
+  save = output<{ name: string, imageUrl: string }>();
+
+  selectedCategory: string = 'Todas';
 
   stepForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -26,23 +28,27 @@ export class StepModalComponent {
 
   categories = ['Higiene', 'Alimentación', 'Vestirse', 'Rutina', 'Colegio', 'Casa'];
 
+  selectCategory(cat: string) {
+    this.selectedCategory = cat;
+  }
+
   selectImage(url: string) {
     this.stepForm.patchValue({ imageUrl: url });
   }
 
-  onSave(){
-    if(this.stepForm.valid){
+  onSave() {
+    if (this.stepForm.valid) {
       this.save.emit({
         name: this.stepForm.value.name!,
         imageUrl: this.stepForm.value.imageUrl!
       });
 
-    }else{
+    } else {
       this.stepForm.markAllAsTouched();
     }
   }
 
-  onClose(){
+  onClose() {
     this.close.emit();
     this.stepForm.reset();
   }

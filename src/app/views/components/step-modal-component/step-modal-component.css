@@ -49,3 +49,29 @@
     border: 3px solid var(--primary-blue);
     transform: scale(1.05);
 }
+
+.categories-box { 
+    background-color: #D9D9D9; 
+}
+
+.category-pill {
+    cursor: pointer;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    color: #6c757d;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.category-pill:hover {
+    color: var(--primary-blue);
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.category-pill.active {
+    background-color: var(--primary-blue);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
