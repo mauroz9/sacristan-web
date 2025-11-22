@@ -2,7 +2,7 @@ import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { StudentService } from '../../../logic/services/student-service';
 @Component({
   selector: 'app-new-student-modal-component',
   imports: [RouterLink, ReactiveFormsModule],
@@ -13,8 +13,7 @@ export class NewStudentModalComponent implements AfterViewInit {
 
   @ViewChild('modal') modal!: TemplateRef<any>;
 
-  constructor(private modalService: NgbModal, private router: Router) {}
-
+  constructor(private modalService: NgbModal, private router: Router, private studentService:StudentService) {}
 
   openModal(modalContent: TemplateRef<any>) {
     this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
@@ -38,7 +37,7 @@ export class NewStudentModalComponent implements AfterViewInit {
       const formData = this.studentFormGroup.value;
       // Process form data here
       this.modalService.dismissAll();
-      console.log(formData);      
+      this.studentService.addStudent(formData);
       this.router.navigate(['/students']);
     } else {
       this.studentFormGroup.markAllAsTouched();
