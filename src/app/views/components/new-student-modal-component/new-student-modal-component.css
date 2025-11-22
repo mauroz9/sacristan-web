@@ -1,0 +1,59 @@
+/* Variables de color (puedes moverlas a styles.css global si prefieres) */
+:host {
+    --primary-blue: #1F3C8B;
+    --input-bg: #E0E0E0;
+}
+
+.text-primary-blue {
+    color: var(--primary-blue) !important;
+}
+
+/* Borde azul superior del modal */
+.student-modal-content {
+    border-radius: 8px;
+    width: 100%;
+}
+
+/* Estilo personalizado para inputs y selects (fondo gris) */
+.custom-input {
+    background-color: #d0d0d0; /* Un poco más oscuro al hacer foco */
+    border: none;
+    padding: 10px 15px;
+}
+
+/* Área de subida de fotos */
+.upload-area {
+    border: 2px dashed #ccc; /* Borde discontinuo */
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 150px;
+}
+
+.upload-area:hover {
+    background-color: #e9ecef;
+    border-color: var(--primary-blue);
+    color: var(--primary-blue) !important;
+}
+
+/* Input file oculto que cubre el área */
+.file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Botón principal azul */
+.btn-primary-blue {
+    background-color: var(--primary-blue);
+    color: white;
+}
+.btn-primary-blue:hover {
+    background-color: #162e6b; /* Un azul un poco más oscuro */
+    color: white;
+}
