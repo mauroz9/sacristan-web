@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -9,22 +9,13 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './new-student-modal-component.html',
   styleUrl: './new-student-modal-component.css',
 })
-export class NewStudentModalComponent implements AfterViewInit {
+export class NewStudentModalComponent implements OnInit, AfterViewInit {
 
   @ViewChild('modal') modal!: TemplateRef<any>;
 
-  studentFormGroup: FormGroup;
+  studentFormGroup!: FormGroup;
 
-  constructor(private modalService: NgbModal, private router: Router) {
-    this.studentFormGroup = new FormGroup({
-      // Define form controls here as needed
-      nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
-      lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
-      gradeFormControl: new FormControl('',[Validators.required]),
-      disabilityFormControl: new FormControl(null, [this.fileRequiredValidator]),
-      photoFormControl: new FormControl(null, [this.fileRequiredValidator]),
-    });
-  }
+  constructor(private modalService: NgbModal, private router: Router) {}
 
   // Custom validator for file inputs
   fileRequiredValidator = (control: AbstractControl): ValidationErrors | null => {
@@ -35,6 +26,16 @@ export class NewStudentModalComponent implements AfterViewInit {
     return null;
   };
 
+  ngOnInit(): void {
+    this.studentFormGroup = new FormGroup({
+      // Define form controls here as needed
+      nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
+      lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
+      gradeFormControl: new FormControl('',[Validators.required]),
+      disabilityFormControl: new FormControl(null, [this.fileRequiredValidator]),
+      photoFormControl: new FormControl(null, [this.fileRequiredValidator]),
+    });
+  }
 
   openModal(modalContent: TemplateRef<any>) {
     this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
