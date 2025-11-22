@@ -3,7 +3,7 @@ import { Content } from '../../../logic/interfaces/content-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
 import { Student } from '../../../logic/interfaces/student-interface';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-sequence-list-page',
   imports: [ContentListComponent],
