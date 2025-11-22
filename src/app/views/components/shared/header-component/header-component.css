@@ -1,0 +1,34 @@
+.custom-navbar {
+    background-color: var(--primary-blue);
+    border-bottom: 3px solid var(--secondary-yellow);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.brand-title {
+    color: white;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.brand-subtitle {
+    color: var(--secondary-yellow);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    border-right: 2px solid var(--secondary-yellow);
+    height: 50px;
+}
+
+.logo-img {
+    max-height: 50px; 
+    width: auto;
+    display: block;
+}
