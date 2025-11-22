@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-blue: #1F3C8B;
+    --secondary-yellow: #F4C430;
+}
+
+body {
+    background-color: var(--primary-blue);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+}
