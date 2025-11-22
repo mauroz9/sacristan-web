@@ -1,7 +1,6 @@
-import { Component, input, OnInit } from '@angular/core';
-import { Sequence } from '../../../logic/interfaces/sequence-interface';
-import { Content } from '../../../logic/interfaces/content-interface';
+import { Component, input } from '@angular/core';
 import { SequenceRowComponent } from '../sequence-row-component/sequence-row-component';
+import { Content } from '../../../../logic/interfaces/content-interface';
 
 @Component({
   selector: 'app-content-list-component',
@@ -9,11 +8,8 @@ import { SequenceRowComponent } from '../sequence-row-component/sequence-row-com
   templateUrl: './content-list-component.html',
   styleUrl: './content-list-component.css',
 })
-export class ContentListComponent implements OnInit {
+export class ContentListComponent {
 
     content = input<Content>();
 
-    ngOnInit(): void {
-      console.log(this.content()?.contentList);
-    }
 }

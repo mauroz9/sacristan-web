@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import { Sequence } from '../../../logic/interfaces/sequence-interface';
-import { ActionButtonsComponent } from "../shared/action-buttons-component/action-buttons-component";
+import { ActionButtonsComponent } from '../../shared/action-buttons-component/action-buttons-component';
+import { Sequence } from '../../../../logic/interfaces/sequence-interface';
 
 @Component({
   selector: 'app-sequence-row-component',

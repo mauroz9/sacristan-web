@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ContentListComponent } from "../../components/content-list-component/content-list-component";
 import { Content, Student } from '../../../logic/interfaces/content-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
+import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
 @Component({
   selector: 'app-sequence-list-page',
   imports: [ContentListComponent],
