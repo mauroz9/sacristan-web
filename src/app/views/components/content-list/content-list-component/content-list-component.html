@@ -22,7 +22,7 @@
                 @if (item.kind == 'secuencia') {
                     <app-sequence-row-component [sequence]="item"></app-sequence-row-component>
                 } @else if (item.kind == 'alumno') {
-                    <!-- TODO: Implement student row component -->
+                    <app-student-row-component [student]="item"></app-student-row-component>
                 } @else {
                     <div class="text-center py-5 text-muted">
                         <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
