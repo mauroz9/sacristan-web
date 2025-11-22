@@ -10,5 +10,5 @@ import { MenuComponent } from "./views/components/shared/menu-component/menu-com
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('proyecto-instituto-san-cristan-pictogramas');
+  protected readonly title = signal('proyecto-instituto-sacristan-pictogramas');
 }
