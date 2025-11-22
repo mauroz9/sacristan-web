@@ -1,8 +1,17 @@
 import { Routes } from '@angular/router';
-import { SequenceListPage } from './pages/sequence-list-page/sequence-list-page';
-
+import { ContentListPage } from './views/pages/content-list-page/content-list-page';
 export const routes: Routes = [
-    {path: 'sequences', component: SequenceListPage},
-    {path: '', redirectTo: '/sequences', pathMatch: 'full'},
-    {path: '**', redirectTo: '/sequences', pathMatch: 'full'},
+    {
+        path: 'sequences', 
+        component: ContentListPage
+    },
+    {
+        path: '', 
+        redirectTo: '/sequences', 
+        pathMatch: 'full'},
+    {
+        path: '**', 
+        redirectTo: '/sequences', 
+        pathMatch: 'full'
+    },
 ];

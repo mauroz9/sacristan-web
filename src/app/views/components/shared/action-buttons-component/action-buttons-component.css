@@ -1,0 +1,20 @@
+.action-buttons-group {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.icon-action {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.icon-copy { color: #94A3B8; }
+.icon-copy:hover { color: #64748B; }
+
+.icon-edit { color: #3B82F6; } 
+.icon-edit:hover { color: #1F3C8B; }
+
+.icon-delete { color: #EF4444; } 
+.icon-delete:hover { color: #DC2626; }
