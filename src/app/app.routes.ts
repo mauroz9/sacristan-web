@@ -5,12 +5,12 @@ export const routes: Routes = [
         path: 'sequences', 
         component: ContentListPage
     },
-    {
-        path: 'students',
+        {
+        path: 'students/new',
         component: ContentListPage
     },
     {
-        path: 'students/new',
+        path: 'students',
         component: ContentListPage
     },
     {

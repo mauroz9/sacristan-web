@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { SequenceRowComponent } from '../sequence-row-component/sequence-row-component';
 import { Content } from '../../../../logic/interfaces/content-interface';
 import { StudentRowComponent } from "../student-row-component/student-row-component";

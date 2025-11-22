@@ -28,7 +28,7 @@ export class NewStudentModalComponent implements AfterViewInit {
     // Define form controls here as needed
     nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
     lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
-    gradeFormControl: new FormControl('',[Validators.required]),
+    gradeFormControl: new FormControl('',[Validators.required, ]),
     disabilityFormControl: new FormControl('',[Validators.required]),
     photoFormControl: new FormControl('',[Validators.required]),
   });
