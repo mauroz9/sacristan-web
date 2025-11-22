@@ -4,8 +4,11 @@ import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
 import { Student } from '../../../logic/interfaces/student-interface';
 import { Router } from '@angular/router';
+import { StudentService } from '../../../logic/services/student-service';
+import { HeaderComponent } from "../../components/shared/header-component/header-component";
+import { MenuComponent } from "../../components/shared/menu-component/menu-component";
 @Component({
-  selector: 'app-sequence-list-page',
+  selector: 'app-content-list-page',
   imports: [ContentListComponent],
   templateUrl: './content-list-page.html',
   styleUrl: './content-list-page.css',
@@ -43,17 +46,6 @@ export class ContentListPage {
     }
   ];
 
-  studentList: Student[] = [
-    {
-      kind: 'alumno',
-      id: 1,
-      name: 'Juan Pérez',
-      grade: '3º de Primaria',
-      assignedSequences: 5
-    },
-  ];
-
-
   contentSequence: Content = {
     kind: "secuencia",
     url: "/sequences",
@@ -63,23 +55,14 @@ export class ContentListPage {
     contentList: this.sequenceList
   }
 
-  contentAlumno: Content = {
-    kind: "alumno",
-    url: "/students",
-    title: "Listado de alumnos",
-    subTitle: "Gestiona los alumnos del centro",
-    gender: 1,
-    contentList: this.studentList
-  }
-
   content: Content = this.contentSequence;
 
-  constructor(private router: Router){
+  constructor(private router: Router, private studentService: StudentService) {
     this.url = this.router.url;
     if(this.url.includes('sequences')){
       this.content = this.contentSequence;
     } else if(this.url.includes('students')){
-      this.content = this.contentAlumno;
+      this.content = this.studentService.contentAlumno;
     }
   }
 }
