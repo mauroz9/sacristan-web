@@ -5,8 +5,8 @@ import { ContentListComponent } from '../../components/content-list/content-list
 import { Student } from '../../../logic/interfaces/student-interface';
 import { Router } from '@angular/router';
 import { StudentService } from '../../../logic/services/student-service';
-import { HeaderComponent } from "../../components/shared/header-component/header-component";
-import { MenuComponent } from "../../components/shared/menu-component/menu-component";
+
+
 @Component({
   selector: 'app-content-list-page',
   imports: [ContentListComponent],
