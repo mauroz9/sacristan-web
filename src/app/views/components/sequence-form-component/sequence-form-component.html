@@ -1,0 +1,94 @@
+<div class="container py-5">
+    <div class="form-container bg-white p-4 rounded-4 shadow-sm">
+
+        <h2 class="page-title mb-1">Nueva Secuencia</h2>
+        <p class="text-muted mb-4">Define los pasos de la secuencia con pictogramas</p>
+
+        <form [formGroup]="sequenceForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label class="form-label text-primary-blue fw-semibold">Título de la secuencia</label>
+                <input type="text" class="form-control custom-input" formControlName="title">
+                @if(sequenceForm.get('title')?.touched && sequenceForm.get('title')?.invalid){
+                <p class="invalid-feedback d-block">Debes indicar un Título</p>
+                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-primary-blue fw-semibold">Descripción</label>
+                <input type="text" class="form-control custom-input" formControlName="description">
+                @if(sequenceForm.get('description')?.touched && sequenceForm.get('title')?.invalid){
+                <p class="invalid-feedback d-block">Debes indicar una Descripción</p>
+                }
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label text-primary-blue fw-semibold">Categoría</label>
+                <select class="form-select custom-input" formControlName="category">
+                    <option value="Material">Material</option>
+                    <option value="Higiene">Higiene</option>
+                    <option value="Rutina">Rutina</option>
+                </select>
+                @if(sequenceForm.get('category')?.touched && sequenceForm.get('category')?.invalid){
+                <p class="invalid-feedback d-block">Debes escoger una Categoría</p>
+                }
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-primary-blue fw-bold mb-0">Pasos</h5>
+                <button type="button" class="btn btn-yellow" (click)="openModal()">
+                    <i class="bi bi-plus-lg me-1"></i> Añadir Paso
+                </button>
+            </div>
+
+            <div class="steps-list mb-5" formArrayName="steps">
+
+                @for (step of steps.controls; track step; let i = $index) {
+
+                <div [formGroupName]="i" class="card step-card mb-3">
+                    <div class="card-body d-flex align-items-center p-3">
+
+                        <div class="drag-handle me-3 text-muted">
+                            <i class="bi bi-grid-3x2-gap-fill fs-5"></i>
+                        </div>
+
+                        <div class="picto-container me-4">
+                            <img [src]="step.get('imageUrl')?.value" alt="Pictograma" class="img-fluid rounded-circle">
+                        </div>
+
+                        <div class="badge-step me-3">
+                            Paso {{ i + 1 }}
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <input type="text"
+                                class="form-control border-0 bg-transparent fw-bold text-primary-blue fs-5 p-0"
+                                formControlName="description" readonly>
+                        </div>
+
+                        <button type="button" class="btn text-danger border-0" (click)="removeStep(i)">
+                            <i class="bi bi-trash fs-4"></i>
+                        </button>
+
+                    </div>
+                </div>
+                }
+
+                @if (steps.length === 0) {
+                <div class="text-center text-muted py-4 border rounded-3 bg-light mt-3">
+                    No hay pasos añadidos. ¡Dale al botón amarillo!
+                </div>
+                }
+
+            </div>
+
+            <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+                <button type="button" class="btn btn-outline-secondary px-4" routerLink="/sequences">Cancelar</button>
+                <button type="submit" class="btn btn-dark-blue px-4">Guardar Cambios</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<app-step-modal-component [isVisible]="showModal" (close)="closeModal()" (save)="handleSaveStep($event)">
+</app-step-modal-component>

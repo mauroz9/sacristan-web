@@ -1,0 +1,57 @@
+@if (isVisible()) {
+    <div class="modal-backdrop fade show"></div>
+    
+    <div class="modal fade show d-block" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 p-3">
+                
+                <div class="modal-header border-0">
+                    <h4 class="modal-title text-primary-blue">Añadir Nuevo Paso</h4>
+                    <button type="button" class="btn-close" (click)="onClose()"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form [formGroup]="stepForm">
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-primary-blue">Nombre del Paso</label>
+                            <input type="text" class="form-control custom-input" formControlName="name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-primary-blue">Buscar Pictograma</label>
+                            <input type="text" class="form-control custom-input" placeholder="Escribe para buscar...">
+                        </div>
+
+                        <div class="categories-box p-3 rounded-3 mb-4">
+                            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                <span class="badge bg-primary-blue">Todas</span>
+                                @for (cat of categories; track cat) {
+                                    <span class="text-muted small pt-1">{{ cat }}</span>
+                                }
+                            </div>
+                        </div>
+
+                        <label class="form-label text-primary-blue mb-2">Selecciona una imagen:</label>
+                        <div class="d-flex gap-3">
+                            @for (imgUrl of availableIcons; track imgUrl) {
+                                <div class="pictogram-option" 
+                                     [class.selected]="stepForm.get('imageUrl')?.value === imgUrl"
+                                     (click)="selectImage(imgUrl)">
+                                    <img [src]="imgUrl" alt="icon">
+                                </div>
+                            }
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary px-4" (click)="onClose()">Cancelar</button>
+                    <button type="button" class="btn btn-dark-blue px-4" (click)="onSave()">Guardar Cambios</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

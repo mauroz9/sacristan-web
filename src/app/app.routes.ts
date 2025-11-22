@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { ContentListPage } from './views/pages/content-list-page/content-list-page';
+import { SequenceFormComponent } from './views/components/sequence-form-component/sequence-form-component';
 export const routes: Routes = [
     {
         path: 'sequences', 
@@ -8,6 +9,14 @@ export const routes: Routes = [
     {
         path: 'students',
         component: ContentListPage
+    },
+    {
+        path: 'sequences/new',
+        component: SequenceFormComponent
+    },
+    {
+        path: 'sequences/edit/:id',
+        component: SequenceFormComponent
     },
     {
         path: '', 

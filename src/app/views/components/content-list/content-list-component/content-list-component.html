@@ -4,7 +4,7 @@
             <p class="page-subtitle">{{content()?.subTitle}}</p>
         </div>
         <div class="col-md-4 text-end">
-            <button class="btn btn-dark-blue">
+            <button class="btn btn-dark-blue" [routerLink]="content()?.url + '/new'">
                 <i class="bi bi-plus-lg me-2"></i> {{content()?.gender == 0 ? 'Nueva' : 'Nuevo'}} {{content()?.kind}}
             </button>
         </div>
