@@ -21,19 +21,19 @@ export class NewStudentModalComponent implements AfterViewInit {
       nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
       lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
       gradeFormControl: new FormControl('',[Validators.required]),
-      disabilityFormControl: new FormControl(null, [this.fileRequiredValidator.bind(this)]),
-      photoFormControl: new FormControl(null, [this.fileRequiredValidator.bind(this)]),
+      disabilityFormControl: new FormControl(null, [this.fileRequiredValidator]),
+      photoFormControl: new FormControl(null, [this.fileRequiredValidator]),
     });
   }
 
   // Custom validator for file inputs
-  fileRequiredValidator(control: AbstractControl): ValidationErrors | null {
+  fileRequiredValidator = (control: AbstractControl): ValidationErrors | null => {
     const files = control.value;
     if (!files || !(files instanceof FileList) || files.length === 0) {
       return { required: true };
     }
     return null;
-  }
+  };
 
 
   openModal(modalContent: TemplateRef<any>) {
@@ -58,10 +58,12 @@ export class NewStudentModalComponent implements AfterViewInit {
 
   // Handle file input change events
   onFileChange(event: Event, controlName: string): void {
-    const input = event.target as HTMLInputElement;
-    const files = input.files;
-    this.studentFormGroup.get(controlName)?.setValue(files);
-    this.studentFormGroup.get(controlName)?.markAsTouched();
+    const target = event.target;
+    if (target instanceof HTMLInputElement) {
+      const files = target.files;
+      this.studentFormGroup.get(controlName)?.setValue(files);
+      this.studentFormGroup.get(controlName)?.markAsTouched();
+    }
   }
 
 }
