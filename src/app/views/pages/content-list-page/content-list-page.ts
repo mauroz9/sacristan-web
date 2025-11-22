@@ -1,17 +1,21 @@
 import { Component } from '@angular/core';
-import { Sequence } from '../../interfaces/sequence-interface';
-
+import { Content, Student } from '../../../logic/interfaces/content-interface';
+import { Sequence } from '../../../logic/interfaces/sequence-interface';
+import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
 @Component({
   selector: 'app-sequence-list-page',
-  imports: [],
-  templateUrl: './sequence-list-page.html',
-  styleUrl: './sequence-list-page.css',
+  imports: [ContentListComponent],
+  templateUrl: './content-list-page.html',
+  styleUrl: './content-list-page.css',
 })
-export class SequenceListPage {
+export class ContentListPage {
+
+
   sequenceList: Sequence[] = [
     {
+      kind: "secuencia",
       id: 1,
-      title: 'Prepara la mochila',
+      title: 'Prepara la mochilas',
       description: 'Elementos necesarios para el colegio',
       steps: [
         { id: 1, order: 1, description: 'Abrir mochila', imageUrl: '...' },
@@ -23,6 +27,7 @@ export class SequenceListPage {
       categorie: 'Colegio'
     },
     {
+      kind: "secuencia",
       id: 2,
       title: 'Lavarse las manos',
       description: 'Higiene antes de comer',
@@ -34,4 +39,26 @@ export class SequenceListPage {
       categorie: 'Higiene'
     }
   ];
+
+  studentList: Student[] = [];
+
+
+  contentSequence: Content = {
+    kind: "secuencia",
+    title: "Secuencia de pasos",
+    subTitle: "Gestiona las secuencias de pictogramas para los estudiantes",
+    gender: 0,
+    contentList: this.sequenceList
+  }
+
+  contentAlumno: Content = {
+    kind: "alumno",
+    title: "Listado de alumnos",
+    subTitle: "Gestiona los alumnos del centro",
+    gender: 1,
+    contentList: this.studentList
+  }
+
+  content = this.contentSequence;
+
 }

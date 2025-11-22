@@ -1,0 +1,37 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-arrow {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.page-number {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #1F3C8B;
+}
+
+.page-number.active {
+    background-color: #1F3C8B;
+    color: white;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    
+    margin-top: auto; 
+    padding-top: 2rem;
+}

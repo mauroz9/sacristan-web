@@ -6,6 +6,7 @@ export interface SequenceStep {
 }
 
 export interface Sequence {
+  kind: 'secuencia',
   id: number;
   title: string;
   description: string;
