@@ -1,0 +1,110 @@
+:host {
+    --primary-blue: #1F3C8B;
+    --secondary-yellow: #F4C430;
+}
+
+.text-primary-blue {
+    color: var(--primary-blue);
+}
+
+.page-title {
+    color: var(--primary-blue);
+    font-weight: 700;
+}
+
+.form-container {
+    border: 1px solid #e0e0e0;
+}
+
+.custom-input {
+    background-color: #E0E0E0;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 15px;
+    color: #333;
+}
+
+.custom-input:focus {
+    background-color: #d6d6d6;
+    box-shadow: none;
+    border: 1px solid var(--primary-blue);
+}
+
+.btn-yellow {
+    background-color: var(--secondary-yellow);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+}
+.btn-yellow:hover {
+    background-color: #dcb02b;
+    color: white;
+}
+
+.step-card {
+    border: 2px solid var(--primary-blue);
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+
+.step-card:hover {
+    background-color: #f8f9fa;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #ccc;
+}
+
+.picto-container {
+    width: 60px;
+    height: 60px;
+    background-color: var(--secondary-yellow);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 5px; 
+}
+
+.picto-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.badge-step {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.btn-dark-blue {
+    background-color: var(--primary-blue);
+    color: white;
+    font-weight: 600;
+    border-radius: 6px;
+}
+.btn-dark-blue:hover {
+    background-color: #162e6b;
+}
+
+.step-card[draggable="true"] {
+    cursor: grab;
+}
+
+.step-card.dragging {
+    opacity: 0.4;
+    border: 2px dashed #999;
+    background-color: #f0f0f0;
+}
+
+.step-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
