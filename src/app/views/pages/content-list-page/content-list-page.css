@@ -4,13 +4,6 @@
     flex-direction: column;
 }
 
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-}
-
 .page-arrow {
     text-decoration: none;
     display: flex;
