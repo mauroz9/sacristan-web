@@ -13,12 +13,23 @@ export class NewStudentModalComponent implements AfterViewInit {
 
   @ViewChild('modal') modal!: TemplateRef<any>;
 
-  constructor(private modalService: NgbModal, private router: Router) {}
+  studentFormGroup: FormGroup;
+
+  constructor(private modalService: NgbModal, private router: Router) {
+    this.studentFormGroup = new FormGroup({
+      // Define form controls here as needed
+      nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
+      lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
+      gradeFormControl: new FormControl('',[Validators.required]),
+      disabilityFormControl: new FormControl(null, [this.fileRequiredValidator.bind(this)]),
+      photoFormControl: new FormControl(null, [this.fileRequiredValidator.bind(this)]),
+    });
+  }
 
   // Custom validator for file inputs
   fileRequiredValidator(control: AbstractControl): ValidationErrors | null {
     const files = control.value;
-    if (!files || files.length === 0) {
+    if (!files || !(files instanceof FileList) || files.length === 0) {
       return { required: true };
     }
     return null;
@@ -32,15 +43,6 @@ export class NewStudentModalComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.openModal(this.modal);
   }
-
-  studentFormGroup: FormGroup = new FormGroup({
-    // Define form controls here as needed
-    nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
-    lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
-    gradeFormControl: new FormControl('',[Validators.required]),
-    disabilityFormControl: new FormControl(null, [this.fileRequiredValidator.bind(this)]),
-    photoFormControl: new FormControl(null, [this.fileRequiredValidator.bind(this)]),
-  });
 
   sendData() {
     if (this.studentFormGroup.valid) {
