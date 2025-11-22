@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -15,6 +15,15 @@ export class NewStudentModalComponent implements AfterViewInit {
 
   constructor(private modalService: NgbModal, private router: Router) {}
 
+  // Custom validator for file inputs
+  fileRequiredValidator(control: AbstractControl): ValidationErrors | null {
+    const files = control.value;
+    if (!files || files.length === 0) {
+      return { required: true };
+    }
+    return null;
+  }
+
 
   openModal(modalContent: TemplateRef<any>) {
     this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
@@ -29,8 +38,8 @@ export class NewStudentModalComponent implements AfterViewInit {
     nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
     lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
     gradeFormControl: new FormControl('',[Validators.required]),
-    disabilityFormControl: new FormControl('',[Validators.required]),
-    photoFormControl: new FormControl('',[Validators.required]),
+    disabilityFormControl: new FormControl(null, [this.fileRequiredValidator.bind(this)]),
+    photoFormControl: new FormControl(null, [this.fileRequiredValidator.bind(this)]),
   });
 
   sendData() {
@@ -43,6 +52,14 @@ export class NewStudentModalComponent implements AfterViewInit {
     } else {
       this.studentFormGroup.markAllAsTouched();
     }
+  }
+
+  // Handle file input change events
+  onFileChange(event: Event, controlName: string): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    this.studentFormGroup.get(controlName)?.setValue(files);
+    this.studentFormGroup.get(controlName)?.markAsTouched();
   }
 
 }

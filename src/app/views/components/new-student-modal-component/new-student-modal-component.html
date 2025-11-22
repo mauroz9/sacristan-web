@@ -47,7 +47,7 @@
                         class="upload-area d-flex flex-column align-items-center justify-content-center text-muted p-4 rounded">
                         <i class="bi bi-upload fs-2 mb-2"></i>
                         <span>Subir foto</span>
-                        <input formControlName="photoFormControl" type="file" class="file-input" accept="image/*">
+                        <input formControlName="photoFormControl" type="file" class="file-input" accept="image/*" (change)="onFileChange($event, 'photoFormControl')">
                     </div>
                     @if (studentFormGroup.get('photoFormControl')?.invalid && (studentFormGroup.get('photoFormControl')?.touched || studentFormGroup.get('photoFormControl')?.dirty)) {
                         <p class="invalid-feedback d-block mb-0"> Debes insertar una foto del alumno</p>
@@ -60,7 +60,7 @@
                         class="upload-area d-flex flex-column align-items-center justify-content-center text-muted p-4 rounded">
                         <i class="bi bi-upload fs-2 mb-2"></i>
                         <span>Subir foto</span>
-                        <input formControlName="disabilityFormControl" type="file" class="file-input" accept="image/*">
+                        <input formControlName="disabilityFormControl" type="file" class="file-input" accept="image/*" (change)="onFileChange($event, 'disabilityFormControl')">
                     </div>
                     @if (studentFormGroup.get('disabilityFormControl')?.invalid && (studentFormGroup.get('disabilityFormControl')?.touched || studentFormGroup.get('disabilityFormControl')?.dirty)) {
                         <p class="invalid-feedback d-block mb-0"> Debes insertar una foto de la tarjeta de discapacidad</p>
