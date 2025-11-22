@@ -6,6 +6,10 @@ export const routes: Routes = [
         component: ContentListPage
     },
     {
+        path: 'students',
+        component: ContentListPage
+    },
+    {
         path: '', 
         redirectTo: '/sequences', 
         pathMatch: 'full'},

@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
-import { Content, Student } from '../../../logic/interfaces/content-interface';
+import { Component, inject } from '@angular/core';
+import { Content } from '../../../logic/interfaces/content-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
+import { Student } from '../../../logic/interfaces/student-interface';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-sequence-list-page',
   imports: [ContentListComponent],
@@ -10,6 +12,7 @@ import { ContentListComponent } from '../../components/content-list/content-list
 })
 export class ContentListPage {
 
+  url = "";
 
   sequenceList: Sequence[] = [
     {
@@ -40,7 +43,15 @@ export class ContentListPage {
     }
   ];
 
-  studentList: Student[] = [];
+  studentList: Student[] = [
+    {
+      kind: 'alumno',
+      id: 1,
+      name: 'Juan Pérez',
+      grade: '3º de Primaria',
+      assignedSequences: 5
+    },
+  ];
 
 
   contentSequence: Content = {
@@ -59,6 +70,14 @@ export class ContentListPage {
     contentList: this.studentList
   }
 
-  content = this.contentSequence;
+  content: Content = this.contentSequence;
 
+  constructor(private router: Router){
+    this.url = this.router.url;
+    if(this.url.includes('sequences')){
+      this.content = this.contentSequence;
+    } else if(this.url.includes('students')){
+      this.content = this.contentAlumno;
+    }
+  }
 }
