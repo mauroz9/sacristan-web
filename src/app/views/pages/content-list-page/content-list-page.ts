@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Content } from '../../../logic/interfaces/content-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
