@@ -35,8 +35,10 @@ export class NewStudentModalComponent implements AfterViewInit {
 
   sendData() {
     if (this.studentFormGroup.valid) {
+      const formData = this.studentFormGroup.value;
       // Process form data here
       this.modalService.dismissAll();
+      console.log(formData);      
       this.router.navigate(['/students']);
     } else {
       this.studentFormGroup.markAllAsTouched();
