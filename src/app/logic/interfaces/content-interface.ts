@@ -1,4 +1,5 @@
 import { Sequence } from "./sequence-interface";
+import { Student } from "./student-interface";
 
 export interface Content {
     kind:string,
@@ -6,12 +7,4 @@ export interface Content {
     subTitle: string,
     gender: number,
     contentList: (Sequence | Student)[]
-}
-
-export interface Student { // Temporal
-    kind: 'alumno',
-    id: number,
-    name: string,
-    grade: string,
-    assignedSequences: number
 }
