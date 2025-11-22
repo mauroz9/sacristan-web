@@ -1,0 +1,66 @@
+<div class="container py-5">
+
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-8">
+            <h2 class="page-title">Secuencias de Pasos</h2>
+            <p class="page-subtitle">Gestiona las secuencias de pictogramas para los estudiantes</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-dark-blue">
+                <i class="bi bi-plus-lg me-2"></i> Nueva secuencia
+            </button>
+        </div>
+    </div>
+
+    <div class="sequence-list">
+        
+        @for (sequence of sequenceList; track sequence) {
+            <div class="card-row mb-3">
+                <div class="row align-items-center g-0 h-100">
+                    
+                    <div class="col-md-3 ps-4">
+                        <span class="fw-medium text-dark-blue fs-5">{{ sequence.title }}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <span class="text-muted">{{ sequence.description }}</span>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <span class="text-muted">{{ sequence.categorie }}</span>
+                    </div>
+
+                    <div class="col-md-2 text-center">
+                        <span class="badge-steps">
+                            {{ sequence.steps.length }}
+                        </span>
+                    </div>
+
+                    <div class="col-md-2 text-end pe-4">
+                        <div class="action-buttons-group">
+                            <i class="bi bi-files icon-action icon-copy" title="Duplicar"></i>
+                            <i class="bi bi-pencil-square icon-action icon-edit" title="Editar"></i>
+                            <i class="bi bi-trash icon-action icon-delete" title="Eliminar"></i>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        }
+
+        @if (sequenceList.length === 0) {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                No hay secuencias disponibles todavía.
+            </div>
+        }
+
+    </div>
+
+    <div class="pagination-container">
+        <a href="#" class="page-arrow text-dark-blue"><i class="bi bi-arrow-left fs-4"></i></a>
+        <div class="page-number active">1</div>
+        <a href="#" class="page-arrow text-dark-blue"><i class="bi bi-arrow-right fs-4"></i></a>
+    </div>
+
+</div>
