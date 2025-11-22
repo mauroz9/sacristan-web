@@ -24,9 +24,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="bg-white">
-                        <td>Prepara la mochila</td>
-                        <td>Elementos necesarios para el colegio</td>
+                    @for(sequence of sequenceList; track sequence){
+                        <tr class="bg-white">
+                        <td>{{sequence.title}}</td>
+                        <td>{{sequence.description}}</td>
                         <td class="text-center"><span class="badge-steps">5</span></td>
                         <td class="text-center">
                             <button class="action-btn btn-copy"><i class="bi bi-files"></i></button>
@@ -34,7 +35,8 @@
                             <button class="action-btn btn-delete"><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>
-                    </tbody>
+                    }
+                </tbody>
             </table>
         </div>
 
