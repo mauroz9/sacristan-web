@@ -112,7 +112,7 @@ export class SequenceFormComponent implements OnInit{
       const formValue = this.sequenceForm.value;
       const newSequence: Sequence = {
         kind: 'secuencia',
-        id: this.isEditMode ? this.sequenceId : 0,
+        id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
         title: formValue.title!,
         description: formValue.description!,
         categorie: formValue.category!,
