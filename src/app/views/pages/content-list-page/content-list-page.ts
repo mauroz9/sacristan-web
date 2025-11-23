@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Content } from '../../../logic/interfaces/content-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
-import { Student } from '../../../logic/interfaces/student-interface';
 import { Router } from '@angular/router';
 import { StudentService } from '../../../logic/services/student-service';
+import { SequenceService } from '../../../logic/services/sequence-service';
 
 
 @Component({
@@ -13,38 +13,11 @@ import { StudentService } from '../../../logic/services/student-service';
   templateUrl: './content-list-page.html',
   styleUrl: './content-list-page.css',
 })
-export class ContentListPage {
+export class ContentListPage implements OnInit{
 
   url = "";
 
-  sequenceList: Sequence[] = [
-    {
-      kind: "secuencia",
-      id: 1,
-      title: 'Prepara la mochilas',
-      description: 'Elementos necesarios para el colegio',
-      steps: [
-        { id: 1, order: 1, description: 'Abrir mochila', imageUrl: '...' },
-        { id: 2, order: 2, description: 'Meter libros', imageUrl: '...' },
-        { id: 3, order: 3, description: 'Meter estuche', imageUrl: '...' },
-        { id: 4, order: 4, description: 'Cerrar mochila', imageUrl: '...' },
-        { id: 5, order: 5, description: 'Ponerse mochila', imageUrl: '...' }
-      ],
-      categorie: 'Colegio'
-    },
-    {
-      kind: "secuencia",
-      id: 2,
-      title: 'Lavarse las manos',
-      description: 'Higiene antes de comer',
-      steps: [
-        { id: 6, order: 1, description: 'Mojar manos', imageUrl: '...' },
-        { id: 7, order: 2, description: 'Poner jabón', imageUrl: '...' },
-        { id: 8, order: 3, description: 'Frotar', imageUrl: '...' }
-      ],
-      categorie: 'Higiene'
-    }
-  ];
+  sequenceList: Sequence[] = [];
 
   contentSequence: Content = {
     kind: "secuencia",
@@ -57,7 +30,21 @@ export class ContentListPage {
 
   content: Content = this.contentSequence;
 
-  constructor(private router: Router, private studentService: StudentService) {
+  constructor(
+    private router: Router, 
+    private studentService: StudentService,
+    private sequenceService: SequenceService
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
+    this.sequenceList = this.sequenceService.getSequences();
+    this.contentSequence.contentList = this.sequenceList;
+    
     this.url = this.router.url;
     if(this.url.includes('sequences')){
       this.content = this.contentSequence;
@@ -65,4 +52,5 @@ export class ContentListPage {
       this.content = this.studentService.contentAlumno;
     }
   }
+
 }
