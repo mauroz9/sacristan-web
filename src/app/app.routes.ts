@@ -11,6 +11,10 @@ export const routes: Routes = [
         component: ContentListPage
     },
     {
+        path: 'students/modify/:id',
+        component: ContentListPage
+    },
+    {
         path: 'students',
         component: ContentListPage
     },

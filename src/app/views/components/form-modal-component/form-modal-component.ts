@@ -1,19 +1,33 @@
-import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StudentService } from '../../../logic/services/student-service';
+import { Student } from '../../../logic/interfaces/student-interface';
 @Component({
-  selector: 'app-new-student-modal-component',
+  selector: 'app-form-modal-component',
   imports: [RouterLink, ReactiveFormsModule],
-  templateUrl: './new-student-modal-component.html',
-  styleUrl: './new-student-modal-component.css',
+  templateUrl: './form-modal-component.html',
+  styleUrl: './form-modal-component.css',
 })
 export class NewStudentModalComponent implements AfterViewInit {
 
   @ViewChild('modal') modal!: TemplateRef<any>;
 
-  constructor(private modalService: NgbModal, private router: Router, private studentService:StudentService) {}
+  functionality = output<string>();
+  isEditMode = false;
+  studentId: number | null = null;
+
+  constructor(private modalService: NgbModal, private router: Router, private studentService:StudentService, private route: ActivatedRoute) {}
+
+  baseStudent : Student = {
+    kind: 'alumno',
+    id: 0,
+    name: '',
+    lastName: '',
+    grade: '',
+    assignedSequences: 0
+  }
 
   openModal(modalContent: TemplateRef<any>) {
     this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
@@ -21,6 +35,25 @@ export class NewStudentModalComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.openModal(this.modal);
+    const id = this.route.snapshot.paramMap.get('id');
+  
+    if(id){
+      const studentId = Number(id);
+      this.baseStudent = this.studentService.getStudentById(studentId);
+        
+      this.isEditMode = true;
+      this.studentId = Number(id);
+
+      this.studentFormGroup.patchValue({
+        nameFormControl: this.baseStudent.name,
+        lastNameFormControl: this.baseStudent.lastName,
+        gradeFormControl: this.baseStudent.grade,
+        disabilityFormControl: '',
+        photoFormControl: ''
+      });
+      
+    }
+
   }
 
   studentFormGroup: FormGroup = new FormGroup({
@@ -37,6 +70,9 @@ export class NewStudentModalComponent implements AfterViewInit {
       const formData = this.studentFormGroup.value;
       // Process form data here
       this.modalService.dismissAll();
+      if(this.isEditMode){
+        formData.id = this.studentId;
+      }
       this.studentService.addStudent(formData);
       this.router.navigate(['/students']);
     } else {

@@ -2,7 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { SequenceRowComponent } from '../sequence-row-component/sequence-row-component';
 import { Content } from '../../../../logic/interfaces/content-interface';
 import { StudentRowComponent } from "../student-row-component/student-row-component";
-import { NewStudentModalComponent } from "../../new-student-modal-component/new-student-modal-component";
+import { NewStudentModalComponent } from "../../form-modal-component/form-modal-component";
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -14,11 +14,13 @@ import { Router, RouterLink } from '@angular/router';
 export class ContentListComponent{
 
   content = input<Content>();
-  newStudent = false;
+  functionality = "";
 
   constructor(private router: Router) {
       if (this.router.url.includes('students/new')) {       
-        this.newStudent = true;
+        this.functionality = "newStudent";
+      } else if (this.router.url.includes('students/modify')) {
+        this.functionality = "modifyStudent";
       }
   }
 }
