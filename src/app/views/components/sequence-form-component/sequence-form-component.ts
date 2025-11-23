@@ -23,7 +23,7 @@ export class SequenceFormComponent implements OnInit{
   draggedIndex: number | null = null;
   showModal = false;
   isEditMode = false;
-  sequenceId: number = 0;
+  sequenceId: number | null = null;
 
   constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute) {}
 
