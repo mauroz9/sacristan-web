@@ -19,7 +19,7 @@ export const routes: Routes = [
         component: SequenceFormComponent
     },
     {
-        path: 'sequences/edit/:id',
+        path: 'sequences/modify/:id',
         component: SequenceFormComponent
     },
     {
