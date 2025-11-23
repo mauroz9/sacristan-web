@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { Router, RouterLink } from '@angular/router';
 import { StepModalComponent } from '../step-modal-component/step-modal-component';
+import { SequenceService } from '../../../logic/services/sequence-service';
 
 @Component({
   selector: 'app-sequence-form-component',
@@ -22,8 +23,9 @@ export class SequenceFormComponent {
   draggedIndex: number | null = null;
   showModal = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private sequenceService: SequenceService) {}
 
+  //Steps logic
   get steps(): FormArray {
     return this.sequenceForm.get('steps') as FormArray;
   }
@@ -75,9 +77,24 @@ export class SequenceFormComponent {
   //Save sequence
   onSubmit(){
     if(this.sequenceForm.valid){
-      console.log(this.sequenceForm.value);
+      
+      const formValue = this.sequenceForm.value;
+      const newSequence: Sequence = {
+        kind: 'secuencia',
+        id: 0,
+        title: formValue.title!,
+        description: formValue.description!,
+        categorie: formValue.category!,
+        steps: (formValue.steps as any[]).map((step, index) => ({
+          id: index + 1,
+          order: index + 1,
+          description: step.description,
+          imageUrl: step.imageUrl
+        }))
+      };
+      this.sequenceService.addSequence(newSequence);
       this.router.navigate(["/sequences"]);
-    }else{
+    } else {
       this.sequenceForm.markAllAsTouched();
     }
   }

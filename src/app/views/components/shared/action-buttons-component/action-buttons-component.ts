@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 
 @Component({
   selector: 'app-action-buttons-component',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './action-buttons-component.css',
 })
 export class ActionButtonsComponent {
-
+  onDelete = output<void>();
 }

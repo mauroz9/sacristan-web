@@ -1,6 +1,6 @@
 <div class="card-row mb-3">
     <div class="row align-items-center g-0 h-100">
-        
+
         <div class="col-md-3 ps-4">
             <span class="fw-medium text-dark-blue fs-5">{{ sequence()?.title }}</span>
         </div>
@@ -8,7 +8,7 @@
         <div class="col-md-3">
             <span class="text-muted">{{ sequence()?.description }}</span>
         </div>
-        
+
         <div class="col-md-2">
             <span class="text-muted">{{ sequence()?.categorie }}</span>
         </div>
@@ -18,10 +18,10 @@
                 {{ sequence()?.steps?.length }} Pasos
             </span>
         </div>
-        
+
         <div class="col-md-2 text-end pe-4">
-            <app-action-buttons-component></app-action-buttons-component>
+            <app-action-buttons-component (onDelete)="deleteSequence()"></app-action-buttons-component>
         </div>
-        
+
     </div>
 </div>
