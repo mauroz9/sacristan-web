@@ -1,7 +1,7 @@
 <div class="container py-5">
     <div class="form-container bg-white p-4 rounded-4 shadow-sm">
 
-        <h2 class="page-title mb-1">Nueva Secuencia</h2>
+        <h2 class="page-title mb-1">{{ isEditMode ? 'Editar Secuencia' : 'Nueva Secuencia' }}</h2>
         <p class="text-muted mb-4">Define los pasos de la secuencia con pictogramas</p>
 
         <form [formGroup]="sequenceForm" (ngSubmit)="onSubmit()">

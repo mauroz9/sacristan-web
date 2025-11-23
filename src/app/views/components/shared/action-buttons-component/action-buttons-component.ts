@@ -8,4 +8,5 @@ import { Component, output } from '@angular/core';
 })
 export class ActionButtonsComponent {
   onDelete = output<void>();
+  onEdit = output<void>();
 }

@@ -1,17 +1,17 @@
-import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { StepModalComponent } from '../step-modal-component/step-modal-component';
 import { SequenceService } from '../../../logic/services/sequence-service';
 
 @Component({
   selector: 'app-sequence-form-component',
-  imports: [ReactiveFormsModule, RouterLink, StepModalComponent],
+  imports: [ReactiveFormsModule, StepModalComponent, RouterLink],
   templateUrl: './sequence-form-component.html',
   styleUrl: './sequence-form-component.css',
 })
-export class SequenceFormComponent {
+export class SequenceFormComponent implements OnInit{
   
   sequenceForm = new FormGroup({
     title: new FormControl('', Validators.required),
@@ -22,8 +22,44 @@ export class SequenceFormComponent {
   
   draggedIndex: number | null = null;
   showModal = false;
+  isEditMode = false;
+  sequenceId: number = 0;
 
-  constructor(private router: Router, private sequenceService: SequenceService) {}
+  constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+      const id = this.route.snapshot.paramMap.get('id');
+
+      if(id){
+        this.isEditMode = true;
+        this.sequenceId = Number(id);
+        this.loadSequenceData(this.sequenceId);
+      }
+  }
+
+  loadSequenceData(id: number): void{
+    const sequence = this.sequenceService.getSequenceById(id);
+
+    if(sequence){
+      this.sequenceForm.patchValue({
+        title: sequence.title,
+        description: sequence.description,
+        category: sequence.categorie
+      });
+
+      sequence.steps.forEach(step =>{
+        this.addStepToForm(step);       
+      });
+    }
+  }
+
+  addStepToForm(step: {description: string, imageUrl: string}): void{
+    const newStep = new FormGroup({
+      description: new FormControl(step.description),
+      imageUrl: new FormControl(step.imageUrl)
+    });
+    this.steps.push(newStep);
+  }
 
   //Steps logic
   get steps(): FormArray {
@@ -39,12 +75,7 @@ export class SequenceFormComponent {
   }
 
   handleSaveStep(step: {name: string, imageUrl: string}): void{
-    const newStep = new FormGroup({
-      description: new FormControl(step.name),
-      imageUrl: new FormControl(step.imageUrl)
-    });
-
-    this.steps.push(newStep);
+    this.addStepToForm({ description: step.name, imageUrl: step.imageUrl });
     this.showModal = false;
   }
 
@@ -81,7 +112,7 @@ export class SequenceFormComponent {
       const formValue = this.sequenceForm.value;
       const newSequence: Sequence = {
         kind: 'secuencia',
-        id: 0,
+        id: this.isEditMode ? this.sequenceId : 0,
         title: formValue.title!,
         description: formValue.description!,
         categorie: formValue.category!,
@@ -92,7 +123,11 @@ export class SequenceFormComponent {
           imageUrl: step.imageUrl
         }))
       };
-      this.sequenceService.addSequence(newSequence);
+      if(this.isEditMode){
+        this.sequenceService.modifySequence(newSequence);
+      }else{
+        this.sequenceService.addSequence(newSequence);
+      }
       this.router.navigate(["/sequences"]);
     } else {
       this.sequenceForm.markAllAsTouched();

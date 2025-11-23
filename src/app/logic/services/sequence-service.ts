@@ -39,9 +39,20 @@ export class SequenceService {
     return this.sequenceList;
   }
 
+  getSequenceById(id: number): Sequence | undefined {
+    return this.sequenceList.find(s => s.id === id);
+  }
+
   addSequence(newSequence: Sequence){
     newSequence.id = this.sequenceList.length + 1;
     this.sequenceList.push(newSequence);
+  }
+
+  modifySequence(modifySequence: Sequence){
+    const index = this.sequenceList.findIndex(s => s.id === modifySequence.id);
+    if (index !== -1) {
+      this.sequenceList[index] = modifySequence;
+    }
   }
 
   deleteSequence(id: number){
