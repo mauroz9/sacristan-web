@@ -46,9 +46,9 @@ export class ContentListPage implements OnInit{
     this.contentSequence.contentList = this.sequenceList;
     
     this.url = this.router.url;
-    if(this.url.includes('sequences')){
+    if(this.url.includes('/sequences')){
       this.content = this.contentSequence;
-    } else if(this.url.includes('students')){
+    } else if(this.url.includes('/students')){
       this.content = this.studentService.contentAlumno;
     }
   }

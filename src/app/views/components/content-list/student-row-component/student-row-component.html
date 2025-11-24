@@ -18,7 +18,7 @@
         </div>
         
         <div class="col-md-3 text-end pe-4">
-            <app-action-buttons-component (onEdit)="editStudent(student()?.id)" (onDelete)="deleteStudent()"></app-action-buttons-component>
+            <app-action-buttons-component (onEdit)="editStudent(student()?.id)" (onAssignSequences)="assignSequences(student()?.id)" (onDelete)="deleteStudent()"></app-action-buttons-component>
         </div>
         
     </div>

@@ -2,13 +2,13 @@ import { AfterViewInit, Component, output, TemplateRef, ViewChild } from '@angul
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { StudentService } from '../../../logic/services/student-service';
-import { Student } from '../../../logic/interfaces/student-interface';
+import { StudentService } from '../../../../logic/services/student-service';
+import { Student } from '../../../../logic/interfaces/student-interface';
 @Component({
-  selector: 'app-form-modal-component',
+  selector: 'app-student-form-modal-component',
   imports: [RouterLink, ReactiveFormsModule],
-  templateUrl: './form-modal-component.html',
-  styleUrl: './form-modal-component.css',
+  templateUrl: './student-form-modal-component.html',
+  styleUrls: ['./student-form-modal-component.css'],
 })
 export class NewStudentModalComponent implements AfterViewInit {
 
