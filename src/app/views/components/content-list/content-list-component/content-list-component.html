@@ -30,8 +30,8 @@
                 </div>
             }
         }
-        @if (newStudent) {
-            <app-new-student-modal-component #newStudentModal></app-new-student-modal-component>
+        @if (functionality != "") {
+            <app-form-modal-component (functionality)="functionality" #newStudentModal></app-form-modal-component>
         }
     }
 

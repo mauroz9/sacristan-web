@@ -3,7 +3,7 @@
 
         <div class="col-md-2 ps-4">
             <img src="images/studentIMG.jpg" alt="student image" class="img-fluid rounded-circle student-image me-3" width="36px">
-            <span class="align-middle fw-medium text-dark-blue fs-5">{{ student()?.name }}</span>
+            <span class="align-middle fw-medium text-dark-blue fs-5">{{ student()?.name }} {{ student()?.lastName }}</span>
         </div>
 
         <div class="col-md-3">
@@ -18,7 +18,7 @@
         </div>
         
         <div class="col-md-3 text-end pe-4">
-            <app-action-buttons-component></app-action-buttons-component>
+            <app-action-buttons-component (onEdit)="editStudent(student()?.id)" (onDelete)="deleteStudent()"></app-action-buttons-component>
         </div>
         
     </div>
