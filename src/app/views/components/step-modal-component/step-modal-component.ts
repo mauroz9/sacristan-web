@@ -32,8 +32,8 @@ export class StepModalComponent implements OnInit{
   ngOnInit(): void {
     if(this.stepData() !== null){
       this.stepForm.patchValue({
-        name: this.stepData()?.description,
-        imageUrl: this.stepData()?.imageUrl
+        name: this.stepData()!.description,
+        imageUrl: this.stepData()!.imageUrl
       });
     }
   }
