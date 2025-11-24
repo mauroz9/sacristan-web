@@ -100,7 +100,6 @@ export class SequenceFormComponent implements OnInit{
   modifyStep(index: number): void{
     const stepMod = this.steps.at(index) as FormGroup;
     this.editingStepIndex = index;
-    
     this.stepToEdit = {
       description: stepMod.get('description')?.value,
       imageUrl: stepMod.get('imageUrl')?.value
