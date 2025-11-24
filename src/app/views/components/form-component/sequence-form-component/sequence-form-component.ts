@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { StepModalComponent } from '../step-modal-component/step-modal-component';
-import { SequenceService } from '../../../logic/services/sequence-service';
-
+import { StepModalComponent } from '../../step-modal-component/step-modal-component';
+import { SequenceService } from '../../../../logic/services/sequence-service';
+import { Sequence } from '../../../../logic/interfaces/sequence-interface';
 @Component({
   selector: 'app-sequence-form-component',
   imports: [ReactiveFormsModule, StepModalComponent, RouterLink],

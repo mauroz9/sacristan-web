@@ -1,5 +1,14 @@
 <div class="action-buttons-group">
-    <i class="bi bi-files icon-action icon-copy" title="Duplicar"></i>
+
+    @if (isSequence) {
+        <i class="bi bi-play icon-action icon-play" title="Reproducir"></i>
+        <i class="bi bi-files icon-action icon-copy" title="Duplicar"></i>
+    }
+    
+    @if (isStudent) {
+        <i class="bi bi-journal-check icon-action icon-play" (click)="onAssignSequences.emit()" title="Asignar"></i>
+    }
+
     <i class="bi bi-pencil-square icon-action icon-edit" title="Editar" (click)="onEdit.emit()"></i>
     <i class="bi bi-trash icon-action icon-delete" title="Eliminar" (click)="onDelete.emit()"></i>
 </div>

@@ -20,6 +20,10 @@ export class StudentRowComponent {
       this.router.navigate(['/students/modify/', idStudent]);
     }
 
+    assignSequences(idStudent: number | undefined) {
+      this.router.navigate(['/students/asign-sequences/', idStudent]);
+    }
+
     deleteStudent() {
       let id = this.student()?.id;
       if(id && confirm('¿Seguro que quieres borrar este alumno?')){
