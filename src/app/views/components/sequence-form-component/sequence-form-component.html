@@ -66,6 +66,9 @@
                                 formControlName="description" readonly>
                         </div>
 
+                        <button type="button" class="btn text-primary border-0" (click)="modifyStep(i)">
+                            <i class="bi bi-pencil-square fs-4"></i>
+                        </button>
                         <button type="button" class="btn text-danger border-0" (click)="removeStep(i)">
                             <i class="bi bi-trash fs-4"></i>
                         </button>
@@ -91,5 +94,8 @@
     </div>
 </div>
 
-<app-step-modal-component [isVisible]="showModal" (close)="closeModal()" (save)="handleSaveStep($event)">
+@if(showModal){
+<app-step-modal-component [isVisible]="showModal" (close)="closeModal()" (save)="handleSaveStep($event)"
+    [stepData]="stepToEdit">
 </app-step-modal-component>
+}

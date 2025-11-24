@@ -24,6 +24,8 @@ export class SequenceFormComponent implements OnInit{
   showModal = false;
   isEditMode = false;
   sequenceId: number | null = null;
+  editingStepIndex: number | null = null;
+  stepToEdit: {description: string, imageUrl: string} | null = null;
 
   constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute) {}
 
@@ -67,15 +69,27 @@ export class SequenceFormComponent implements OnInit{
   }
 
   openModal(): void{
+    this.editingStepIndex = null;
+    this.stepToEdit = null;
     this.showModal = true;
   }
 
   closeModal(): void {
     this.showModal = false;
+    this.editingStepIndex = null;
+    this.stepToEdit = null;
   }
 
   handleSaveStep(step: {name: string, imageUrl: string}): void{
-    this.addStepToForm({ description: step.name, imageUrl: step.imageUrl });
+    if(this.editingStepIndex !== null){
+      const stepControl = this.steps.at(this.editingStepIndex) as FormGroup;
+      stepControl.patchValue({
+        description: step.name,
+        imageUrl: step.imageUrl
+      });
+    }else{
+      this.addStepToForm({ description: step.name, imageUrl: step.imageUrl});
+    }
     this.showModal = false;
   }
 
@@ -83,22 +97,34 @@ export class SequenceFormComponent implements OnInit{
     this.steps.removeAt(index);
   }
 
+  modifyStep(index: number): void{
+    const stepMod = this.steps.at(index) as FormGroup;
+    this.editingStepIndex = index;
+    
+    this.stepToEdit = {
+      description: stepMod.get('description')?.value,
+      imageUrl: stepMod.get('imageUrl')?.value
+    }
+
+    this.showModal = true;
+  }
+
   //Move Steps
-  onDragStart(index: number) {
+  onDragStart(index: number): void {
     this.draggedIndex = index;
   }
 
-  onDragOver(event: DragEvent) {
+  onDragOver(event: DragEvent): void {
     event.preventDefault();
   }
     
-  moveStep(fromIndex: number, toIndex: number) {
+  moveStep(fromIndex: number, toIndex: number): void{
     const stepControl = this.steps.at(fromIndex);
     this.steps.removeAt(fromIndex);
     this.steps.insert(toIndex, stepControl);
   }
 
-  onDrop(dropIndex: number) {
+  onDrop(dropIndex: number): void {
     if (this.draggedIndex !== null && this.draggedIndex !== dropIndex) {
       this.moveStep(this.draggedIndex, dropIndex);
     }
