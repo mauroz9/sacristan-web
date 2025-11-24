@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -7,10 +7,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   templateUrl: './step-modal-component.html',
   styleUrl: './step-modal-component.css',
 })
-export class StepModalComponent {
+export class StepModalComponent implements OnInit{
   isVisible = input<Boolean>(false);
   close = output<void>();
   save = output<{ name: string, imageUrl: string }>();
+  stepData = input<{ description: string, imageUrl: string } | null>(null);
 
   selectedCategory: string = 'Todas';
 
@@ -28,6 +29,15 @@ export class StepModalComponent {
 
   categories = ['Higiene', 'Alimentación', 'Vestirse', 'Rutina', 'Colegio', 'Casa'];
 
+  ngOnInit(): void {
+    if(this.stepData() !== null){
+      this.stepForm.patchValue({
+        name: this.stepData()!.description,
+        imageUrl: this.stepData()!.imageUrl
+      });
+    }
+  }
+
   selectCategory(cat: string) {
     this.selectedCategory = cat;
   }
@@ -42,6 +52,7 @@ export class StepModalComponent {
         name: this.stepForm.value.name!,
         imageUrl: this.stepForm.value.imageUrl!
       });
+      this.stepForm.reset();
 
     } else {
       this.stepForm.markAllAsTouched();
@@ -49,7 +60,7 @@ export class StepModalComponent {
   }
 
   onClose() {
-    this.close.emit();
     this.stepForm.reset();
+    this.close.emit();
   }
 }
