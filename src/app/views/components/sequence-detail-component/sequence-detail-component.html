@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="step-image-container">
-                        <img [src]="sequence.steps[currentIndex].imageUrl" class="img-fluid" alt="Pictograma">
+                        <img [src]="sequence.steps[currentIndex].imageUrl" class="img-fluid" [alt]="sequence.steps[currentIndex].description">
                     </div>
                     
                     <div class="step-footer">
