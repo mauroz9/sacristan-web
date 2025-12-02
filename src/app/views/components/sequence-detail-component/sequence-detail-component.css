@@ -1,0 +1,53 @@
+:host {
+    --primary-blue: #1F3C8B;
+    --secondary-yellow: #F4C430;
+}
+
+.text-primary-blue { color: var(--primary-blue); }
+.bg-secondary-yellow { background-color: var(--secondary-yellow); color: #333; }
+
+.step-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: white;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(31, 60, 139, 0.15) !important;
+}
+
+.card-img-wrapper {
+    height: 220px;
+    background-color: #ffffff;
+}
+
+.step-image {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.step-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.btn-primary-blue {
+    background-color: var(--primary-blue);
+    color: white;
+}

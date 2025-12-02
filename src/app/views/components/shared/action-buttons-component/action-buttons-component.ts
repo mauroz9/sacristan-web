@@ -15,6 +15,7 @@ export class ActionButtonsComponent implements OnInit {
   onDelete = output<void>();
   onEdit = output<void>();
   onAssignSequences = output<void>();
+  onView = output<void>();
 
   constructor(private router: Router) {}
 

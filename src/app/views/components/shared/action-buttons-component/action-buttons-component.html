@@ -1,7 +1,7 @@
 <div class="action-buttons-group">
 
     @if (isSequence) {
-        <i class="bi bi-play icon-action icon-play" title="Reproducir"></i>
+        <i class="bi bi-play icon-action icon-play" title="Reproducir" (click)="onView.emit()"></i>
         <i class="bi bi-files icon-action icon-copy" title="Duplicar"></i>
     }
     

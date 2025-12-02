@@ -31,4 +31,11 @@ export class SequenceRowComponent {
       this.router.navigate(['/sequences/modify', id]);
     }
   }
+
+  viewSequence(){
+    const id = this.sequence()?.id;
+    if(id){
+      this.router.navigate(['/sequences/view', id]);
+    }
+  }
 }
