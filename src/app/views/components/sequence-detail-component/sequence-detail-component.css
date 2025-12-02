@@ -1,0 +1,90 @@
+:host {
+    --primary-blue: #1F3C8B;
+    --secondary-yellow: #F4C430;
+}
+
+.text-primary-blue { color: var(--primary-blue); }
+.bg-secondary-yellow { background-color: var(--secondary-yellow); }
+
+.carousel-area {
+    min-height: 500px;
+}
+
+/* Tarjeta Central */
+.step-display-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+    width: 100%;
+    max-width: 650px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.step-header {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.step-counter {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.step-image-container {
+    height: 350px; /* Altura fija para la imagen */
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.step-image-container img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.step-footer {
+    padding: 1.5rem;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+}
+
+/* Botones de navegación */
+.nav-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-blue);
+    background: white;
+    color: var(--primary-blue);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: var(--primary-blue);
+    color: white;
+    transform: scale(1.1);
+}
+
+.nav-btn:disabled {
+    border-color: #ccc;
+    color: #ccc;
+    cursor: default;
+}

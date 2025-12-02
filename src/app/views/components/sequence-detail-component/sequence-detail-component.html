@@ -1,0 +1,61 @@
+<div class="container py-5 h-100 d-flex flex-column">
+    
+    @if (sequence) {
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <span class="badge bg-secondary-yellow text-dark mb-2">{{ sequence.categorie }}</span>
+                <h2 class="text-primary-blue fw-bold mb-0">{{ sequence.title }}</h2>
+                <p class="text-muted mb-0">{{ sequence.description }}</p>
+            </div>
+            <button class="btn btn-outline-secondary" (click)="goBack()">
+                <i class="bi bi-x-lg me-2"></i>Cerrar
+            </button>
+        </div>
+
+        <div class="carousel-area flex-grow-1 d-flex align-items-center justify-content-center gap-4">
+            
+            <button class="nav-btn" 
+                    (click)="prevStep()" 
+                    [style.visibility]="currentIndex === 0 ? 'hidden' : 'visible'">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+
+            @if (sequence.steps.length > 0) {
+                <div class="step-display-card shadow-sm">
+                    <div class="step-header">
+                        <span class="step-counter">Paso {{ currentIndex + 1 }} de {{ sequence.steps.length }}</span>
+                    </div>
+
+                    <div class="step-image-container">
+                        <img [src]="sequence.steps[currentIndex].imageUrl" class="img-fluid" [alt]="sequence.steps[currentIndex].description">
+                    </div>
+                    
+                    <div class="step-footer">
+                        <h2 class="text-primary-blue fw-bold mb-0 text-center">
+                            {{ sequence.steps[currentIndex].description }}
+                        </h2>
+                    </div>
+                </div>
+            } @else {
+                <div class="alert alert-info">Esta secuencia no tiene pasos.</div>
+            }
+
+            <button class="nav-btn" 
+                    (click)="nextStep()" 
+                    [style.visibility]="currentIndex === sequence.steps.length - 1 ? 'hidden' : 'visible'">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+
+        </div>
+
+        @if (sequence.steps.length > 0) {
+            <div class="progress mt-4" style="height: 8px;">
+                <div class="progress-bar bg-primary-blue" role="progressbar" 
+                     [style.width.%]="((currentIndex + 1) / sequence.steps.length) * 100">
+                </div>
+            </div>
+        }
+
+    }
+</div>
