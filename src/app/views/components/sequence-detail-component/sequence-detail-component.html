@@ -1,49 +1,59 @@
-<div class="container py-5">
+<div class="container py-5 h-100 d-flex flex-column">
     
     @if (sequence) {
-        <div class="d-flex justify-content-between align-items-start mb-5">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold text-primary-blue mb-1">{{ sequence.title }}</h2>
-                <p class="text-muted fs-5 mb-0">{{ sequence.description }}</p>
-                <span class="badge bg-secondary-yellow mt-2">{{ sequence.categorie }}</span>
+                <span class="badge bg-secondary-yellow text-dark mb-2">{{ sequence.categorie }}</span>
+                <h2 class="text-primary-blue fw-bold mb-0">{{ sequence.title }}</h2>
+                <p class="text-muted mb-0">{{ sequence.description }}</p>
             </div>
             <button class="btn btn-outline-secondary" (click)="goBack()">
-                <i class="bi bi-arrow-left me-2"></i> Volver
+                <i class="bi bi-x-lg me-2"></i>Cerrar
             </button>
         </div>
 
-        <div class="row g-4">
-            @for (step of sequence.steps; track step.id; let i = $index) {
-                <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                    <div class="card h-100 step-card border-0 shadow-sm">
-                        
-                        <div class="step-badge">{{ i + 1 }}</div>
-                        
-                        <div class="card-img-wrapper p-4 d-flex align-items-center justify-content-center">
-                            <img [src]="step.imageUrl" [alt]="step.description" class="img-fluid step-image">
-                        </div>
-                        
-                        <div class="card-body text-center border-top">
-                            <h5 class="card-title text-primary-blue fw-bold mb-0">{{ step.description }}</h5>
-                        </div>
+        <div class="carousel-area flex-grow-1 d-flex align-items-center justify-content-center gap-4">
+            
+            <button class="nav-btn" 
+                    (click)="prevStep()" 
+                    [style.visibility]="currentIndex === 0 ? 'hidden' : 'visible'">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+
+            @if (sequence.steps.length > 0) {
+                <div class="step-display-card shadow-sm">
+                    <div class="step-header">
+                        <span class="step-counter">Paso {{ currentIndex + 1 }} de {{ sequence.steps.length }}</span>
+                    </div>
+
+                    <div class="step-image-container">
+                        <img [src]="sequence.steps[currentIndex].imageUrl" class="img-fluid" alt="Pictograma">
+                    </div>
+                    
+                    <div class="step-footer">
+                        <h2 class="text-primary-blue fw-bold mb-0 text-center">
+                            {{ sequence.steps[currentIndex].description }}
+                        </h2>
                     </div>
                 </div>
+            } @else {
+                <div class="alert alert-info">Esta secuencia no tiene pasos.</div>
             }
+
+            <button class="nav-btn" 
+                    (click)="nextStep()" 
+                    [style.visibility]="currentIndex === sequence.steps.length - 1 ? 'hidden' : 'visible'">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+
         </div>
 
-        @if (sequence.steps.length === 0) {
-            <div class="alert alert-info text-center">
-                Esta secuencia no tiene pasos definidos.
+        <div class="progress mt-4" style="height: 8px;">
+            <div class="progress-bar bg-primary-blue" role="progressbar" 
+                 [style.width.%]="((currentIndex + 1) / sequence.steps.length) * 100">
             </div>
-        }
+        </div>
 
-    } @else {
-        <div class="alert alert-warning text-center">
-            No se ha encontrado la secuencia.
-        </div>
-        <div class="text-center mt-3">
-            <button class="btn btn-primary-blue" (click)="goBack()">Volver al listado</button>
-        </div>
     }
-
 </div>
