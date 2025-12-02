@@ -49,11 +49,13 @@
 
         </div>
 
-        <div class="progress mt-4" style="height: 8px;">
-            <div class="progress-bar bg-primary-blue" role="progressbar" 
-                 [style.width.%]="((currentIndex + 1) / sequence.steps.length) * 100">
+        @if (sequence.steps.length > 0) {
+            <div class="progress mt-4" style="height: 8px;">
+                <div class="progress-bar bg-primary-blue" role="progressbar" 
+                     [style.width.%]="((currentIndex + 1) / sequence.steps.length) * 100">
+                </div>
             </div>
-        </div>
+        }
 
     }
 </div>
