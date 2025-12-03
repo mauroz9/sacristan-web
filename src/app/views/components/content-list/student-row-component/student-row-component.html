@@ -1,7 +1,7 @@
 <div class="card-row mb-3">
     <div class="row align-items-center g-0 h-100">
 
-        <div class="col-md-2 ps-4">
+        <div class="col-md-3 ps-4">
             <img src="images/studentIMG.jpg" alt="student image" class="img-fluid rounded-circle student-image me-3" width="36px">
             <span class="align-middle fw-medium text-dark-blue fs-5">{{ student()?.name }} {{ student()?.lastName }}</span>
         </div>
@@ -17,7 +17,7 @@
             </span>
         </div>
         
-        <div class="col-md-3 text-end pe-4">
+        <div class="col-md-2 text-end pe-4">
             <app-action-buttons-component (onEdit)="editStudent(student()?.id)" (onAssignSequences)="assignSequences(student()?.id)" (onDelete)="deleteStudent()"></app-action-buttons-component>
         </div>
         
