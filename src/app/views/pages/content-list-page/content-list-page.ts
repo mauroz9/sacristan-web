@@ -40,18 +40,17 @@ export class ContentListPage implements OnInit{
   ) {
   }
 
-  ngOnInit(): void {
+  reloadContent() {
     this.getData();
-
-    console.log("Hi");
     
-
     this.infoMessage = localStorage.getItem('infoMessage');
     if (this.infoMessage) {
       localStorage.removeItem('infoMessage');
-    }
+    }  
+  }
 
-
+  ngOnInit(): void {
+    this.reloadContent();
   }
 
   getData() {
@@ -61,7 +60,7 @@ export class ContentListPage implements OnInit{
     } else if(this.url.includes('/students')){
       this.studentService.getStudent().subscribe({
         next: (data) => {
-          this.studentList = data.map(item => this.studentService.convertToStudent(item));
+          this.studentList = data.map(item => this.studentService.convertToStudent(item));          
           this.loadData()
         }}
       ) 
@@ -84,6 +83,8 @@ export class ContentListPage implements OnInit{
           contentList: this.studentList
       }
     }
+    console.log(this.content);
+    
   }
 
 }

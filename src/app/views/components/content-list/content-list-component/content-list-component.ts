@@ -15,6 +15,7 @@ import { AsignSequencesComponent } from "../../asign-sequences-component/asign-s
 export class ContentListComponent {
 
   content = input<Content>();
+  reload = output<void>();
   functionality = "";
 
   constructor(private router: Router) {    
@@ -25,6 +26,10 @@ export class ContentListComponent {
       } else if (this.router.url.includes('students/asign-sequences')) {
         this.functionality = "assignSequences";
       }      
+  }
+
+  reloadContent() {
+    this.reload.emit();
   }
 
 }

@@ -9,7 +9,7 @@
         </div>
     }
 
-    <app-content-list-component [content]="content"></app-content-list-component>
+    <app-content-list-component (reload)="reloadContent()" [content]="content"></app-content-list-component>
     
     @if (content.contentList.length != 0) {
         <div class="pagination-container">

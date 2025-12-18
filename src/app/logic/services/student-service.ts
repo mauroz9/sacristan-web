@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class StudentService {
+  deleteStudent(id: number) {
+    return this.http.delete("http://127.0.0.1:8000/api/usuarios/" + id)
+  }
 
   convertToStudent(data: any): Student {
     return {

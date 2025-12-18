@@ -1,4 +1,4 @@
-import { Component, input, OnChanges } from '@angular/core';
+import { Component, input, OnChanges, output } from '@angular/core';
 import { Student } from '../../../../logic/interfaces/student-interface';
 import { ActionButtonsComponent } from "../../shared/action-buttons-component/action-buttons-component";
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ export class StudentRowComponent {
     constructor(private router: Router, private studentService: StudentService) {}
 
     student = input<Student>();
+    onDelete = output<void>();
 
     editStudent(idStudent: number | undefined) {
         // Hacer un router navigate a la pagina de modificar estudiante pasandolle el ID de estudiante.
@@ -27,7 +28,15 @@ export class StudentRowComponent {
     deleteStudent() {
       let id = this.student()?.id;
       if(id && confirm('¿Seguro que quieres borrar este alumno?')){
-        //this.studentService.deleteStudent(id);
+        this.studentService.deleteStudent(id).subscribe({
+          next: () => {
+            localStorage.setItem('infoMessage', 'Alumno borrado correctamente.');
+            this.onDelete.emit();
+          },
+          error: (err) => {
+            alert('Error al borrar el alumno: ' + err.message);
+          }
+        });
     }}
 
 }
