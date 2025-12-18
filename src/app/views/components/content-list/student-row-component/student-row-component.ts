@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, OnChanges } from '@angular/core';
 import { Student } from '../../../../logic/interfaces/student-interface';
 import { ActionButtonsComponent } from "../../shared/action-buttons-component/action-buttons-component";
 import { Router } from '@angular/router';
@@ -27,7 +27,7 @@ export class StudentRowComponent {
     deleteStudent() {
       let id = this.student()?.id;
       if(id && confirm('¿Seguro que quieres borrar este alumno?')){
-        this.studentService.deleteStudent(id);
+        //this.studentService.deleteStudent(id);
     }}
 
 }

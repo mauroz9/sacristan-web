@@ -25,7 +25,6 @@ export class NewStudentModalComponent implements AfterViewInit {
     id: 0,
     name: '',
     lastName: '',
-    grade: '',
     assignedSequences: 0
   }
 
@@ -39,7 +38,7 @@ export class NewStudentModalComponent implements AfterViewInit {
   
     if(id){
       const studentId = Number(id);
-      this.baseStudent = this.studentService.getStudentById(studentId);
+      //this.baseStudent = this.studentService.getStudentById(studentId);
         
       this.isEditMode = true;
       this.studentId = Number(id);
@@ -47,7 +46,6 @@ export class NewStudentModalComponent implements AfterViewInit {
       this.studentFormGroup.patchValue({
         nameFormControl: this.baseStudent.name,
         lastNameFormControl: this.baseStudent.lastName,
-        gradeFormControl: this.baseStudent.grade,
         disabilityFormControl: '',
         photoFormControl: ''
       });
@@ -60,9 +58,10 @@ export class NewStudentModalComponent implements AfterViewInit {
     // Define form controls here as needed
     nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
     lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
-    gradeFormControl: new FormControl('',[Validators.required, ]),
-    disabilityFormControl: new FormControl('',[Validators.required]),
-    photoFormControl: new FormControl('',[Validators.required]),
+    emailFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
+    passwordFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
+    // disabilityFormControl: new FormControl('',[Validators.required]),
+    // photoFormControl: new FormControl('',[Validators.required]),
   });
 
   sendData() {

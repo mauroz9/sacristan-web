@@ -5,6 +5,7 @@ import { ContentListComponent } from '../../components/content-list/content-list
 import { Router } from '@angular/router';
 import { StudentService } from '../../../logic/services/student-service';
 import { SequenceService } from '../../../logic/services/sequence-service';
+import { Student } from '../../../logic/interfaces/student-interface';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class ContentListPage implements OnInit{
   url = "";
 
   sequenceList: Sequence[] = [];
+  studentList: Student[] = []
 
   contentSequence: Content = {
     kind: "secuencia",
@@ -38,18 +40,44 @@ export class ContentListPage implements OnInit{
   }
 
   ngOnInit(): void {
-    this.loadData();
+    this.getData();
+  }
+
+  getData() {
+      this.url = this.router.url;
+    if(this.url.includes('/sequences')){
+      this.content = this.contentSequence;
+    } else if(this.url.includes('/students')){
+      this.studentService.getStudent().subscribe({
+        next: (data) => {
+          this.studentList = data.map(s => ({
+            id: s.id,
+            kind: "alumno",
+            name: s.nombre,
+            lastName: s.apellidos,
+            assignedSequences: 0
+          }))
+          this.loadData()
+        }}
+      ) 
+    }
   }
 
   loadData() {
     this.sequenceList = this.sequenceService.getSequences();
     this.contentSequence.contentList = this.sequenceList;
     
-    this.url = this.router.url;
     if(this.url.includes('/sequences')){
       this.content = this.contentSequence;
-    } else if(this.url.includes('/students')){
-      this.content = this.studentService.contentAlumno;
+    } else if(this.url.includes('/students')){      
+      this.content = {
+          kind: "alumno",
+          url: "/students",
+          title: "Listado de alumnos",
+          subTitle: "Gestiona los alumnos del centro",
+          gender: 1,
+          contentList: this.studentList
+      }
     }
   }
 

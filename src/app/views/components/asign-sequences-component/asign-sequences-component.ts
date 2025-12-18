@@ -27,7 +27,7 @@ export class AsignSequencesComponent implements AfterViewInit {
     const id = this.route.snapshot.paramMap.get('id');
     if(id){
       const studentId = Number(id);
-      this.student = this.studentService.getStudentById(studentId);
+      //this.student = this.studentService.getStudentById(studentId);
     }
   }
 

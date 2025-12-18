@@ -28,19 +28,25 @@
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <label for="cicloSelect" class="form-label fw-semibold text-primary-blue">Ciclo</label>
-                    <select formControlName="gradeFormControl" class="form-select custom-input" id="cicloSelect">
-                        <option selected hidden>Selecciona un ciclo</option>
-                        <option value="infantil">Educación Infantil</option>
-                        <option value="primaria">Educación Primaria</option>
-                    </select>
-                    @if (studentFormGroup.get('gradeFormControl')?.invalid && (studentFormGroup.get('gradeFormControl')?.touched || studentFormGroup.get('gradeFormControl')?.dirty)) {
-                        <p class="invalid-feedback d-block mb-0"> Debes seleccionar un ciclo</p>
-                    }
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="emailInput" class="form-label fw-semibold text-primary-blue">Email</label>
+                        <input formControlName="emailFormControl" type="text" class="form-control custom-input" id="emailInput">
+                        @if (studentFormGroup.get('emailFormControl')?.invalid && (studentFormGroup.get('emailFormControl')?.touched || studentFormGroup.get('emailFormControl')?.dirty)) {
+                            <p class="invalid-feedback d-block mb-0"> Debes escribir el email</p>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <label for="passwordInput" class="form-label fw-semibold text-primary-blue">Contrasena</label>
+                        <input formControlName="passwordFormControl" type="text" class="form-control custom-input" id="passwordInput">
+                        @if (studentFormGroup.get('passwordFormControl')?.invalid && (studentFormGroup.get('passwordFormControl')?.touched || studentFormGroup.get('passwordFormControl')?.dirty)) {
+                            <p class="invalid-feedback d-block mb-0"> Debes escribir la contraseña</p>
+                        }
+                    </div>
                 </div>
                 
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-5 mb-3 mb-md-0">
                         <label class="form-label fw-semibold text-primary-blue d-block">Foto del alumno</label>
                         <div
@@ -66,7 +72,7 @@
                         <p class="invalid-feedback d-block mb-0"> Debes insertar una foto de la tarjeta de discapacidad</p>
                     }
                     </div>
-                </div>
+                </div> -->
             </form>
         </div>
 
