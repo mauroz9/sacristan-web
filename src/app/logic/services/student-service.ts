@@ -1,96 +1,91 @@
 import { Injectable } from '@angular/core';
-import { backStudent, Student } from '../interfaces/student-interface';
+import { backStudent, backStudentDetails, backStudentRequest, Student } from '../interfaces/student-interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudentService {
-  addStudent(formData: any) {
-    console.log(formData);
+
+  convertToStudent(data: any): Student {
+    return {
+      kind: 'alumno',
+      id: data.id,
+      name: data.nombre,
+      lastName: data.apellidos,
+      email: data.email,
+      password: data.contrasena,
+      assignedSequences: 0
+    };
   }
 
-  // studentList: Student[] = [
-  //   {
-  //     kind: 'alumno',
-  //     id: 1,
-  //     name: 'Lucía',
-  //     lastName: 'Fernández Morales',
-  //     assignedSequences: 4
-  //   },
-  //   {
-  //     kind: 'alumno',
-  //     id: 2,
-  //     name: 'Carlos',
-  //     lastName: 'Sánchez Ruiz',
-  //     assignedSequences: 6
-  //   },
-  //   {
-  //     kind: 'alumno',
-  //     id: 3,
-  //     name: 'Elena',
-  //     lastName: 'Martín Pérez',
-  //     assignedSequences: 3
-  //   },
-  //   {
-  //     kind: 'alumno',
-  //     id: 4,
-  //     name: 'Javier',
-  //     lastName: 'Gómez Ortega',
-  //     assignedSequences: 8
-  //   },
-  //   {
-  //     kind: 'alumno',
-  //     id: 5,
-  //     name: 'Sara',
-  //     lastName: 'Navarro León',
-  //     assignedSequences: 5
-  //   },
-  //   {
-  //     kind: 'alumno',
-  //     id: 6,
-  //     name: 'David',
-  //     lastName: 'Ruiz Castellano',
-  //     assignedSequences: 7
-  //   },
-  //   {
-  //     kind: 'alumno',
-  //     id: 7,
-  //     name: 'Paula',
-  //     lastName: 'Torres López',
-  //     assignedSequences: 9
-  //   },
-  //   {
-  //     kind: 'alumno',
-  //     id: 8,
-  //     name: 'Hugo',
-  //     lastName: 'Vega Santana',
-  //     grade: 'Proyecto Interdisciplinar 1º Ciclo (16-18 años)',
-  //     assignedSequences: 10
-  //   },
-  //   {
-  //     kind: 'alumno',
-  //     id: 9,
-  //     name: 'Andrea',
-  //     lastName: 'Iglesias Romero',
-  //     grade: 'Proyecto Interdisciplinar 2º Ciclo (18-21 años)',
-  //     assignedSequences: 11
-  //   },
-  //   {
-  //     kind: 'alumno',
-  //     id: 10,
-  //     name: 'Óscar',
-  //     lastName: 'Delgado Herrera',
-  //     grade: '2º Ciclo Educación Infantil (3-6 años)',
-  //     assignedSequences: 2
-  //   }
-
-  // ];
-
-  constructor (private http:HttpClient) {
-
+  convertToBackStudentRequest(student: Student): backStudentRequest {    
+    return {
+      id: student.id,
+      nombre: student.name,
+      apellidos: student.lastName,
+      email: student.email,
+      contrasena: student.password,
+      contrasena_confirmation: student.password,
+    };
   }
+
+  convertFormDataToStudent(formData: any): Student {
+    return {
+      kind: 'alumno',
+      id: formData.id,
+      name: formData.nameFormControl,
+      lastName: formData.lastNameFormControl,
+      email: formData.emailFormControl,
+      password: formData.passwordFormControl,
+      assignedSequences: 0
+    };
+  }
+
+  getStudentById(studentId: number): Observable<backStudentDetails> {
+    return this.http.get<backStudentDetails>("http://127.0.0.1:8000/api/usuarios/" + studentId);
+  }
+
+  sendStudent(formData: Student) {
+    formData = this.convertFormDataToStudent(formData);
+    if(formData.id){
+      this.updateStudent(formData);
+    } else {
+      this.addStudent(formData);
+    }
+  }
+
+  addStudent(formData: Student) {
+    this.http.post("http://127.0.0.1:8000/api/usuarios/", this.convertToBackStudentRequest(formData)).subscribe
+    ({
+      next: (data) => {
+        localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
+        this.router.navigate(['/students']);
+      },
+      error: (error) => {
+        console.error("Error adding student", error);
+      }
+    });
+  }
+
+  updateStudent(formData: Student) {
+
+    this.http.put("http://127.0.0.1:8000/api/usuarios/" + formData.id, this.convertToBackStudentRequest(formData)).subscribe(
+      {
+        next: (data) => {
+          localStorage.setItem('infoMessage', 'Alumno actualizado correctamente');
+          this.router.navigate(['/students']);
+        },
+        error: (error) => {
+          console.error("Error updating student", error);
+        }
+      }
+    );
+  }
+
+  constructor (private http:HttpClient, private router: Router) {}
 
   getStudent(): Observable<backStudent[]> {
     return this.http.get<backStudent[]>("http://127.0.0.1:8000/api/usuarios")

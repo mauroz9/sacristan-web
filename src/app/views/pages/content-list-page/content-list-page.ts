@@ -20,6 +20,7 @@ export class ContentListPage implements OnInit{
 
   sequenceList: Sequence[] = [];
   studentList: Student[] = []
+  infoMessage: string | null = null;
 
   contentSequence: Content = {
     kind: "secuencia",
@@ -41,6 +42,16 @@ export class ContentListPage implements OnInit{
 
   ngOnInit(): void {
     this.getData();
+
+    console.log("Hi");
+    
+
+    this.infoMessage = localStorage.getItem('infoMessage');
+    if (this.infoMessage) {
+      localStorage.removeItem('infoMessage');
+    }
+
+
   }
 
   getData() {
@@ -50,13 +61,7 @@ export class ContentListPage implements OnInit{
     } else if(this.url.includes('/students')){
       this.studentService.getStudent().subscribe({
         next: (data) => {
-          this.studentList = data.map(s => ({
-            id: s.id,
-            kind: "alumno",
-            name: s.nombre,
-            lastName: s.apellidos,
-            assignedSequences: 0
-          }))
+          this.studentList = data.map(item => this.studentService.convertToStudent(item));
           this.loadData()
         }}
       ) 

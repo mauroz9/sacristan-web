@@ -1,5 +1,14 @@
 <div class="container py-5">
 
+    @if (infoMessage) {
+        <div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ infoMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+
     <app-content-list-component [content]="content"></app-content-list-component>
     
     @if (content.contentList.length != 0) {

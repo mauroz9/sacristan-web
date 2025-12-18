@@ -15,7 +15,7 @@ export class NewStudentModalComponent implements AfterViewInit {
   @ViewChild('modal') modal!: TemplateRef<any>;
 
   functionality = output<string>();
-  isEditMode = false;
+  isEditMode: boolean = false;
   studentId: number | null = null;
 
   constructor(private modalService: NgbModal, private router: Router, private studentService:StudentService, private route: ActivatedRoute) {}
@@ -25,6 +25,8 @@ export class NewStudentModalComponent implements AfterViewInit {
     id: 0,
     name: '',
     lastName: '',
+    email: '',
+    password: '',
     assignedSequences: 0
   }
 
@@ -38,18 +40,25 @@ export class NewStudentModalComponent implements AfterViewInit {
   
     if(id){
       const studentId = Number(id);
-      //this.baseStudent = this.studentService.getStudentById(studentId);
-        
-      this.isEditMode = true;
-      this.studentId = Number(id);
+      this.studentService.getStudentById(studentId).subscribe(data => {
+          this.baseStudent = this.studentService.convertToStudent(data.usuario);          
+          
+          this.isEditMode = true;
+          this.studentId = Number(id);
 
-      this.studentFormGroup.patchValue({
-        nameFormControl: this.baseStudent.name,
-        lastNameFormControl: this.baseStudent.lastName,
-        disabilityFormControl: '',
-        photoFormControl: ''
-      });
-      
+          this.studentFormGroup.get('passwordFormControl')?.setValidators([]);
+          
+          this.studentFormGroup.patchValue({
+            nameFormControl: this.baseStudent.name,
+            lastNameFormControl: this.baseStudent.lastName,
+            emailFormControl: this.baseStudent.email,
+            passwordFormControl: '',
+            // disabilityFormControl: '',
+            // photoFormControl: ''
+          });
+        }
+      );
+          
     }
 
   }
@@ -59,7 +68,7 @@ export class NewStudentModalComponent implements AfterViewInit {
     nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
     lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
     emailFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
-    passwordFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
+    passwordFormControl: new FormControl('',[Validators.required, Validators.minLength(8)]),
     // disabilityFormControl: new FormControl('',[Validators.required]),
     // photoFormControl: new FormControl('',[Validators.required]),
   });
@@ -72,8 +81,7 @@ export class NewStudentModalComponent implements AfterViewInit {
       if(this.isEditMode){
         formData.id = this.studentId;
       }
-      this.studentService.addStudent(formData);
-      this.router.navigate(['/students']);
+      this.studentService.sendStudent(formData);
     } else {
       this.studentFormGroup.markAllAsTouched();
     }
