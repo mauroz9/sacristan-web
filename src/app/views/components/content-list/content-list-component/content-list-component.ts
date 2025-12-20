@@ -12,18 +12,24 @@ import { AsignSequencesComponent } from "../../asign-sequences-component/asign-s
   templateUrl: './content-list-component.html',
   styleUrl: './content-list-component.css',
 })
-export class ContentListComponent{
+export class ContentListComponent {
 
   content = input<Content>();
+  reload = output<void>();
   functionality = "";
 
-  constructor(private router: Router) {
+  constructor(private router: Router) {    
       if (this.router.url.includes('students/new')) {       
         this.functionality = "newStudent";
       } else if (this.router.url.includes('students/modify')) {
         this.functionality = "modifyStudent";
       } else if (this.router.url.includes('students/asign-sequences')) {
         this.functionality = "assignSequences";
-      }
+      }      
   }
+
+  reloadContent() {
+    this.reload.emit();
+  }
+
 }

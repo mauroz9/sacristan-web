@@ -5,6 +5,7 @@ import { ContentListComponent } from '../../components/content-list/content-list
 import { Router } from '@angular/router';
 import { StudentService } from '../../../logic/services/student-service';
 import { SequenceService } from '../../../logic/services/sequence-service';
+import { Student } from '../../../logic/interfaces/student-interface';
 
 
 @Component({
@@ -18,6 +19,8 @@ export class ContentListPage implements OnInit{
   url = "";
 
   sequenceList: Sequence[] = [];
+  studentList: Student[] = []
+  infoMessage: string | null = null;
 
   contentSequence: Content = {
     kind: "secuencia",
@@ -37,20 +40,49 @@ export class ContentListPage implements OnInit{
   ) {
   }
 
+  reloadContent() {
+    this.getData();
+    
+    this.infoMessage = localStorage.getItem('infoMessage');
+    if (this.infoMessage) {
+      localStorage.removeItem('infoMessage');
+    }  
+  }
+
   ngOnInit(): void {
-    this.loadData();
+    this.reloadContent();
+  }
+
+  getData() {
+      this.url = this.router.url;
+    if(this.url.includes('/sequences')){
+      this.loadData();
+    } else if(this.url.includes('/students')){
+      this.studentService.getStudent().subscribe({
+        next: (data) => {
+          this.studentList = data.map(item => this.studentService.convertToStudent(item));          
+          this.loadData()
+        }
+      }); 
+    }
   }
 
   loadData() {
     this.sequenceList = this.sequenceService.getSequences();
     this.contentSequence.contentList = this.sequenceList;
     
-    this.url = this.router.url;
     if(this.url.includes('/sequences')){
       this.content = this.contentSequence;
-    } else if(this.url.includes('/students')){
-      this.content = this.studentService.contentAlumno;
-    }
+    } else if(this.url.includes('/students')){      
+      this.content = {
+          kind: "alumno",
+          url: "/students",
+          title: "Listado de alumnos",
+          subTitle: "Gestiona los alumnos del centro",
+          gender: 1,
+          contentList: this.studentList
+      }
+    }    
   }
 
 }
