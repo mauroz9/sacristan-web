@@ -68,21 +68,25 @@ export class ContentListPage implements OnInit{
   }
 
   loadData() {
-    this.sequenceList = this.sequenceService.getSequences();
-    this.contentSequence.contentList = this.sequenceList;
-    
-    if(this.url.includes('/sequences')){
-      this.content = this.contentSequence;
-    } else if(this.url.includes('/students')){      
-      this.content = {
-          kind: "alumno",
-          url: "/students",
-          title: "Listado de alumnos",
-          subTitle: "Gestiona los alumnos del centro",
-          gender: 1,
-          contentList: this.studentList
+    this.sequenceService.getSequences().subscribe({
+      next: (data) => {
+        this.sequenceList = data;
+        this.contentSequence.contentList = this.sequenceList;
+        
+        if(this.url.includes('/sequences')){
+          this.content = this.contentSequence;
+        } else if(this.url.includes('/students')){      
+          this.content = {
+              kind: "alumno",
+              url: "/students",
+              title: "Listado de alumnos",
+              subTitle: "Gestiona los alumnos del centro",
+              gender: 1,
+              contentList: this.studentList
+          }
+        }
       }
-    }    
+    });
   }
 
 }
