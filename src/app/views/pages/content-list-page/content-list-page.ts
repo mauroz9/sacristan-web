@@ -56,14 +56,14 @@ export class ContentListPage implements OnInit{
   getData() {
       this.url = this.router.url;
     if(this.url.includes('/sequences')){
-      this.content = this.contentSequence;
+      this.loadData();
     } else if(this.url.includes('/students')){
       this.studentService.getStudent().subscribe({
         next: (data) => {
           this.studentList = data.map(item => this.studentService.convertToStudent(item));          
           this.loadData()
-        }}
-      ) 
+        }
+      }); 
     }
   }
 
@@ -82,9 +82,7 @@ export class ContentListPage implements OnInit{
           gender: 1,
           contentList: this.studentList
       }
-    }
-    console.log(this.content);
-    
+    }    
   }
 
 }

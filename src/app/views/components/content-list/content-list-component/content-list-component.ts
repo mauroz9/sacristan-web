@@ -1,4 +1,4 @@
-import { Component, effect, input, OnChanges, OnInit, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { SequenceRowComponent } from '../sequence-row-component/sequence-row-component';
 import { Content } from '../../../../logic/interfaces/content-interface';
 import { StudentRowComponent } from "../student-row-component/student-row-component";

@@ -32,19 +32,19 @@
                 <div class="row mb-3">
                     <div class="col-md-12">
                         <label for="emailInput" class="form-label fw-semibold text-primary-blue">Email</label>
-                        <input formControlName="emailFormControl" type="text" class="form-control custom-input" id="emailInput">
+                        <input formControlName="emailFormControl" type="email" class="form-control custom-input" id="emailInput">
                         @if (studentFormGroup.get('emailFormControl')?.invalid && (studentFormGroup.get('emailFormControl')?.touched || studentFormGroup.get('emailFormControl')?.dirty)) {
                             <p class="invalid-feedback d-block mb-0"> Debes escribir el email</p>
                         }
                     </div>
                     <div class="">
-                        <label for="passwordInput" class="form-label fw-semibold text-primary-blue">Contrasena</label>
+                        <label for="passwordInput" class="form-label fw-semibold text-primary-blue">Contraseña</label>
                         <input formControlName="passwordFormControl" type="password" class="form-control custom-input" id="passwordInput">
                         @if (studentFormGroup.get('passwordFormControl')?.invalid && (studentFormGroup.get('passwordFormControl')?.touched || studentFormGroup.get('passwordFormControl')?.dirty)) {
                             @if (studentFormGroup.get('passwordFormControl')?.errors?.['minlength']) {
-                                <p class="invalid-feedback d-block mb-0"> La contrasena debe tener al menos 8 caracteres</p>
+                                <p class="invalid-feedback d-block mb-0"> La contraseña debe tener al menos 8 caracteres</p>
                             } @else {
-                                <p class="invalid-feedback d-block mb-0"> Debes escribir la contrasena</p>
+                                <p class="invalid-feedback d-block mb-0"> Debes escribir la contraseña</p>
                             }
                         }
                         @if (isEditMode) {
