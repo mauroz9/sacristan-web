@@ -1,4 +1,4 @@
-import { Component, output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, input, output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,6 +16,7 @@ import { User } from '../../../../logic/interfaces/user-interface';
 export class UserFormComponent {
 
   functionality = output<string>();
+  kind = input<string>();
   isEditMode: boolean = false;
   userId: number | null = null;
 
@@ -30,6 +31,16 @@ export class UserFormComponent {
     role_id: 0,
   }
 
+  userFormGroup: FormGroup = new FormGroup({
+    // Define form controls here as needed
+    nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
+    lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
+    emailFormControl: new FormControl('',[Validators.required, Validators.minLength(1), Validators.email]),
+    passwordFormControl: new FormControl('',[Validators.required, Validators.minLength(8)]),
+    // disabilityFormControl: new FormControl('',[Validators.required]),
+    // photoFormControl: new FormControl('',[Validators.required]),
+  });
+
   ngAfterViewInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
   
@@ -38,9 +49,14 @@ export class UserFormComponent {
       this.userService.getUserById(userId).subscribe(data => {
           this.baseUser = data;          
           
+          
+
           this.isEditMode = true;
           this.userId = Number(id);
           this.userFormGroup.get('passwordFormControl')?.setValidators([]);
+
+          console.log(data);
+          
           
           this.userFormGroup.patchValue({
             nameFormControl: this.baseUser.name,
@@ -54,15 +70,5 @@ export class UserFormComponent {
     }
 
   }
-
-  userFormGroup: FormGroup = new FormGroup({
-    // Define form controls here as needed
-    nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
-    lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
-    emailFormControl: new FormControl('',[Validators.required, Validators.minLength(1), Validators.email]),
-    passwordFormControl: new FormControl('',[Validators.required, Validators.minLength(8)]),
-    // disabilityFormControl: new FormControl('',[Validators.required]),
-    // photoFormControl: new FormControl('',[Validators.required]),
-  });
 
 }

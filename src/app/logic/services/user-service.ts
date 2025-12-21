@@ -34,7 +34,7 @@ export class UserService {
     ({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Usuario añadido correctamente');
-        this.router.navigate(['/pruebas']);
+        this.router.navigate(['/users']);
       },
       error: (error) => {
         console.error("Error adding user", error);
@@ -46,7 +46,6 @@ export class UserService {
     this.http.put("http://127.0.0.1:8000/api/usuarios/" + formData.id, formData).subscribe({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Usuario modificado correctamente');
-        this.router.navigate(['/pruebas']);
       },
       error: (error) => {
         console.error("Error updating user", error);
