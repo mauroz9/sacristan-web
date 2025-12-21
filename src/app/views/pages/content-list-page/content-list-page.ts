@@ -7,6 +7,8 @@ import { StudentService } from '../../../logic/services/student-service';
 import { SequenceService } from '../../../logic/services/sequence-service';
 import { Student } from '../../../logic/interfaces/student-interface';
 import { firstValueFrom } from 'rxjs';
+import { Teacher } from '../../../logic/interfaces/teacher-interface';
+import { TeacherService } from '../../../logic/services/teacher-service';
 
 
 @Component({
@@ -17,10 +19,18 @@ import { firstValueFrom } from 'rxjs';
 })
 export class ContentListPage implements OnInit {
 
+    constructor(
+    private router: Router,
+    private studentService: StudentService,
+    private sequenceService: SequenceService,
+    private teacherService: TeacherService
+  ) {}
+
   url = "";
 
   sequenceList: Sequence[] = [];
   studentList: Student[] = []
+  teacherList: Teacher[] = [];
   infoMessage: string | null = null;
 
   contentSequence: Content = {
@@ -33,13 +43,6 @@ export class ContentListPage implements OnInit {
   }
 
   content: Content = this.contentSequence;
-
-  constructor(
-    private router: Router,
-    private studentService: StudentService,
-    private sequenceService: SequenceService
-  ) {
-  }
 
   async reloadContent() {
     await this.getData();
@@ -59,7 +62,10 @@ export class ContentListPage implements OnInit {
     if (this.url.includes('/students')) {
       this.studentList = [];
       this.studentList = await firstValueFrom(this.studentService.getStudent());
-    };
+    } else if (this.url.includes('/teachers')) {
+      this.teacherList = [];
+      this.teacherList = await firstValueFrom(this.teacherService.getTeachers());
+    }
     this.loadData()
   }
 
@@ -87,7 +93,10 @@ export class ContentListPage implements OnInit {
         contentList: this.studentList
       }
     } else if (this.url.includes('/teachers')) {
-      console.log("teachers");
+
+      for (let teacher of this.teacherList) {
+        teacher.kind = "profesor";
+      }
 
       this.content = {
         kind: "profesor",
@@ -96,8 +105,11 @@ export class ContentListPage implements OnInit {
         subTitle: "Gestiona los profesores del centro",
         gender: 1,
         plural: 1,
-        contentList: []
+        contentList: this.teacherList
       }
+
+      console.log(this.content);
+      
     } else {
       console.log("asd");
     }

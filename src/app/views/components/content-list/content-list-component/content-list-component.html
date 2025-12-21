@@ -27,7 +27,9 @@
                 <app-sequence-row-component [sequence]="item"></app-sequence-row-component>
             } @else if (item.kind == 'alumno') {
                 <app-student-row-component [student]="item" (onDelete)="reloadContent()"></app-student-row-component>
-            } @else {
+            } @else if (item.kind == 'profesor') {
+                <app-teacher-row-component [teacher]="item" (onDelete)="reloadContent()"></app-teacher-row-component>
+            }@else {
                 <div class="text-center py-5 text-muted">
                     <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
                     Tipo de contenido no soportado.
@@ -38,6 +40,8 @@
     @if (functionality != "") {
             @if (functionality == "newStudent" || functionality == "modifyStudent") {
                 <app-student-form-modal-component [functionality]="functionality"></app-student-form-modal-component>
+            } @else if (functionality == "newTeacher" || functionality == "modifyTeacher") {
+                <app-teacher-form-modal-component [functionality]="functionality"></app-teacher-form-modal-component>
             } @else if (functionality == "assignSequences") {
                 <app-asign-sequences-component></app-asign-sequences-component>
             }
