@@ -6,7 +6,7 @@ import { SequenceService } from '../../../../logic/services/sequence-service';
 import { Sequence } from '../../../../logic/interfaces/sequence-interface';
 import { CategorySequenceService } from '../../../../logic/services/category-sequence-service';
 import { Category } from '../../../../logic/interfaces/category-sequence-interface';
-import { first, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { Step } from '../../../../logic/interfaces/sequence-step-interface';
 @Component({
   selector: 'app-sequence-form-component',
