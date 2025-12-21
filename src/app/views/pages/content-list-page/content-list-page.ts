@@ -100,7 +100,8 @@ export class ContentListPage implements OnInit {
             contentList: []
           }
         }
-      });
+      }
+    });
   }
 
 }

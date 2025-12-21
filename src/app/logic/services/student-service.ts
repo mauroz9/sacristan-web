@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from './user-service';
 import { UserCreationResponse } from '../interfaces/user-interface';
+import { API_URL } from './env';
 
 @Injectable({
   providedIn: 'root',

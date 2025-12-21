@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../interfaces/user-interface';
 import { Router } from '@angular/router';
+import { API_URL } from './env';
 
 @Injectable({
   providedIn: 'root',
