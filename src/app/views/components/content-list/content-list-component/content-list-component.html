@@ -20,7 +20,7 @@
     } @else {
         @for (item of content()?.contentList; track item.id) {
             @if (content()?.kind == 'secuencia') {
-                <app-sequence-row-component [sequence]="$any(item)"></app-sequence-row-component>
+                <app-sequence-row-component [sequence]="$any(item)" (onDelete)="reloadContent()"></app-sequence-row-component>
             } @else if (content()?.kind == 'alumno') {
                 <app-student-row-component [student]="$any(item)" (onDelete)="reloadContent()"></app-student-row-component>
             } @else {

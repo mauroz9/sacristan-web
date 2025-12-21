@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class SequenceRowComponent {
 
   sequence = input<Sequence>();
+  onDelete = output<void>();
 
   constructor(private sequenceService: SequenceService, private router: Router) {}
 
@@ -20,7 +21,16 @@ export class SequenceRowComponent {
     const id = this.sequence()?.id;
     
     if(id && confirm('¿Seguro que quieres borrar esta secuencia?')){
-      this.sequenceService.deleteSequence(id);
+      this.sequenceService.deleteSequence(id).subscribe({
+        next: () => {
+          localStorage.setItem('infoMessage', 'Secuencia eliminada correctamente');
+          this.onDelete.emit();
+        },
+        error: (error) => {
+          console.error('Error al eliminar la secuencia:', error);
+          alert('Error al eliminar la secuencia');
+        }
+      });
     }
 
   }
