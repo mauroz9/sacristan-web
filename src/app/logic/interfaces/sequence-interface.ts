@@ -2,6 +2,7 @@ import { Category } from "./category-sequence-interface";
 import { Step } from "./sequence-step-interface";
 
 export interface Sequence {
+  kind: 'secuencia'
   id: number;
   sequence_category_id: number;
   title: string;
