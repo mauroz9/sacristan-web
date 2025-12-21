@@ -7,5 +7,6 @@ export interface Content {
     title: string,
     subTitle: string,
     gender: number,
+    plural?: number,
     contentList: (Sequence | Student)[]
 }

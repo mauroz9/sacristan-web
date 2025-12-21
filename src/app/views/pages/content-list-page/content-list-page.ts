@@ -70,8 +70,8 @@ export class ContentListPage implements OnInit{
   loadData() {
     this.sequenceList = this.sequenceService.getSequences();
     this.contentSequence.contentList = this.sequenceList;
-    
-    if(this.url.includes('/sequences')){
+
+    if (this.url.includes('/sequences')) {
       this.content = this.contentSequence;
     } else if(this.url.includes('/students')){      
 
@@ -88,7 +88,19 @@ export class ContentListPage implements OnInit{
         gender: 1,
         contentList: this.studentList
       }
-    }    
+    } else if (this.url.includes('/teachers')) {
+      this.content = {
+        kind: "profesor",
+        url: "/teachers",
+        title: "Listado de profesores",
+        subTitle: "Gestiona los profesores del centro",
+        gender: 1,
+        plural: 1,
+        contentList: []
+      }
+    } else {
+      console.log(this.url);
+    }
   }
 
 }

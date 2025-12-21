@@ -73,7 +73,7 @@ export class NewStudentModalComponent implements AfterViewInit {
     // photoFormControl: new FormControl('',[Validators.required]),
   });
 
-  sendData() {
+  sendData() {    
     if (this.studentFormGroup.valid) {
       const formData = this.studentFormGroup.value;
       // Process form data here
