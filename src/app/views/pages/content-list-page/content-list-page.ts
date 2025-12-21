@@ -88,7 +88,6 @@ export class ContentListPage implements OnInit{
         gender: 1,
         contentList: this.studentList
       }
-      console.log(this.content);
     }    
   }
 

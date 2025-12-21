@@ -35,7 +35,7 @@ export class StudentService {
     return this.http.get<Student>("http://127.0.0.1:8000/api/usuarios/" + studentId);
   }
 
-  sendStudent(formData: Student) {
+  sendStudent(formData: any) {
     formData = this.convertFormDataToStudent(formData);
     if(formData.id){
       this.updateStudent(formData);
@@ -45,7 +45,7 @@ export class StudentService {
   }
 
   addStudent(formData: Student) {
-    this.http.post("http://127.0.0.1:8000/api/usuarios/", this.convertFormDataToStudent(formData)).subscribe
+    this.http.post("http://127.0.0.1:8000/api/usuarios/", formData).subscribe
     ({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
@@ -59,7 +59,7 @@ export class StudentService {
 
   updateStudent(formData: Student) {
 
-    this.http.put("http://127.0.0.1:8000/api/usuarios/" + formData.id, this.convertFormDataToStudent(formData)).subscribe(
+    this.http.put("http://127.0.0.1:8000/api/usuarios/" + formData.id, formData).subscribe(
       {
         next: (data) => {
           localStorage.setItem('infoMessage', 'Alumno actualizado correctamente');
