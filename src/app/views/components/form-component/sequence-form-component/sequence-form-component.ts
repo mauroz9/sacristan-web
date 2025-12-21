@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { StepModalComponent } from '../../step-modal-component/step-modal-component';
 import { SequenceService } from '../../../../logic/services/sequence-service';
 import { Sequence } from '../../../../logic/interfaces/sequence-interface';
+import { CategorySequenceService } from '../../../../logic/services/category-sequence-service';
 @Component({
   selector: 'app-sequence-form-component',
   imports: [ReactiveFormsModule, StepModalComponent, RouterLink],
@@ -24,9 +25,9 @@ export class SequenceFormComponent implements OnInit{
   isEditMode = false;
   sequenceId: number | null = null;
   editingStepIndex: number | null = null;
-  stepToEdit: {description: string, imageUrl: string} | null = null;
+  stepToEdit: {title: string, imageUrl: string} | null = null;
 
-  constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute) {}
+  constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute, private categorySequenceService: CategorySequenceService) {}
 
   ngOnInit(): void {
       const id = this.route.snapshot.paramMap.get('id');
@@ -52,8 +53,8 @@ export class SequenceFormComponent implements OnInit{
           if (sequence.steps) {
             sequence.steps.forEach(step => {
               this.addStepToForm({ 
-                description: step.description,
-                imageUrl: step.imageUrl 
+                title: step.title,
+                imageUrl: step.pictogram_arasaac 
               });
             });
           }
@@ -62,9 +63,9 @@ export class SequenceFormComponent implements OnInit{
     });
   }
 
-  addStepToForm(step: {description: string, imageUrl: string}): void{
+  addStepToForm(step: {title: string, imageUrl: string | null}): void{
     const newStep = new FormGroup({
-      description: new FormControl(step.description),
+      title: new FormControl(step.title),
       imageUrl: new FormControl(step.imageUrl)
     });
     this.steps.push(newStep);
@@ -95,7 +96,7 @@ export class SequenceFormComponent implements OnInit{
         imageUrl: step.imageUrl
       });
     }else{
-      this.addStepToForm({ description: step.name, imageUrl: step.imageUrl});
+      this.addStepToForm({ title: step.name, imageUrl: step.imageUrl});
     }
     this.showModal = false;
   }
@@ -108,7 +109,7 @@ export class SequenceFormComponent implements OnInit{
     const stepMod = this.steps.at(index) as FormGroup;
     this.editingStepIndex = index;
     this.stepToEdit = {
-      description: stepMod.get('description')?.value,
+      title: stepMod.get('description')?.value,
       imageUrl: stepMod.get('imageUrl')?.value
     }
 
@@ -142,25 +143,37 @@ export class SequenceFormComponent implements OnInit{
     if(this.sequenceForm.valid){
       
       const formValue = this.sequenceForm.value;
-      const newSequence: Sequence = {
+      this.categorySequenceService.getCategoryById(formValue.category_id!).subscribe(req => {
+        const newSequence: Sequence = {
         kind: 'secuencia',
         id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
         title: formValue.title!,
         description: formValue.description!,
-        category_id: formValue.category_id!,
+        sequence_category_id: formValue.category_id!,
         steps: (formValue.steps as any[]).map((step, index) => ({
-          id: index + 1,
-          order: index + 1,
-          description: step.description,
-          imageUrl: step.imageUrl
-        }))
+          id: this.isEditMode ? (step.id ?? index + 1) : index + 1,
+          sequence_id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
+          position: index + 1,
+          title: step.title,
+          pictogram_arasaac: step.imageUrl,
+          pictogram_custom: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        category: req
       };
+
       if(this.isEditMode){
         this.sequenceService.modifySequence(newSequence);
       }else{
         this.sequenceService.addSequence(newSequence);
       }
       this.router.navigate(["/sequences"]);
+      });
+      
+      
     } else {
       this.sequenceForm.markAllAsTouched();
     }
