@@ -4,7 +4,7 @@
         
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <span class="badge bg-secondary-yellow text-dark mb-2">{{ sequence.categorie }}</span>
+                <span class="badge bg-secondary-yellow text-dark mb-2">{{ sequence.category }}</span>
                 <h2 class="text-primary-blue fw-bold mb-0">{{ sequence.title }}</h2>
                 <p class="text-muted mb-0">{{ sequence.description }}</p>
             </div>
@@ -28,12 +28,12 @@
                     </div>
 
                     <div class="step-image-container">
-                        <img [src]="sequence.steps[currentIndex].imageUrl" class="img-fluid" [alt]="sequence.steps[currentIndex].description">
+                        <img [src]="sequence.steps[currentIndex].pictogram_arasaac" class="img-fluid" [alt]="sequence.steps[currentIndex].title">
                     </div>
                     
                     <div class="step-footer">
                         <h2 class="text-primary-blue fw-bold mb-0 text-center">
-                            {{ sequence.steps[currentIndex].description }}
+                            {{ sequence.steps[currentIndex].title }}
                         </h2>
                     </div>
                 </div>

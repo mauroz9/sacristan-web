@@ -23,12 +23,13 @@
 
             <div class="mb-4">
                 <label class="form-label text-primary-blue fw-semibold">Categoría</label>
-                <select class="form-select custom-input" formControlName="category">
-                    <option value="Material">Material</option>
-                    <option value="Higiene">Higiene</option>
-                    <option value="Rutina">Rutina</option>
+                <select class="form-select custom-input" formControlName="category_id">
+                    <option [value]="null" disabled selected>Selecciona una categoría</option>
+                    @for (category of categories; track category.id) {
+                        <option [value]="category.id">{{ category.name }}</option>
+                    }
                 </select>
-                @if(sequenceForm.get('category')?.touched && sequenceForm.get('category')?.invalid){
+                @if(sequenceForm.get('category_id')?.touched && sequenceForm.get('category_id')?.invalid){
                 <p class="invalid-feedback d-block">Debes escoger una Categoría</p>
                 }
             </div>
@@ -63,7 +64,7 @@
                         <div class="flex-grow-1">
                             <input type="text"
                                 class="form-control border-0 bg-transparent fw-bold text-primary-blue fs-5 p-0"
-                                formControlName="description" readonly>
+                                formControlName="title" readonly>
                         </div>
 
                         <button type="button" class="btn text-primary border-0" (click)="modifyStep(i)">

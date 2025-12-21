@@ -1,15 +1,14 @@
-export interface SequenceStep {
-  id: number;
-  order: number;
-  description: string;
-  imageUrl: string;
-}
+import { Category } from "./category-sequence-interface";
+import { Step } from "./sequence-step-interface";
 
 export interface Sequence {
-  kind: 'secuencia',
+  kind: 'secuencia'
   id: number;
+  sequence_category_id: number;
   title: string;
   description: string;
-  categorie: string;
-  steps: SequenceStep[]; 
+  created_at: string;
+  updated_at: string;
+  category: Category;
+  steps: Step[];
 }
