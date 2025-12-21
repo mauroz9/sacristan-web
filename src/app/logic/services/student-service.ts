@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { backStudent, backStudentDetails, backStudentRequest, Student } from '../interfaces/student-interface';
+import { Student } from '../interfaces/student-interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -12,43 +12,27 @@ export class StudentService {
     return this.http.delete("http://127.0.0.1:8000/api/usuarios/" + id)
   }
 
-  convertToStudent(data: any): Student {
-    return {
-      kind: 'alumno',
-      id: data.id,
-      name: data.nombre,
-      lastName: data.apellidos,
-      email: data.email,
-      password: data.contrasena,
-      assignedSequences: 0
-    };
-  }
-
-  convertToBackStudentRequest(student: Student): backStudentRequest {    
-    return {
-      id: student.id,
-      nombre: student.name,
-      apellidos: student.lastName,
-      email: student.email,
-      contrasena: student.password,
-      contrasena_confirmation: student.password,
-    };
-  }
-
   convertFormDataToStudent(formData: any): Student {
-    return {
+    let student: Student = {
       kind: 'alumno',
       id: formData.id,
       name: formData.nameFormControl,
-      lastName: formData.lastNameFormControl,
+      last_name: formData.lastNameFormControl,
       email: formData.emailFormControl,
       password: formData.passwordFormControl,
       assignedSequences: 0
-    };
+    }
+
+    if (formData.passwordFormControl === '') { 
+      delete student.password;
+    }
+
+    return student;
+
   }
 
-  getStudentById(studentId: number): Observable<backStudentDetails> {
-    return this.http.get<backStudentDetails>("http://127.0.0.1:8000/api/usuarios/" + studentId);
+  getStudentById(studentId: number): Observable<Student> {
+    return this.http.get<Student>("http://127.0.0.1:8000/api/usuarios/" + studentId);
   }
 
   sendStudent(formData: Student) {
@@ -61,7 +45,7 @@ export class StudentService {
   }
 
   addStudent(formData: Student) {
-    this.http.post("http://127.0.0.1:8000/api/usuarios/", this.convertToBackStudentRequest(formData)).subscribe
+    this.http.post("http://127.0.0.1:8000/api/usuarios/", this.convertFormDataToStudent(formData)).subscribe
     ({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
@@ -75,7 +59,7 @@ export class StudentService {
 
   updateStudent(formData: Student) {
 
-    this.http.put("http://127.0.0.1:8000/api/usuarios/" + formData.id, this.convertToBackStudentRequest(formData)).subscribe(
+    this.http.put("http://127.0.0.1:8000/api/usuarios/" + formData.id, this.convertFormDataToStudent(formData)).subscribe(
       {
         next: (data) => {
           localStorage.setItem('infoMessage', 'Alumno actualizado correctamente');
@@ -90,8 +74,8 @@ export class StudentService {
 
   constructor (private http:HttpClient, private router: Router) {}
 
-  getStudent(): Observable<backStudent[]> {
-    return this.http.get<backStudent[]>("http://127.0.0.1:8000/api/usuarios")
+  getStudent(): Observable<Student[]> {
+    return this.http.get<Student[]>("http://127.0.0.1:8000/api/usuarios")
   }
 
 

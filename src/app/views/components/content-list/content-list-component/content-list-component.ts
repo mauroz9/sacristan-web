@@ -18,7 +18,9 @@ export class ContentListComponent {
   reload = output<void>();
   functionality = "";
 
-  constructor(private router: Router) {    
+  constructor(private router: Router) {   
+      console.log(this.content());
+      
       if (this.router.url.includes('students/new')) {       
         this.functionality = "newStudent";
       } else if (this.router.url.includes('students/modify')) {
