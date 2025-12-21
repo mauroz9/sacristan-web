@@ -1,68 +1,41 @@
 import { Injectable } from '@angular/core';
-import { backStudent, backStudentDetails, backStudentRequest, Student } from '../interfaces/student-interface';
+import { Student } from '../interfaces/student-interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserService } from './user-service';
+import { UserCreationResponse } from '../interfaces/user-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudentService {
+
+  constructor (private http:HttpClient, private router: Router, private userService:UserService) {}
+
+  getStudent(): Observable<Student[]> {
+    return this.http.get<Student[]>(API_URL + "/api/estudiantes");
+  }
+
+  getStudentById(studentId: number): Observable<Student> {
+    return this.http.get<Student>(API_URL + "/api/estudiantes/" + studentId);
+  }
+
   deleteStudent(id: number) {
-    return this.http.delete("http://127.0.0.1:8000/api/usuarios/" + id)
+    return this.http.delete(API_URL + "/api/estudiantes/" + id)
   }
 
-  convertToStudent(data: any): Student {
-    return {
-      kind: 'alumno',
-      id: data.id,
-      name: data.nombre,
-      lastName: data.apellidos,
-      email: data.email,
-      password: data.contrasena,
-      assignedSequences: 0
-    };
-  }
-
-  convertToBackStudentRequest(student: Student): backStudentRequest {    
-    return {
-      id: student.id,
-      nombre: student.name,
-      apellidos: student.lastName,
-      email: student.email,
-      contrasena: student.password,
-      contrasena_confirmation: student.password,
-    };
-  }
-
-  convertFormDataToStudent(formData: any): Student {
-    return {
-      kind: 'alumno',
-      id: formData.id,
-      name: formData.nameFormControl,
-      lastName: formData.lastNameFormControl,
-      email: formData.emailFormControl,
-      password: formData.passwordFormControl,
-      assignedSequences: 0
-    };
-  }
-
-  getStudentById(studentId: number): Observable<backStudentDetails> {
-    return this.http.get<backStudentDetails>("http://127.0.0.1:8000/api/usuarios/" + studentId);
-  }
-
-  sendStudent(formData: Student) {
-    formData = this.convertFormDataToStudent(formData);
-    if(formData.id){
-      this.updateStudent(formData);
+  sendStudent(formData: any) {
+    let processedFormData:Student = this.convertFormDataToStudent(formData);
+    if(processedFormData.user.id){
+      this.updateStudent(processedFormData);
     } else {
-      this.addStudent(formData);
+      this.addStudent(processedFormData);
     }
   }
 
   addStudent(formData: Student) {
-    this.http.post("http://127.0.0.1:8000/api/usuarios/", this.convertToBackStudentRequest(formData)).subscribe
-    ({
+    this.http.post(API_URL + "/api/estudiantes/", formData.user).subscribe({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
         this.router.navigate(['/students']);
@@ -73,11 +46,13 @@ export class StudentService {
     });
   }
 
-  updateStudent(formData: Student) {
+  updateStudent(formData: Student) {    
 
-    this.http.put("http://127.0.0.1:8000/api/usuarios/" + formData.id, this.convertToBackStudentRequest(formData)).subscribe(
+    this.http.put(API_URL + "/api/usuarios/" + formData.user.id, formData.user).subscribe(
       {
         next: (data) => {
+          console.log(data);
+          
           localStorage.setItem('infoMessage', 'Alumno actualizado correctamente');
           this.router.navigate(['/students']);
         },
@@ -88,10 +63,28 @@ export class StudentService {
     );
   }
 
-  constructor (private http:HttpClient, private router: Router) {}
+  convertFormDataToStudent(formData: any): Student {
+    let student: Student = {
+      kind: 'alumno',
+      user: {
+        id: formData.id,
+        name: formData.nameFormControl,
+        last_name: formData.lastNameFormControl,
+        email: formData.emailFormControl,
+        role_id: 2,
+        password: formData.passwordFormControl,
+        password_confirmation: formData.passwordFormControl
+      }
+    }
 
-  getStudent(): Observable<backStudent[]> {
-    return this.http.get<backStudent[]>("http://127.0.0.1:8000/api/usuarios")
+    if (formData.passwordFormControl === '') { 
+      delete student.user.password;
+    } else {
+      student.user.password_confirmation = formData.passwordFormControl;
+    }
+
+    return student;
+
   }
 
 

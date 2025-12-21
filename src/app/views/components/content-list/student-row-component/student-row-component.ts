@@ -27,6 +27,8 @@ export class StudentRowComponent {
 
     deleteStudent() {
       let id = this.student()?.id;
+      console.log(id);
+      
       if(id && confirm('¿Seguro que quieres borrar este alumno?')){
         this.studentService.deleteStudent(id).subscribe({
           next: () => {

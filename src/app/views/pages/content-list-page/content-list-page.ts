@@ -60,7 +60,7 @@ export class ContentListPage implements OnInit {
     } else if (this.url.includes('/students')) {
       this.studentService.getStudent().subscribe({
         next: (data) => {
-          this.studentList = data.map(item => this.studentService.convertToStudent(item));
+          this.studentList = data;          
           this.loadData()
         }
       });
