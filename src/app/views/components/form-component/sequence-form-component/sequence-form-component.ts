@@ -6,73 +6,75 @@ import { SequenceService } from '../../../../logic/services/sequence-service';
 import { Sequence } from '../../../../logic/interfaces/sequence-interface';
 import { CategorySequenceService } from '../../../../logic/services/category-sequence-service';
 import { Category } from '../../../../logic/interfaces/category-sequence-interface';
+import { first, firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-sequence-form-component',
   imports: [ReactiveFormsModule, StepModalComponent, RouterLink],
   templateUrl: './sequence-form-component.html',
   styleUrl: './sequence-form-component.css',
 })
-export class SequenceFormComponent implements OnInit{
-  
+export class SequenceFormComponent implements OnInit {
+
   sequenceForm = new FormGroup({
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    category_id: new FormControl<number | null>(null , Validators.required),
+    category_id: new FormControl<number | null>(null, Validators.required),
     steps: new FormArray([])
   });
-  
+
   draggedIndex: number | null = null;
   showModal = false;
   isEditMode = false;
   sequenceId: number | null = null;
   editingStepIndex: number | null = null;
-  stepToEdit: {title: string, imageUrl: string} | null = null;
+  stepToEdit: { title: string, imageUrl: string } | null = null;
   categories: Category[] = [];
 
-  constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute, private categorySequenceService: CategorySequenceService) {}
+  constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute, private categorySequenceService: CategorySequenceService) { }
 
   ngOnInit(): void {
 
-    this.categorySequenceService.getCategories().subscribe({
-        next: (categories) => {
-          this.categories = categories;
-        }
-      });
+    this.categorySequenceService.getCategories().subscribe(req => {
+      this.categories = req;
+    });
 
-      const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('id');
 
-      if(id){
-        this.isEditMode = true;
-        this.sequenceId = Number(id);
-        this.loadSequenceData(this.sequenceId);
-      }
+    if (id) {
+      this.isEditMode = true;
+      this.sequenceId = Number(id);
+      this.loadSequenceData(this.sequenceId);
+    }
   }
 
-  loadSequenceData(id: number): void{
+  loadSequenceData(id: number): void {
     this.sequenceService.getSequenceById(id).subscribe({
-      next: (sequence) => {
+      next: (sequence: any) => {
         if (sequence) {
           this.sequenceForm.patchValue({
             title: sequence.title,
             description: sequence.description,
-            category_id: sequence.sequence_category_id 
+            category_id: sequence.sequence_category_id
           });
 
           this.steps.clear();
           if (sequence.steps) {
-            sequence.steps.forEach(step => {
-              this.addStepToForm({ 
-                title: step.title,
+            const sortedSteps = sequence.steps.sort((a: any, b: any) => a.position - b.position);
+
+            sortedSteps.forEach((step: any) => {
+              this.addStepToForm({
+                title: step.name, 
                 imageUrl: step.pictogram_arasaac 
               });
             });
           }
         }
       },
+      error: (err) => console.error('Error al cargar la secuencia:', err)
     });
   }
 
-  addStepToForm(step: {title: string, imageUrl: string | null}): void{
+  addStepToForm(step: { title: string, imageUrl: string | null }): void {
     const newStep = new FormGroup({
       title: new FormControl(step.title),
       imageUrl: new FormControl(step.imageUrl)
@@ -85,7 +87,7 @@ export class SequenceFormComponent implements OnInit{
     return this.sequenceForm.get('steps') as FormArray;
   }
 
-  openModal(): void{
+  openModal(): void {
     this.editingStepIndex = null;
     this.stepToEdit = null;
     this.showModal = true;
@@ -97,15 +99,15 @@ export class SequenceFormComponent implements OnInit{
     this.stepToEdit = null;
   }
 
-  handleSaveStep(step: {name: string, imageUrl: string}): void{
-    if(this.editingStepIndex !== null){
+  handleSaveStep(step: { name: string, imageUrl: string }): void {
+    if (this.editingStepIndex !== null) {
       const stepControl = this.steps.at(this.editingStepIndex) as FormGroup;
       stepControl.patchValue({
-        description: step.name,
+        title: step.name,
         imageUrl: step.imageUrl
       });
-    }else{
-      this.addStepToForm({ title: step.name, imageUrl: step.imageUrl});
+    } else {
+      this.addStepToForm({ title: step.name, imageUrl: step.imageUrl });
     }
     this.showModal = false;
   }
@@ -114,11 +116,11 @@ export class SequenceFormComponent implements OnInit{
     this.steps.removeAt(index);
   }
 
-  modifyStep(index: number): void{
+  modifyStep(index: number): void {
     const stepMod = this.steps.at(index) as FormGroup;
     this.editingStepIndex = index;
     this.stepToEdit = {
-      title: stepMod.get('description')?.value,
+      title: stepMod.get('title')?.value,
       imageUrl: stepMod.get('imageUrl')?.value
     }
 
@@ -133,8 +135,8 @@ export class SequenceFormComponent implements OnInit{
   onDragOver(event: DragEvent): void {
     event.preventDefault();
   }
-    
-  moveStep(fromIndex: number, toIndex: number): void{
+
+  moveStep(fromIndex: number, toIndex: number): void {
     const stepControl = this.steps.at(fromIndex);
     this.steps.removeAt(fromIndex);
     this.steps.insert(toIndex, stepControl);
@@ -148,59 +150,49 @@ export class SequenceFormComponent implements OnInit{
   }
 
   //Save sequence
-  onSubmit(){
-  if(this.sequenceForm.valid){
-    
+  async onSubmit() {
+  if (this.sequenceForm.valid) {
     const formValue = this.sequenceForm.value;
-    this.categorySequenceService.getCategoryById(formValue.category_id!).subscribe({
-      next: (category) => {
-        const newSequence: Sequence = {
-          kind: 'secuencia',
-          id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
-          title: formValue.title!,
-          description: formValue.description!,
-          sequence_category_id: formValue.category_id!,
-          steps: (formValue.steps as any[]).map((step, index) => ({
-            id: this.isEditMode ? (step.id ?? index + 1) : index + 1,
-            sequence_id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
-            position: index + 1,
-            title: step.title,
-            pictogram_arasaac: step.imageUrl,
-            pictogram_custom: null,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          })),
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          category: category
-        };
+    
+    try {
+      const sequenceCategory = await firstValueFrom(this.categorySequenceService.getCategoryById(formValue.category_id!));
 
-        if(this.isEditMode){
-          this.sequenceService.modifySequence(newSequence).subscribe({
-            next: () => {
-              localStorage.setItem('infoMessage', 'Secuencia modificada correctamente');
-              this.router.navigate(["/sequences"]);
-            },
-            error: (error) => {
-              console.error('Error al modificar la secuencia:', error);
-            }
-          });
-        }else{
-          this.sequenceService.addSequence(newSequence).subscribe({
-            next: () => {
-              localStorage.setItem('infoMessage', 'Secuencia creada correctamente');
-              this.router.navigate(["/sequences"]);
-            },
-            error: (error) => {
-              console.error('Error al crear la secuencia:', error);
-            }
-          });
-        }
-      },
-      error: (error) => {
-        console.error('Error al obtener la categoría:', error);
-      }
-    });
+      const newSequence: Sequence = {
+        kind: 'secuencia',
+        id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
+        title: formValue.title!,
+        description: formValue.description!,
+        sequence_category_id: formValue.category_id!,
+        category: sequenceCategory, 
+
+        steps: (formValue.steps as any[]).map((step, index) => ({
+          id: 0, 
+          sequence_id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
+          position: index + 1,
+          title: step.title,
+          pictogram_arasaac: step.imageUrl,
+          pictogram_custom: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      const request$ = this.isEditMode 
+        ? this.sequenceService.modifySequence(newSequence) 
+        : this.sequenceService.addSequence(newSequence);
+
+      await firstValueFrom(request$);
+      
+      localStorage.setItem('infoMessage', this.isEditMode ? 'Secuencia modificada correctamente' : 'Secuencia creada correctamente');
+      this.router.navigate(["/sequences"]);
+      
+    } catch (error) {
+      console.error('Error al guardar la secuencia:', error);
+      alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
+    }
+
   } else {
     this.sequenceForm.markAllAsTouched();
   }
