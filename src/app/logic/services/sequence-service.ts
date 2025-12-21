@@ -11,22 +11,22 @@ export class SequenceService {
   constructor (private http: HttpClient) {}
 
   getSequences(): Observable<Sequence[]>{
-    return this.http.get<Sequence[]>('http://localhost:8000/api/secuencias');
+    return this.http.get<Sequence[]>('/api/secuencias');
   }
 
   getSequenceById(id: number): Observable<Sequence> {
-    return this.http.get<Sequence>(`http://localhost:8000/api/secuencias/${id}`);
+    return this.http.get<Sequence>(API_URL + `/api/secuencias/${id}`);
   }
 
   addSequence(newSequence: Sequence): Observable<any>{
-    return this.http.post('http://localhost:8000/api/secuencias', newSequence);
+    return this.http.post(API_URL + '/api/secuencias', newSequence);
   }
 
   modifySequence(modifySequence: Sequence): Observable<any>{
-    return this.http.put( `http://localhost:8000/api/secuencias/${modifySequence.id}`, modifySequence);
+    return this.http.put(API_URL + `/api/secuencias/${modifySequence.id}`, modifySequence);
   }
 
   deleteSequence(id: number): Observable<any>{
-    return this.http.delete(`http://localhost:8000/api/secuencias/${id}`)
+    return this.http.delete(API_URL + `/api/secuencias/${id}`)
   }
 }
