@@ -60,7 +60,7 @@ export class ContentListPage implements OnInit{
     } else if(this.url.includes('/students')){
       this.studentService.getStudent().subscribe({
         next: (data) => {
-          this.studentList = data.map(item => this.studentService.convertToStudent(item));          
+          this.studentList = data;          
           this.loadData()
         }
       }); 
@@ -74,13 +74,19 @@ export class ContentListPage implements OnInit{
     if(this.url.includes('/sequences')){
       this.content = this.contentSequence;
     } else if(this.url.includes('/students')){      
+
+      for (let student of this.studentList) {
+        student.kind = "alumno";
+        student.assignedSequences = 0;
+      }
+      
       this.content = {
-          kind: "alumno",
-          url: "/students",
-          title: "Listado de alumnos",
-          subTitle: "Gestiona los alumnos del centro",
-          gender: 1,
-          contentList: this.studentList
+        kind: "alumno",
+        url: "/students",
+        title: "Listado de alumnos",
+        subTitle: "Gestiona los alumnos del centro",
+        gender: 1,
+        contentList: this.studentList
       }
     }    
   }

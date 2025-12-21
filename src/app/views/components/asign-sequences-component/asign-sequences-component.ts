@@ -28,7 +28,7 @@ export class AsignSequencesComponent implements AfterViewInit {
     if(id){
       const studentId = Number(id);
       this.studentService.getStudentById(studentId).subscribe(data => {
-          this.student = this.studentService.convertToStudent(data.usuario);          
+          this.student = data;          
         });
     }
   }
