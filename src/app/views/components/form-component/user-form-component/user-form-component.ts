@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../logic/services/user-service';
 import { User } from '../../../../logic/interfaces/user-interface';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-user-form-component',
@@ -37,32 +38,24 @@ export class UserFormComponent {
     // photoFormControl: new FormControl('',[Validators.required]),
   });
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
   
     if(id){
       const userId = Number(id);
-      this.userService.getUserById(userId).subscribe(data => {
-          this.baseUser = data;          
-          
-          
+      this.baseUser = await firstValueFrom(this.userService.getUserById(userId));
 
           this.isEditMode = true;
           this.userId = Number(id);
           this.userFormGroup.get('passwordFormControl')?.setValidators([]);
 
-          console.log(data);
-          
-          
           this.userFormGroup.patchValue({
             nameFormControl: this.baseUser.name,
             lastNameFormControl: this.baseUser.last_name,
             emailFormControl: this.baseUser.email,
             passwordFormControl: '',
           });
-        }
-      );
-          
+
     }
 
   }
