@@ -5,6 +5,7 @@ import { StepModalComponent } from '../../step-modal-component/step-modal-compon
 import { SequenceService } from '../../../../logic/services/sequence-service';
 import { Sequence } from '../../../../logic/interfaces/sequence-interface';
 import { CategorySequenceService } from '../../../../logic/services/category-sequence-service';
+import { Category } from '../../../../logic/interfaces/category-sequence-interface';
 @Component({
   selector: 'app-sequence-form-component',
   imports: [ReactiveFormsModule, StepModalComponent, RouterLink],
@@ -26,10 +27,18 @@ export class SequenceFormComponent implements OnInit{
   sequenceId: number | null = null;
   editingStepIndex: number | null = null;
   stepToEdit: {title: string, imageUrl: string} | null = null;
+  categories: Category[] = [];
 
   constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute, private categorySequenceService: CategorySequenceService) {}
 
   ngOnInit(): void {
+
+    this.categorySequenceService.getCategories().subscribe({
+        next: (categories) => {
+          this.categories = categories;
+        }
+      });
+
       const id = this.route.snapshot.paramMap.get('id');
 
       if(id){
