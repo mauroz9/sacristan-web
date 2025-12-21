@@ -7,6 +7,7 @@ import { Sequence } from '../../../../logic/interfaces/sequence-interface';
 import { CategorySequenceService } from '../../../../logic/services/category-sequence-service';
 import { Category } from '../../../../logic/interfaces/category-sequence-interface';
 import { first, firstValueFrom } from 'rxjs';
+import { Step } from '../../../../logic/interfaces/sequence-step-interface';
 @Component({
   selector: 'app-sequence-form-component',
   imports: [ReactiveFormsModule, StepModalComponent, RouterLink],
@@ -65,7 +66,7 @@ export class SequenceFormComponent implements OnInit {
 
           this.steps.clear();
           if (sequence.steps) {
-            const sortedSteps = sequence.steps.sort((a: any, b: any) => a.position - b.position);
+            const sortedSteps = sequence.steps.sort((a: Step, b: Step) => a.position - b.position);
 
             sortedSteps.forEach((step: any) => {
               this.addStepToForm({
