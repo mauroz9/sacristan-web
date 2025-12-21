@@ -3,4 +3,6 @@
     min-height: 100vh;
     background: linear-gradient(to bottom right, #EFF6FF, #EEF2FF);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --primary-blue: #1F3C8B;
+    --input-bg: #E0E0E0;
 }
