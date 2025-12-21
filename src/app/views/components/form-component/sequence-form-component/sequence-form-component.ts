@@ -34,8 +34,14 @@ export class SequenceFormComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.categorySequenceService.getCategories().subscribe(req => {
-      this.categories = req;
+    this.categorySequenceService.getCategories().subscribe({
+      next: (req) => {
+        this.categories = req;
+      },
+      error: (err) => {
+        console.error('Error al cargar las categorías:', err);
+        alert('No se pudieron cargar las categorías. Intente nuevamente más tarde.');
+      }
     });
 
     const id = this.route.snapshot.paramMap.get('id');
