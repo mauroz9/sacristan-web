@@ -18,11 +18,11 @@
             No hay {{content()?.kind}}s disponibles todavía.
         </div>
     } @else {
-        @for (item of content()?.contentList; track item) {
-            @if (item.kind == 'secuencia') {
-                <app-sequence-row-component [sequence]="item"></app-sequence-row-component>
-            } @else if (item.kind == 'alumno') {
-                <app-student-row-component [student]="item" (onDelete)="reloadContent()"></app-student-row-component>
+        @for (item of content()?.contentList; track item.id) {
+            @if (content()?.kind == 'secuencia') {
+                <app-sequence-row-component [sequence]="$any(item)"></app-sequence-row-component>
+            } @else if (content()?.kind == 'alumno') {
+                <app-student-row-component [student]="$any(item)" (onDelete)="reloadContent()"></app-student-row-component>
             } @else {
                 <div class="text-center py-5 text-muted">
                     <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
@@ -40,4 +40,3 @@
     }
 
 </div>
-
