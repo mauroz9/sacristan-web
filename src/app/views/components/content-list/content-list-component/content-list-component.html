@@ -33,7 +33,7 @@
     }
     @if (functionality != "") {
             @if (functionality == "newStudent" || functionality == "modifyStudent") {
-                <app-student-form-modal-component functionality="{{functionality}}"></app-student-form-modal-component>
+                <app-student-form-modal-component [functionality]="functionality"></app-student-form-modal-component>
             } @else if (functionality == "assignSequences") {
                 <app-asign-sequences-component></app-asign-sequences-component>
             }

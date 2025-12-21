@@ -16,7 +16,7 @@ export class StudentFormModalComponent {
 
   constructor (private modalService: NgbModal, private studentService: StudentService) {}
 
-  functionality = input<string>();
+  functionality = input<string>(); // Usada en el frontend para mostrar si es "Crear" o "Editar".
 
   openModal(modalContent: TemplateRef<any>) {
     this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });

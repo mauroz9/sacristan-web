@@ -1,9 +1,6 @@
-import { Component, input, output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { StudentService } from '../../../../logic/services/student-service';
-import { Student } from '../../../../logic/interfaces/student-interface';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../logic/services/user-service';
 import { User } from '../../../../logic/interfaces/user-interface';
 
@@ -15,7 +12,6 @@ import { User } from '../../../../logic/interfaces/user-interface';
 })
 export class UserFormComponent {
 
-  functionality = output<string>();
   kind = input<string>();
   isEditMode: boolean = false;
   userId: number | null = null;

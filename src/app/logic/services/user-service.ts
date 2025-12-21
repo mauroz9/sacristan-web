@@ -12,11 +12,11 @@ export class UserService {
   constructor(private http: HttpClient, private router: Router) {}
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>("http://127.0.0.1:8000/api/usuarios/");
+    return this.http.get<User[]>(API_URL + "/api/usuarios/");
   }
 
   getUserById(userId: number): Observable<User> {
-    return this.http.get<User>(`http://127.0.0.1:8000/api/usuarios/${userId}`);
+    return this.http.get<User>(`${API_URL}/api/usuarios/${userId}`);
   }
 
   sendUser(formData: any) {
@@ -30,7 +30,7 @@ export class UserService {
 
 
   addUser(formData: User) {
-    this.http.post("http://127.0.0.1:8000/api/usuarios/", formData).subscribe
+    this.http.post(API_URL + "/api/usuarios/", formData).subscribe
     ({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Usuario añadido correctamente');
@@ -43,7 +43,7 @@ export class UserService {
   }
 
   updateUser(formData: User) {
-    this.http.put("http://127.0.0.1:8000/api/usuarios/" + formData.id, formData).subscribe({
+    this.http.put(API_URL + "/api/usuarios/" + formData.id, formData).subscribe({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Usuario modificado correctamente');
       },

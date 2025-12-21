@@ -14,15 +14,15 @@ export class StudentService {
   constructor (private http:HttpClient, private router: Router, private userService:UserService) {}
 
   getStudent(): Observable<Student[]> {
-    return this.http.get<Student[]>("http://127.0.0.1:8000/api/estudiantes");
+    return this.http.get<Student[]>(API_URL + "/api/estudiantes");
   }
 
   getStudentById(studentId: number): Observable<Student> {
-    return this.http.get<Student>("http://127.0.0.1:8000/api/estudiantes/" + studentId);
+    return this.http.get<Student>(API_URL + "/api/estudiantes/" + studentId);
   }
 
   deleteStudent(id: number) {
-    return this.http.delete("http://127.0.0.1:8000/api/estudiantes/" + id)
+    return this.http.delete(API_URL + "/api/estudiantes/" + id)
   }
 
   sendStudent(formData: any) {
@@ -35,7 +35,7 @@ export class StudentService {
   }
 
   addStudent(formData: Student) {
-    this.http.post("http://127.0.0.1:8000/api/estudiantes/", formData.user).subscribe({
+    this.http.post(API_URL + "/api/estudiantes/", formData.user).subscribe({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
         this.router.navigate(['/students']);
@@ -48,7 +48,7 @@ export class StudentService {
 
   updateStudent(formData: Student) {    
 
-    this.http.put("http://127.0.0.1:8000/api/usuarios/" + formData.user.id, formData.user).subscribe(
+    this.http.put(API_URL + "/api/usuarios/" + formData.user.id, formData.user).subscribe(
       {
         next: (data) => {
           console.log(data);
