@@ -14,8 +14,8 @@ export class SequenceService {
     return this.http.get<Sequence[]>('http://localhost:8000/api/secuencias');
   }
 
-  getSequenceById(id: number): Observable<Sequence | undefined> {
-    return this.http.get<Sequence | undefined>(`http://localhost:8000/api/secuencias/${id}`);
+  getSequenceById(id: number): Observable<Sequence> {
+    return this.http.get<Sequence>(`http://localhost:8000/api/secuencias/${id}`);
   }
 
   addSequence(newSequence: Sequence){
