@@ -18,16 +18,15 @@ export class SequenceService {
     return this.http.get<Sequence>(`http://localhost:8000/api/secuencias/${id}`);
   }
 
-  addSequence(newSequence: Sequence){
-    this.http.post('http://localhost:8000/api/secuencias', newSequence);
+  addSequence(newSequence: Sequence): Observable<any>{
+    return this.http.post('http://localhost:8000/api/secuencias', newSequence);
   }
 
-  modifySequence(modifySequence: Sequence){
-    
-    this.http.put( `http://localhost:8000/api/secuencias/${modifySequence.id}`, modifySequence);
+  modifySequence(modifySequence: Sequence): Observable<any>{
+    return this.http.put( `http://localhost:8000/api/secuencias/${modifySequence.id}`, modifySequence);
   }
 
-  deleteSequence(id: number){
-    this.http.delete(`http://localhost:8000/api/secuencias/${id}`)
+  deleteSequence(id: number): Observable<any>{
+    return this.http.delete(`http://localhost:8000/api/secuencias/${id}`)
   }
 }
