@@ -3,11 +3,11 @@ import { Step } from "./sequence-step-interface";
 
 export interface Sequence {
   id: number;
-  categoria_id: number;
-  titulo: string;
-  descripcion: string;
+  sequence_category_id: number;
+  title: string;
+  description: string;
   created_at: string;
   updated_at: string;
-  categoria: Category;
-  pasos: Step[];
+  category: Category;
+  steps: Step[];
 }
