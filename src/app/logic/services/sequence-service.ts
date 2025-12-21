@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Sequence } from '../interfaces/sequence-interface';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { API_URL } from './env';
 
 @Injectable({
   providedIn: 'root',
