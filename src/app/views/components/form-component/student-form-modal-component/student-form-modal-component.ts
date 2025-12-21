@@ -24,7 +24,7 @@ export class NewStudentModalComponent implements AfterViewInit {
     kind: 'alumno',
     id: 0,
     name: '',
-    lastName: '',
+    last_name: '',
     email: '',
     password: '',
     assignedSequences: 0
@@ -41,7 +41,7 @@ export class NewStudentModalComponent implements AfterViewInit {
     if(id){
       const studentId = Number(id);
       this.studentService.getStudentById(studentId).subscribe(data => {
-          this.baseStudent = this.studentService.convertToStudent(data.usuario);          
+          this.baseStudent = data;          
           
           this.isEditMode = true;
           this.studentId = Number(id);
@@ -50,7 +50,7 @@ export class NewStudentModalComponent implements AfterViewInit {
           
           this.studentFormGroup.patchValue({
             nameFormControl: this.baseStudent.name,
-            lastNameFormControl: this.baseStudent.lastName,
+            lastNameFormControl: this.baseStudent.last_name,
             emailFormControl: this.baseStudent.email,
             passwordFormControl: '',
             // disabilityFormControl: '',

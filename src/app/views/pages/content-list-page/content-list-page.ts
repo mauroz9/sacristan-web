@@ -58,10 +58,7 @@ export class ContentListPage implements OnInit {
     this.url = this.router.url;
     if (this.url.includes('/students')) {
       this.studentList = [];
-      const studentsBack = await firstValueFrom(this.studentService.getStudent());
-      for (let studentBack of studentsBack) {
-        this.studentList.push(this.studentService.convertToStudent(studentBack));
-      }
+      this.studentList = await firstValueFrom(this.studentService.getStudent());
     };
     this.loadData()
   }
@@ -75,8 +72,12 @@ export class ContentListPage implements OnInit {
       console.log("sequence");
 
       this.content = this.contentSequence;
-    } else if (this.url.includes('/students')) {
-      console.log("students");
+    } else if(this.url.includes('/students')){      
+
+      for (let student of this.studentList) {
+        student.kind = "alumno";
+        student.assignedSequences = 0;
+      }
 
       this.content = {
         kind: "alumno",
