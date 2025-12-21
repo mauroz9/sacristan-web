@@ -7,3 +7,8 @@ export interface User {
     password?: string,
     password_confirmation?: string
 }
+
+export interface UserCreationResponse {
+    message: string,
+    user: User
+}

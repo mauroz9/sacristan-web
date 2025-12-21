@@ -77,8 +77,7 @@ export class ContentListPage implements OnInit{
 
       for (let student of this.studentList) {
         student.kind = "alumno";
-        student.assignedSequences = 0;
-      }
+      }      
       
       this.content = {
         kind: "alumno",
