@@ -140,42 +140,60 @@ export class SequenceFormComponent implements OnInit{
 
   //Save sequence
   onSubmit(){
-    if(this.sequenceForm.valid){
-      
-      const formValue = this.sequenceForm.value;
-      this.categorySequenceService.getCategoryById(formValue.category_id!).subscribe(req => {
+  if(this.sequenceForm.valid){
+    
+    const formValue = this.sequenceForm.value;
+    this.categorySequenceService.getCategoryById(formValue.category_id!).subscribe({
+      next: (category) => {
         const newSequence: Sequence = {
-        kind: 'secuencia',
-        id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
-        title: formValue.title!,
-        description: formValue.description!,
-        sequence_category_id: formValue.category_id!,
-        steps: (formValue.steps as any[]).map((step, index) => ({
-          id: this.isEditMode ? (step.id ?? index + 1) : index + 1,
-          sequence_id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
-          position: index + 1,
-          title: step.title,
-          pictogram_arasaac: step.imageUrl,
-          pictogram_custom: null,
+          kind: 'secuencia',
+          id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
+          title: formValue.title!,
+          description: formValue.description!,
+          sequence_category_id: formValue.category_id!,
+          steps: (formValue.steps as any[]).map((step, index) => ({
+            id: this.isEditMode ? (step.id ?? index + 1) : index + 1,
+            sequence_id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
+            position: index + 1,
+            title: step.title,
+            pictogram_arasaac: step.imageUrl,
+            pictogram_custom: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })),
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        category: req
-      };
+          updated_at: new Date().toISOString(),
+          category: category
+        };
 
-      if(this.isEditMode){
-        this.sequenceService.modifySequence(newSequence);
-      }else{
-        this.sequenceService.addSequence(newSequence);
+        if(this.isEditMode){
+          this.sequenceService.modifySequence(newSequence).subscribe({
+            next: () => {
+              localStorage.setItem('infoMessage', 'Secuencia modificada correctamente');
+              this.router.navigate(["/sequences"]);
+            },
+            error: (error) => {
+              console.error('Error al modificar la secuencia:', error);
+            }
+          });
+        }else{
+          this.sequenceService.addSequence(newSequence).subscribe({
+            next: () => {
+              localStorage.setItem('infoMessage', 'Secuencia creada correctamente');
+              this.router.navigate(["/sequences"]);
+            },
+            error: (error) => {
+              console.error('Error al crear la secuencia:', error);
+            }
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener la categoría:', error);
       }
-      this.router.navigate(["/sequences"]);
-      });
-      
-      
-    } else {
-      this.sequenceForm.markAllAsTouched();
-    }
+    });
+  } else {
+    this.sequenceForm.markAllAsTouched();
   }
+}
 }
