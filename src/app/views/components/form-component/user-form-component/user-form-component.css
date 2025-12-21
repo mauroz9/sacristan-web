@@ -1,9 +1,4 @@
 /* Variables de color (puedes moverlas a styles.css global si prefieres) */
-:host {
-    --primary-blue: #1F3C8B;
-    --input-bg: #E0E0E0;
-}
-
 .text-primary-blue {
     color: var(--primary-blue) !important;
 }
@@ -46,14 +41,4 @@
     height: 100%;
     opacity: 0;
     cursor: pointer;
-}
-
-/* Botón principal azul */
-.btn-primary-blue {
-    background-color: var(--primary-blue);
-    color: white;
-}
-.btn-primary-blue:hover {
-    background-color: #162e6b; /* Un azul un poco más oscuro */
-    color: white;
 }

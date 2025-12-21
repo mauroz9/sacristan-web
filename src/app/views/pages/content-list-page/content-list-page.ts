@@ -76,7 +76,6 @@ export class ContentListPage implements OnInit {
 
       for (let student of this.studentList) {
         student.kind = "alumno";
-        student.assignedSequences = 0;
       }
 
       this.content = {
@@ -101,12 +100,8 @@ export class ContentListPage implements OnInit {
       }
     } else {
       console.log("asd");
-
-      console.log(this.url);
-
     }
 
-    console.log(this.content);
 
 
   }
