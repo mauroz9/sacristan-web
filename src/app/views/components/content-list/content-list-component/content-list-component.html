@@ -15,7 +15,11 @@
     @if (content()?.contentList?.length === 0) {
         <div class="text-center py-5 text-muted">
             <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-            No hay {{content()?.kind}}s disponibles todavía.
+            @if (content()?.plural != null) {
+                No hay {{content()?.kind}}es disponibles todavía.
+            } @else {
+                No hay {{content()?.kind}}s disponibles todavía.
+            }
         </div>
     } @else {
         @for (item of content()?.contentList; track item) {

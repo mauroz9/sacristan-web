@@ -24,6 +24,10 @@ export const routes: Routes = [
         component: ContentListPage
     },
     {
+        path: 'teachers',
+        component: ContentListPage
+    },
+    {
         path: 'sequences/new',
         component: SequenceFormComponent
     },

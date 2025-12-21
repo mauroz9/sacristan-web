@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { StudentService } from '../../../logic/services/student-service';
 import { SequenceService } from '../../../logic/services/sequence-service';
 import { Student } from '../../../logic/interfaces/student-interface';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { Student } from '../../../logic/interfaces/student-interface';
   templateUrl: './content-list-page.html',
   styleUrl: './content-list-page.css',
 })
-export class ContentListPage implements OnInit{
+export class ContentListPage implements OnInit {
 
   url = "";
 
@@ -34,55 +35,79 @@ export class ContentListPage implements OnInit{
   content: Content = this.contentSequence;
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private studentService: StudentService,
     private sequenceService: SequenceService
   ) {
   }
 
-  reloadContent() {
-    this.getData();
-    
+  async reloadContent() {
+    await this.getData();
+
     this.infoMessage = localStorage.getItem('infoMessage');
     if (this.infoMessage) {
       localStorage.removeItem('infoMessage');
-    }  
+    }
   }
 
   ngOnInit(): void {
     this.reloadContent();
   }
 
-  getData() {
-      this.url = this.router.url;
-    if(this.url.includes('/sequences')){
-      this.loadData();
-    } else if(this.url.includes('/students')){
-      this.studentService.getStudent().subscribe({
-        next: (data) => {
-          this.studentList = data.map(item => this.studentService.convertToStudent(item));          
-          this.loadData()
-        }
-      }); 
-    }
+  async getData() {
+    this.url = this.router.url;
+    if (this.url.includes('/students')) {
+      this.studentList = [];
+      const studentsBack = await firstValueFrom(this.studentService.getStudent());
+      for (let studentBack of studentsBack) {
+        this.studentList.push(this.studentService.convertToStudent(studentBack));
+      }
+    };
+    this.loadData()
   }
+
 
   loadData() {
     this.sequenceList = this.sequenceService.getSequences();
     this.contentSequence.contentList = this.sequenceList;
-    
-    if(this.url.includes('/sequences')){
+
+    if (this.url.includes('/sequences')) {
+      console.log("sequence");
+
       this.content = this.contentSequence;
-    } else if(this.url.includes('/students')){      
+    } else if (this.url.includes('/students')) {
+      console.log("students");
+
       this.content = {
-          kind: "alumno",
-          url: "/students",
-          title: "Listado de alumnos",
-          subTitle: "Gestiona los alumnos del centro",
-          gender: 1,
-          contentList: this.studentList
+        kind: "alumno",
+        url: "/students",
+        title: "Listado de alumnos",
+        subTitle: "Gestiona los alumnos del centro",
+        gender: 1,
+        contentList: this.studentList
       }
-    }    
+    } else if (this.url.includes('/teachers')) {
+      console.log("teachers");
+
+      this.content = {
+        kind: "profesor",
+        url: "/teachers",
+        title: "Listado de profesores",
+        subTitle: "Gestiona los profesores del centro",
+        gender: 1,
+        plural: 1,
+        contentList: []
+      }
+    } else {
+      console.log("asd");
+
+      console.log(this.url);
+
+    }
+
+    console.log(this.content);
+
+
   }
 
 }
