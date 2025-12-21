@@ -15,7 +15,7 @@ export class SequenceFormComponent implements OnInit{
   sequenceForm = new FormGroup({
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    category: new FormControl('', Validators.required),
+    category_id: new FormControl<number | null>(null , Validators.required),
     steps: new FormArray([])
   });
   
@@ -39,19 +39,27 @@ export class SequenceFormComponent implements OnInit{
   }
 
   loadSequenceData(id: number): void{
-    const sequence = this.sequenceService.getSequenceById(id);
+    this.sequenceService.getSequenceById(id).subscribe({
+      next: (sequence) => {
+        if (sequence) {
+          this.sequenceForm.patchValue({
+            title: sequence.title,
+            description: sequence.description,
+            category_id: sequence.sequence_category_id 
+          });
 
-    if(sequence){
-      this.sequenceForm.patchValue({
-        title: sequence.title,
-        description: sequence.description,
-        category: sequence.categorie
-      });
-
-      sequence.steps.forEach(step =>{
-        this.addStepToForm(step);       
-      });
-    }
+          this.steps.clear();
+          if (sequence.steps) {
+            sequence.steps.forEach(step => {
+              this.addStepToForm({ 
+                description: step.description,
+                imageUrl: step.imageUrl 
+              });
+            });
+          }
+        }
+      },
+    });
   }
 
   addStepToForm(step: {description: string, imageUrl: string}): void{
@@ -139,7 +147,7 @@ export class SequenceFormComponent implements OnInit{
         id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
         title: formValue.title!,
         description: formValue.description!,
-        categorie: formValue.category!,
+        category_id: formValue.category_id!,
         steps: (formValue.steps as any[]).map((step, index) => ({
           id: index + 1,
           order: index + 1,
