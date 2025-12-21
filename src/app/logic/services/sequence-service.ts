@@ -12,7 +12,7 @@ export class SequenceService {
   constructor (private http: HttpClient) {}
 
   getSequences(): Observable<Sequence[]>{
-    return this.http.get<Sequence[]>('/api/secuencias');
+    return this.http.get<Sequence[]>(API_URL + '/api/secuencias');
   }
 
   getSequenceById(id: number): Observable<Sequence> {
