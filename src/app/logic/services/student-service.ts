@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from './user-service';
 import { API_URL } from './env';
+import { Sequence } from '../interfaces/sequence-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -115,6 +116,19 @@ export class StudentService {
 
   }
 
+  getStudentSequences(studentId: number): Observable<Sequence[]>{
+    return this.http.get<Sequence[]>(API_URL + `/api/estudiantes/${studentId}/secuencias`);
+  }
 
+  assignSequence(studentId: number, sequenceId: number): Observable<any>{
+    return this.http.post(API_URL + `/api/student-sequences`, {
+      studentId: studentId,
+      sequenceId: sequenceId
+    });
+  }
+
+  unassignSequence(studentId: number, sequenceId: number): Observable<any>{
+    return this.http.delete(API_URL + `/api/student-sequences/${studentId}/${sequenceId}`)
+  }
 
 }
