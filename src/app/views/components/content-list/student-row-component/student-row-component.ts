@@ -18,7 +18,7 @@ export class StudentRowComponent {
 
     editStudent() {
         // Hacer un router navigate a la pagina de modificar estudiante pasandolle el ID de estudiante.
-      let id = this.student()?.id;
+      let id = this.student()?.user!.id;
       this.router.navigate(['/students/modify/', id]);
     }
 
@@ -29,7 +29,7 @@ export class StudentRowComponent {
 
     deleteStudent() {
       let id = this.student()?.id;
-      
+
       if(id && confirm('¿Seguro que quieres borrar este alumno?')){
         this.studentService.deleteStudent(id).subscribe({
           next: () => {

@@ -75,8 +75,6 @@ export class ContentListPage implements OnInit {
     this.contentSequence.contentList = this.sequenceList;
 
     if (this.url.includes('/sequences')) {
-      console.log("sequence");
-
       this.content = this.contentSequence;
     } else if(this.url.includes('/students')){      
 
@@ -106,12 +104,9 @@ export class ContentListPage implements OnInit {
         gender: 1,
         plural: 1,
         contentList: this.teacherList
-      }
-
-      console.log(this.content);
-      
+      }      
     } else {
-      console.log("asd");
+      console.log("Something went wrong loading content list page data");
     }
 
 

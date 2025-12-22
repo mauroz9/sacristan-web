@@ -9,12 +9,12 @@
 
         <div class="col-md-4 text-center">
             <span class="badge-steps">
-                0 Secuencias asignadas
+                {{assignatedStudents}} Estudiantes asignados
             </span>
         </div>
         
         <div class="col-md-2 text-end pe-4">
-            <app-action-buttons-component (onEdit)="editTeacher()" (onDelete)="deleteTeacher()">
+            <app-action-buttons-component (onEdit)="editTeacher()" (onAssignStudent)="assignStudent()" (onDelete)="deleteTeacher()">
         </app-action-buttons-component>
         </div>
         

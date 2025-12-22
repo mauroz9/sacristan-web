@@ -7,10 +7,11 @@ import { AsignSequencesComponent } from "../../asign-sequences-component/asign-s
 import { StudentFormModalComponent } from "../../form-modals/student-form-modal-component/student-form-modal-component";
 import { TeacherRowComponent } from "../teacher-row-component/teacher-row-component";
 import { TeacherFormModalComponent } from "../../form-modals/teacher-form-modal-component/teacher-form-modal-component";
+import { AsignStudentComponent } from "../../asign-student-component/asign-student-component";
 
 @Component({
   selector: 'app-content-list-component',
-  imports: [SequenceRowComponent, StudentRowComponent, RouterLink, AsignSequencesComponent, StudentFormModalComponent, TeacherRowComponent, TeacherFormModalComponent],
+  imports: [SequenceRowComponent, StudentRowComponent, RouterLink, AsignSequencesComponent, StudentFormModalComponent, TeacherRowComponent, TeacherFormModalComponent, AsignStudentComponent],
   templateUrl: './content-list-component.html',
   styleUrl: './content-list-component.css',
 })
@@ -31,6 +32,8 @@ export class ContentListComponent {
         this.functionality = "newTeacher";
       } else if (this.router.url.includes('teachers/modify')) {
         this.functionality = "modifyTeacher";
+      } else if (this.router.url.includes('teachers/asign-students')) {
+        this.functionality = "assignStudent";
       }
   }
 

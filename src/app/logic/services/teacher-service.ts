@@ -16,8 +16,16 @@ export class TeacherService {
     return this.http.get<Teacher[]>(API_URL + "/api/profesores");
   }
 
+  getTeacherById(id: number): Observable<Teacher> {
+    return this.http.get<Teacher>(API_URL + "/api/profesores/" + id);
+  }
+
   deleteTeacher(id: number) {
     return this.http.delete(API_URL + "/api/profesores/" + id)
+  }
+
+  getAssignedStudentsCount(id: number): Observable<number> {
+    return this.http.get<number>(API_URL + "/api/profesores/" + id + "/estudiantes-asignados");
   }
 
   sendTeacher(formData: any) {

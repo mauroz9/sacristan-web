@@ -11,10 +11,12 @@ export class ActionButtonsComponent implements OnInit {
   
   isStudent = false;
   isSequence = false;
+  isTeacher = false;
   
   onDelete = output<void>();
   onEdit = output<void>();
   onAssignSequences = output<void>();
+  onAssignStudent = output<void>();
   onView = output<void>();
 
   constructor(private router: Router) {}
@@ -24,6 +26,8 @@ export class ActionButtonsComponent implements OnInit {
       this.isStudent = true;
     } else if (this.router.url.includes('/sequences')) {
       this.isSequence = true;
+    } else if (this.router.url.includes('/teachers')) {
+      this.isTeacher = true;
     }
   }
   

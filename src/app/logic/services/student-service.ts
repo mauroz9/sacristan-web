@@ -17,12 +17,41 @@ export class StudentService {
     return this.http.get<Student[]>(API_URL + "/api/estudiantes");
   }
 
+  getStudentsWithTeacher(id: number): Observable<Student[]> {
+    return this.http.get<Student[]>(API_URL + "/api/estudiantes/con-profesor/" + id);
+  }
+
+  getStudentsWithoutTeacher(): Observable<Student[]> {
+    return this.http.get<Student[]>(API_URL + "/api/estudiantes/sin-profesor");
+  }
+
   getStudentById(studentId: number): Observable<Student> {
     return this.http.get<Student>(API_URL + "/api/estudiantes/" + studentId);
   }
 
   deleteStudent(id: number) {
     return this.http.delete(API_URL + "/api/estudiantes/" + id)
+  }
+
+  assignTeacherToStudent(studentId: number, teacherId: number) {
+    return this.http.put(API_URL + "/api/estudiantes/" + studentId + "/asignar-profesor/" + teacherId, {}).subscribe({
+      next: (data) => {
+      },
+      error: (error) => {
+        console.error("Error assigning teacher to student", error);
+      }
+    }); 
+  }
+
+  unassignTeacherFromStudent(studentId: number) {
+    return this.http.put(API_URL + "/api/estudiantes/" + studentId + "/desasignar-profesor", {}).subscribe({
+      next: (data) => {
+        console.log("Teacher unassigned from student successfully");
+      },
+      error: (error) => {
+        console.error("Error unassigning teacher from student", error);
+      }
+    });
   }
 
   sendStudent(formData: any) {
@@ -51,7 +80,6 @@ export class StudentService {
     this.http.put(API_URL + "/api/usuarios/" + formData.user.id, formData.user).subscribe(
       {
         next: (data) => {
-          console.log(data);
           
           localStorage.setItem('infoMessage', 'Alumno actualizado correctamente');
           this.router.navigate(['/students']);
