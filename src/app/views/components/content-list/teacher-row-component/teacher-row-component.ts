@@ -39,7 +39,7 @@ export class TeacherRowComponent implements OnInit {
 
     assignStudent() {
       let id = this.teacher()?.id;
-      this.router.navigate(['/teachers/asign-students/', id]);
+      this.router.navigate(['/teachers/assign-students/', id]);
     }
 
   deleteTeacher() {
