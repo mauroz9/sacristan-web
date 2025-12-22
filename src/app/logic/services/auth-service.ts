@@ -23,7 +23,7 @@ export class AuthService {
       tap((response: any) => {
         if(response.token){
           localStorage.setItem('auth_token', response.token)
-          this.currentUser.set(response.user);
+          this.currentUser.set(response.token);
         }
       })
     );
