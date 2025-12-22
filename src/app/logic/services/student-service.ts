@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from './user-service';
 import { API_URL } from './env';
+import { Sequence } from '../interfaces/sequence-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -114,7 +115,5 @@ export class StudentService {
     return student;
 
   }
-
-
 
 }

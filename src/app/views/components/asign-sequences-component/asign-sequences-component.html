@@ -16,51 +16,72 @@
                 <div class="dropdown me-3 flex-grow-1 custom-select-wrapper">
                     <button class="btn dropdown-toggle text-start w-100 custom-dropdown-button" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="text-muted"></span>
+                        <span [class.text-muted]="!selectedSequence">
+                            {{ selectedSequence ?  selectedSequence.title : 'Seleccionar secuencia' }}
+                        </span>
                     </button>
                     <span class="dropdown-arrow-icon"></span>
 
                     <ul class="dropdown-menu w-100">
-                        <li><a class="dropdown-item" href="#">Prepara la mochila</a></li>
-                        <li><a class="dropdown-item" href="#">Lavarse los dientes</a></li>
-                        </ul>
+                        @if (availableSequences.length === 0) {
+                            <li><a class="dropdown-item text-muted">No hay secuencias disponibles</a></li>
+                        } @else {
+                            @for (sequence of availableSequences; track sequence.id) {
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0)" (click)="selectSequence(sequence)">
+                                        {{ sequence.title }}
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
                 </div>
 
-                <button type="button" class="btn custom-assign-btn custom-yellow-btn">Asignar</button>
+                <button type="button" class="btn custom-assign-btn custom-yellow-btn" 
+                    [disabled]="!selectedSequence"
+                    (click)="assignSequence()">
+                    Asignar
+                </button>
             </div>
 
             <h6 class="text-start mb-3 fw-semibold">Secuencias asignadas</h6>
 
-            <div class="card mb-3 custom-sequence-card">
-                <div class="card-body p-3 d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="mb-0 fw-semibold text-dark">Prepara la mochila</p>
-                        <small class="text-muted">Elementos necesarios para el colegio</small>
-                    </div>
-                    <button type="button" class="btn custom-personalize-btn custom-dark-blue-btn">
-                        <i class="bi bi-pencil-fill me-1"></i> Personalizar
-                    </button>
+            @if (assignedSequences.length === 0) {
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-collection fs-1 d-block mb-2"></i>
+                    No hay secuencias asignadas todavía.
                 </div>
-            </div>
-
-            <div class="card mb-3 custom-sequence-card">
-                <div class="card-body p-3 d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="mb-0 fw-semibold text-dark-blue">Prepara la mochila</p>
-                        <small class="text-muted">Elementos necesarios para el colegio</small>
+            } @else {
+                @for (sequence of assignedSequences; track sequence.id) {
+                    <div class="card mb-3 custom-sequence-card">
+                        <div class="card-body p-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-semibold text-dark">{{ sequence.title }}</p>
+                                <small class="text-muted">{{ sequence.description }}</small>
+                                <div class="mt-1">
+                                    <span class="badge bg-secondary">{{ sequence.category?.name }}</span>
+                                    <span class="badge bg-info ms-2">{{ sequence.steps?.length || 0 }} pasos</span>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn custom-personalize-btn custom-dark-blue-btn"
+                                    (click)="personalizeSequence(sequence)">
+                                    <i class="bi bi-gear"></i> Personalizar
+                                </button>
+                                <button type="button" class="btn btn-outline-danger"
+                                    (click)="unassignSequence(sequence)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="btn custom-personalize-btn custom-dark-blue-btn">
-                        <i class="bi bi-pencil-fill me-1"></i> Personalizar
-                    </button>
-                </div>
-            </div>
-            
+                }
+            }
         </div>
 
         <div class="modal-footer border-top-0 pt-3 pb-4 px-4 justify-content-end">
-            <button type="button" class="btn btn-light custom-cancel-btn me-2" (click)="modal.close()"
-                [routerLink]="'/students'">Cancelar</button>
-            <button type="button" class="btn custom-save-btn custom-dark-blue-btn">Guardar Cambios</button>
+            <button type="button" class="btn btn-light custom-cancel-btn" (click)="modal.close()"
+                [routerLink]="'/students'">Cerrar</button>
         </div>
     </div>
 </ng-template>
