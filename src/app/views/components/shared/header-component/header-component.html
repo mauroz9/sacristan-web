@@ -12,12 +12,17 @@
         </a>
 
         @if (loggedIn) {
+            
             <div class="ms-auto d-flex align-items-center">
-                <button type="submit" class="btn btn-logout d-flex align-items-center gap-2" (click)="logout()">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Cerrar Sesión</span>
-                </button>
-        </div>
+                <button type="submit" class="btn btn-logout d-flex align-items-center gap-2" (click)="logout()" [disabled]="loading">
+                        @if (loading) {
+                            <span class="spinner-border spinner-border-sm me-2"></span>
+                        } @else {
+                            <i class="bi bi-box-arrow-right"></i>
+                        }
+                        <span>Cerrar Sesión</span>
+                    </button>
+                </div>
         }
     </div>
 </nav>

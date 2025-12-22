@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 export class HeaderComponent implements OnInit {
 
   loggedIn = false;
+  loading = false;
   private authSub?: Subscription;
 
   constructor(private authService: AuthService) {}
@@ -27,8 +28,10 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  logout() {
-    this.authService.logout();
+  async logout() {
+    this.loading = true;
+    await this.authService.logout();
+    this.loading = false;
   }
 
 }
