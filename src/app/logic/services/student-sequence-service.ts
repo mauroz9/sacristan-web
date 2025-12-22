@@ -11,11 +11,11 @@ export class StudentSequenceService {
 
   constructor(private http: HttpClient) {}
 
-  getStudentSequences(studentId:  number): Observable<Sequence[]> {
+  getStudentSequences(studentId: number): Observable<Sequence[]> {
     return this.http.get<Sequence[]>(`${API_URL}/api/estudiantes/${studentId}/secuencias`);
   }
 
-  getAvailableSequences(studentId:  number): Observable<Sequence[]> {
+  getAvailableSequences(studentId: number): Observable<Sequence[]> {
     return this.http.get<Sequence[]>(`${API_URL}/api/estudiantes/${studentId}/secuencias-disponibles`);
   }
 
