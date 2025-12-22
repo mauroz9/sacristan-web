@@ -106,7 +106,7 @@ export class AsignSequencesComponent implements AfterViewInit {
       next: () => {
         this.loadSequences(this.studentId!);
 
-        localStorage. setItem('infoMessage', `Secuencia eliminada correctamente`);
+        localStorage.setItem('infoMessage', `Secuencia eliminada correctamente`);
       },
       error: (error) => {
         console.error('Error al desasignar secuencia:',error);
