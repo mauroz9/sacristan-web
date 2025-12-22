@@ -9,7 +9,8 @@ export const routes: Routes = [
     // --- RUTA PÚBLICA (LOGIN) ---
     { 
         path: 'login', 
-        component: LoginPage 
+        component: LoginPage, 
+        data: { showMenu: false }
     },
 
     // --- RUTAS PROTEGIDAS (Sequences) ---
@@ -46,12 +47,14 @@ export const routes: Routes = [
     {
         path: 'sequences/modify/:id',
         component: SequenceFormComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { showMenu: false }
     },
     {
         path: 'sequences/view/:id',
         component: SequenceDetailComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { showMenu: false }
     },
 
     // --- RUTAS PROTEGIDAS (Students) ---
