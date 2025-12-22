@@ -51,7 +51,7 @@ export class LoginPage implements OnInit {
         error: (err) => {
           console.error('Error de login:', err);
           this.isLoading = false;
-          this.errorMessage = err.error.message || 'Error al iniciar sesión';
+          this.errorMessage = err.error?.message || 'Error al iniciar sesión';
         },
         complete: () => this.isLoading = false
       });

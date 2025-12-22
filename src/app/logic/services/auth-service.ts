@@ -25,6 +25,10 @@ export class AuthService {
     return this.http.post(`${API_URL}/api/login`, credentials).pipe(
       tap((response: any) => {
         
+        if (!response.user) {
+          throw new Error('Respuesta inválida del servidor: falta el objeto de usuario.');
+        }
+
         if (response.user.role_id !== 1) {
           this.doLogout();
           throw new Error('Acceso denegado. Solo administradores pueden acceder.');
