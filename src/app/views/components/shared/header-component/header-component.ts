@@ -17,9 +17,14 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.authSub = this.authService.isLoggedIn$.subscribe(status => {
-      console.log(status);
       this.loggedIn = status;
     });
+
+    if (localStorage.getItem('auth_token')) {
+      this.loggedIn = true;
+    } else {
+      this.loggedIn = false;
+    }
   }
 
   logout() {

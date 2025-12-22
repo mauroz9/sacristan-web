@@ -8,9 +8,15 @@
         </div>
 
         <div class="col-md-4 text-center">
-            <span class="badge-steps">
-                {{assignatedStudents}} Estudiantes asignados
-            </span>
+            @if (loading) {
+                <div class="spinner-border text-dark-blue" role="status" style="width: 1.5rem; height: 1.5rem;">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            } @else {
+                <span class="badge-steps">
+                    {{assignatedStudents}} Estudiantes asignados
+                </span>
+            }
         </div>
         
         <div class="col-md-2 text-end pe-4">
