@@ -83,7 +83,6 @@ export class AsignSequencesComponent implements AfterViewInit {
       return;
     }
 
-    const sequenceTitle = this.selectedSequence.title;
     this.studentSequenceService.assignSequence(this.studentId!, this.selectedSequence!.id!).subscribe({
       next: () => {
         this.loadSequences(this.studentId!);
