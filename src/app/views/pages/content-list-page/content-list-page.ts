@@ -73,6 +73,11 @@ export class ContentListPage implements OnInit {
     this.sequenceService.getSequences().subscribe({
       next: (data) => {
         this.sequenceList = data;
+
+        for (let sequence of this.sequenceList) {
+          sequence.kind = "secuencia";
+        }
+
         this.contentSequence.contentList = this.sequenceList;
 
         if (this.url.includes('/sequences')) {
