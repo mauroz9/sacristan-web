@@ -90,7 +90,7 @@ export class AsignSequencesComponent implements AfterViewInit {
         localStorage.setItem('infoMessage', `Secuencia asignada correctamente a ${this.student!.user!.name}`);
         this.selectedSequence = null;
       },
-      error: (error) =>{
+      error: (error) => {
         console.error('Error al asignar secuencia:',error);
         alert('Error al asignar secuencia. Por favor, intenta de nuevo.')
       }
