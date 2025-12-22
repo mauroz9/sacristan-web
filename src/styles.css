@@ -29,7 +29,7 @@ body {
 }
 
 .btn-custom-primary:disabled {
-    background-color: #1F3C8B;
+    background-color: var(--primary-blue);
     color: white;
     cursor: not-allowed;
 }

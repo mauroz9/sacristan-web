@@ -25,8 +25,7 @@ export class AuthService {
     return this.http.post(`${API_URL}/api/login`, credentials).pipe(
       tap((response: any) => {
         
-        if (response.user.role_id != 1) {
-          localStorage.setItem('errorMessage', 'Acceso denegado. Solo administradores pueden acceder.');
+        if (response.user.role_id !== 1) {
           this.doLogout();
           throw new Error('Acceso denegado. Solo administradores pueden acceder.');
         }

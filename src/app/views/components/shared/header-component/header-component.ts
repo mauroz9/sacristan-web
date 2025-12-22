@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../logic/services/auth-service';
 import { Subscription } from 'rxjs';
-import { TypeofExpression } from '@angular/compiler';
 
 @Component({
   selector: 'app-header-component',

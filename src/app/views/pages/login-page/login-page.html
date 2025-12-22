@@ -31,7 +31,7 @@
                     <input [type]="showPassword ? 'text' : 'password'" class="form-control"
                         [class.is-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
                         formControlName="password" placeholder="••••••••">
-                    <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()" [disabled]="loginForm.get('password')?.value == ''">
+                    <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()" [disabled]="loginForm.get('password')?.value === ''">
                         <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
                     </button>
                     <div class="invalid-feedback">
