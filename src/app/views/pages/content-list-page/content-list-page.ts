@@ -109,8 +109,11 @@ export class ContentListPage implements OnInit {
     } else {
       console.log("Something went wrong loading content list page data");
     }
-
-
+      },
+      error: (err) => {
+        console.error('Error al obtener las secuencias: ' + err.message);
+      }
+    }); 
 
   }
 
