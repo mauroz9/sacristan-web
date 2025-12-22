@@ -6,6 +6,9 @@ import { Router } from '@angular/router';
 import { StudentService } from '../../../logic/services/student-service';
 import { SequenceService } from '../../../logic/services/sequence-service';
 import { Student } from '../../../logic/interfaces/student-interface';
+import { firstValueFrom } from 'rxjs';
+import { Teacher } from '../../../logic/interfaces/teacher-interface';
+import { TeacherService } from '../../../logic/services/teacher-service';
 
 
 @Component({
@@ -16,10 +19,18 @@ import { Student } from '../../../logic/interfaces/student-interface';
 })
 export class ContentListPage implements OnInit {
 
+    constructor(
+    private router: Router,
+    private studentService: StudentService,
+    private sequenceService: SequenceService,
+    private teacherService: TeacherService
+  ) {}
+
   url = "";
 
   sequenceList: Sequence[] = [];
   studentList: Student[] = []
+  teacherList: Teacher[] = [];
   infoMessage: string | null = null;
 
   contentSequence: Content = {
@@ -33,16 +44,10 @@ export class ContentListPage implements OnInit {
 
   content: Content = this.contentSequence;
 
-  constructor(
-    private router: Router,
-    private studentService: StudentService,
-    private sequenceService: SequenceService
-  ) {
-  }
 
   reloadContent() {
     this.getData();
-
+    
     this.infoMessage = localStorage.getItem('infoMessage');
     if (this.infoMessage) {
       localStorage.removeItem('infoMessage');
@@ -53,19 +58,16 @@ export class ContentListPage implements OnInit {
     this.reloadContent();
   }
 
-  getData() {
+  async getData() {
     this.url = this.router.url;
-    if (this.url.includes('/sequences')) {
-      this.loadData();
-    } else if (this.url.includes('/students')) {
-      this.studentService.getStudent().subscribe({
-        next: (data) => {
-          this.studentList = data;          
-          this.loadData()
-        }
-      });
+    if (this.url.includes('/students')) {
+      this.studentList = await firstValueFrom(this.studentService.getStudent());
+    } else if (this.url.includes('/teachers')) {
+      this.teacherList = await firstValueFrom(this.teacherService.getTeachers());
     }
+    this.loadData()
   }
+
 
   loadData() {
     this.sequenceService.getSequences().subscribe({
@@ -77,31 +79,42 @@ export class ContentListPage implements OnInit {
           this.content = this.contentSequence;
         } else if (this.url.includes('/students')) {
 
-          for (let student of this.studentList) {
-            student.kind = "alumno";
-          }
-
-          this.content = {
-            kind: "alumno",
-            url: "/students",
-            title: "Listado de alumnos",
-            subTitle: "Gestiona los alumnos del centro",
-            gender: 1,
-            contentList: this.studentList
-          }
-        } else if (this.url.includes('/teachers')) {
-          this.content = {
-            kind: "profesor",
-            url: "/teachers",
-            title: "Listado de profesores",
-            subTitle: "Gestiona los profesores del centro",
-            gender: 1,
-            plural: 1,
-            contentList: []
-          }
-        }
+      for (let student of this.studentList) {
+        student.kind = "alumno";
       }
-    });
+
+      this.content = {
+        kind: "alumno",
+        url: "/students",
+        title: "Listado de alumnos",
+        subTitle: "Gestiona los alumnos del centro",
+        gender: 1,
+        contentList: this.studentList
+      }
+    } else if (this.url.includes('/teachers')) {
+
+      for (let teacher of this.teacherList) {
+        teacher.kind = "profesor";
+      }
+
+      this.content = {
+        kind: "profesor",
+        url: "/teachers",
+        title: "Listado de profesores",
+        subTitle: "Gestiona los profesores del centro",
+        gender: 1,
+        plural: 1,
+        contentList: this.teacherList
+      }      
+    } else {
+      console.log("Something went wrong loading content list page data");
+    }
+      },
+      error: (err) => {
+        console.error('Error al obtener las secuencias: ' + err.message);
+      }
+    }); 
+
   }
 
 }

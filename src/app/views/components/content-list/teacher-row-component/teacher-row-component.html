@@ -4,23 +4,17 @@
 
         <div class="col-md-6 ps-4">
             <img src="images/studentIMG.jpg" alt="student image" class="img-fluid rounded-circle student-image me-3" width="36px">
-            <span class="align-middle fw-medium text-dark-blue fs-5">{{ student()?.user!.name }} {{ student()?.user!.last_name }}</span>
+            <span class="align-middle fw-medium text-dark-blue fs-5">{{ teacher()?.user!.name }} {{ teacher()?.user!.last_name }}</span>
         </div>
-
-        <!-- <div class="col-md-3">
-            <span class="text-muted">{{ student()?.grade }}</span>
-        </div> -->
-        
 
         <div class="col-md-4 text-center">
             <span class="badge-steps">
-                0 Secuencias asignadas
+                {{assignatedStudents}} Estudiantes asignados
             </span>
         </div>
         
         <div class="col-md-2 text-end pe-4">
-            <app-action-buttons-component (onEdit)="editStudent()" 
-            (onAssignSequences)="assignSequences()" (onDelete)="deleteStudent()">
+            <app-action-buttons-component (onEdit)="editTeacher()" (onAssignStudent)="assignStudent()" (onDelete)="deleteTeacher()">
         </app-action-buttons-component>
         </div>
         

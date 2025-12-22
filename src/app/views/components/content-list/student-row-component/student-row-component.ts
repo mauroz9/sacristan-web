@@ -16,19 +16,20 @@ export class StudentRowComponent {
     student = input<Student>();
     onDelete = output<void>();
 
-    editStudent(idStudent: number | undefined) {
+    editStudent() {
         // Hacer un router navigate a la pagina de modificar estudiante pasandolle el ID de estudiante.
-      this.router.navigate(['/students/modify/', idStudent]);
+      let id = this.student()?.user!.id;
+      this.router.navigate(['/students/modify/', id]);
     }
 
-    assignSequences(idStudent: number | undefined) {
-      this.router.navigate(['/students/asign-sequences/', idStudent]);
+    assignSequences() {
+      let id = this.student()?.id;
+      this.router.navigate(['/students/asign-sequences/', id]);
     }
 
     deleteStudent() {
       let id = this.student()?.id;
-      console.log(id);
-      
+
       if(id && confirm('¿Seguro que quieres borrar este alumno?')){
         this.studentService.deleteStudent(id).subscribe({
           next: () => {

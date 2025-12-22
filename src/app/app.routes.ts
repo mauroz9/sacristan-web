@@ -19,6 +19,26 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'teachers',
+        component: ContentListPage,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'teachers/new',
+        component: ContentListPage,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'teachers/modify/:id',
+        component: ContentListPage,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'teachers/assign-students/:id',
+        component: ContentListPage,
+        canActivate: [authGuard]
+    },
+    {
         path: 'sequences/new',
         component: SequenceFormComponent,
         canActivate: [authGuard]
