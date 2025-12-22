@@ -61,10 +61,8 @@ export class ContentListPage implements OnInit {
   async getData() {
     this.url = this.router.url;
     if (this.url.includes('/students')) {
-      this.studentList = [];
       this.studentList = await firstValueFrom(this.studentService.getStudent());
     } else if (this.url.includes('/teachers')) {
-      this.teacherList = [];
       this.teacherList = await firstValueFrom(this.teacherService.getTeachers());
     }
     this.loadData()
