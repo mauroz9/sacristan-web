@@ -47,7 +47,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return this.currentUser !== null;
+    return !!this.getToken();
   }
 
   getToken(): string | null {

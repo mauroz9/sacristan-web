@@ -20,7 +20,7 @@ export class TeacherRowComponent implements OnInit {
   loading: boolean = false;
 
   ngOnInit(): void {
-    this.loading = true
+    this.loading = true;
     let id = this.teacher()?.id;
     if(id){
       this.teacherService.getAssignedStudentsCount(id).subscribe({
@@ -30,6 +30,7 @@ export class TeacherRowComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al obtener el número de estudiantes asignados: ' + err.message);
+          this.loading = false;
         }
       });
     }
