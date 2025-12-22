@@ -20,19 +20,23 @@ export const routes: Routes = [
     },
     {
         path: 'teachers',
-        component: ContentListPage
+        component: ContentListPage,
+        canActivate: [authGuard]
     },
     {
         path: 'teachers/new',
-        component: ContentListPage
+        component: ContentListPage,
+        canActivate: [authGuard]
     },
     {
         path: 'teachers/modify/:id',
-        component: ContentListPage
+        component: ContentListPage,
+        canActivate: [authGuard]
     },
     {
         path: 'teachers/asign-students/:id',
-        component: ContentListPage
+        component: ContentListPage,
+        canActivate: [authGuard]
     },
     {
         path: 'sequences/new',
