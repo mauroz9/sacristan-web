@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common'; // Importante para *ngIf
 })
 export class LoginPage implements OnInit {
   isLoading = false;
+  errorMessage: string | null = null;
+  showPassword = false; // Estado para mostrar/ocultar contraseña
   
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -33,6 +35,10 @@ export class LoginPage implements OnInit {
     }    
   }
 
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
@@ -43,10 +49,9 @@ export class LoginPage implements OnInit {
           this.router.navigate(['/sequences']);
         },
         error: (err) => {
-          this.isLoading = false;
-          // En lugar de alert, podrías usar un toast o un mensaje en el UI
           console.error('Error de login:', err);
-          alert('Credenciales incorrectas. Inténtalo de nuevo.');
+          this.isLoading = false;
+          this.errorMessage = err.error.message || 'Error al iniciar sesión';
         },
         complete: () => this.isLoading = false
       });

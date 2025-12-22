@@ -9,3 +9,27 @@ body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     min-height: 100vh;
 }
+
+.text-primary-custom {
+    color: var(--primary-blue) !important;
+}
+
+.btn-custom-primary {
+    background-color: var(--primary-blue);
+    color: white;
+    border: 1px solid var(--primary-blue);
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-custom-primary:hover, .btn-custom-primary:focus {
+    background-color: white;
+    border: 1px solid var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+.btn-custom-primary:disabled {
+    background-color: #1F3C8B;
+    color: white;
+    cursor: not-allowed;
+}

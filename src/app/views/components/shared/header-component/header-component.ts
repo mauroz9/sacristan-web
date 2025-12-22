@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../logic/services/auth-service';
 import { Subscription } from 'rxjs';
+import { TypeofExpression } from '@angular/compiler';
 
 @Component({
   selector: 'app-header-component',
@@ -11,6 +12,7 @@ import { Subscription } from 'rxjs';
 export class HeaderComponent implements OnInit {
 
   loggedIn = false;
+  loading = false;
   private authSub?: Subscription;
 
   constructor(private authService: AuthService) {}
@@ -27,8 +29,10 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  logout() {
-    this.authService.logout();
+  async logout() {
+    this.loading = true;
+    await this.authService.logout();
+    this.loading = false;
   }
 
 }

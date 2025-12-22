@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, tap } from 'rxjs';
 import { API_URL } from './env';
 
 @Injectable({
@@ -24,20 +24,31 @@ export class AuthService {
   login(credentials: any): Observable<any>{
     return this.http.post(`${API_URL}/api/login`, credentials).pipe(
       tap((response: any) => {
+        
+        if (response.user.role_id != 1) {
+          localStorage.setItem('errorMessage', 'Acceso denegado. Solo administradores pueden acceder.');
+          this.doLogout();
+          throw new Error('Acceso denegado. Solo administradores pueden acceder.');
+        }
+
         if(response.token){
           localStorage.setItem('auth_token', response.token)
           this.currentUser.set(response.token);
           this.loggedInSubject.next(true);
         }
-      })
-    );
+      },
+      (error) => {
+        console.error('Login error:', error);
+        throw error;
+      }
+    ));
   }
   
-  logout(): void{
-    this.http.post(`${API_URL}/api/logout`, {}).subscribe(() => {
-        this.loggedInSubject.next(false);
-      this.doLogout()
-    });
+  async logout(): Promise<void> {
+    await firstValueFrom(this.http.post(`${API_URL}/api/logout`, {}))
+    this.loggedInSubject.next(false);
+    this.doLogout()
+    return;
   }
 
   doLogout() {
