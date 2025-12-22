@@ -36,7 +36,7 @@ export class AsignSequencesComponent implements AfterViewInit {
       const studentId = Number(id);
       this.studentService.getStudentById(studentId).subscribe(data => {
         this.student = data;
-        this.loadData(studentId);ss
+        this.loadData(studentId);
       });
     }
   }
