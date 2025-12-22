@@ -116,19 +116,4 @@ export class StudentService {
 
   }
 
-  getStudentSequences(studentId: number): Observable<Sequence[]>{
-    return this.http.get<Sequence[]>(API_URL + `/api/estudiantes/${studentId}/secuencias`);
-  }
-
-  assignSequence(studentId: number, sequenceId: number): Observable<any>{
-    return this.http.post(API_URL + `/api/student-sequences`, {
-      studentId: studentId,
-      sequenceId: sequenceId
-    });
-  }
-
-  unassignSequence(studentId: number, sequenceId: number): Observable<any>{
-    return this.http.delete(API_URL + `/api/student-sequences/${studentId}/${sequenceId}`)
-  }
-
 }
