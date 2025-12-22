@@ -1,4 +1,4 @@
-import { Component, input, OnChanges, OnInit, output } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { Student } from '../../../../logic/interfaces/student-interface';
 import { ActionButtonsComponent } from "../../shared/action-buttons-component/action-buttons-component";
 import { Router } from '@angular/router';
