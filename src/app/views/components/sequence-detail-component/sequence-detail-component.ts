@@ -20,7 +20,9 @@ export class SequenceDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
 
     if(id){
-      this.sequence = this.sequenceService.getSequenceById(+id);
+      this.sequenceService.getSequenceById(+id).subscribe(req => {
+        this.sequence = req;
+      });
     }
   }
 

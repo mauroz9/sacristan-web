@@ -44,9 +44,10 @@ export class ContentListPage implements OnInit {
 
   content: Content = this.contentSequence;
 
-  async reloadContent() {
-    await this.getData();
 
+  reloadContent() {
+    this.getData();
+    
     this.infoMessage = localStorage.getItem('infoMessage');
     if (this.infoMessage) {
       localStorage.removeItem('infoMessage');
@@ -71,12 +72,14 @@ export class ContentListPage implements OnInit {
 
 
   loadData() {
-    this.sequenceList = this.sequenceService.getSequences();
-    this.contentSequence.contentList = this.sequenceList;
+    this.sequenceService.getSequences().subscribe({
+      next: (data) => {
+        this.sequenceList = data;
+        this.contentSequence.contentList = this.sequenceList;
 
-    if (this.url.includes('/sequences')) {
-      this.content = this.contentSequence;
-    } else if(this.url.includes('/students')){      
+        if (this.url.includes('/sequences')) {
+          this.content = this.contentSequence;
+        } else if (this.url.includes('/students')) {
 
       for (let student of this.studentList) {
         student.kind = "alumno";

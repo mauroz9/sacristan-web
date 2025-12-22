@@ -11,7 +11,7 @@ export class StepModalComponent implements OnInit{
   isVisible = input<Boolean>(false);
   close = output<void>();
   save = output<{ name: string, imageUrl: string }>();
-  stepData = input<{ description: string, imageUrl: string } | null>(null);
+  stepData = input<{ title: string, imageUrl: string } | null>(null);
 
   selectedCategory: string = 'Todas';
 
@@ -32,7 +32,7 @@ export class StepModalComponent implements OnInit{
   ngOnInit(): void {
     if(this.stepData() !== null){
       this.stepForm.patchValue({
-        name: this.stepData()!.description,
+        name: this.stepData()!.title,
         imageUrl: this.stepData()!.imageUrl
       });
     }
