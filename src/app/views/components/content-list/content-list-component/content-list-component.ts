@@ -32,7 +32,7 @@ export class ContentListComponent {
         this.functionality = "newTeacher";
       } else if (this.router.url.includes('teachers/modify')) {
         this.functionality = "modifyTeacher";
-      } else if (this.router.url.includes('teachers/asign-students')) {
+      } else if (this.router.url.includes('teachers/assign-students')) {
         this.functionality = "assignStudent";
       }
   }
