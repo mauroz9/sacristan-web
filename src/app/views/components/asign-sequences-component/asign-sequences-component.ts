@@ -6,7 +6,6 @@ import { StudentService } from '../../../logic/services/student-service';
 import { Student } from '../../../logic/interfaces/student-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { SequenceService } from '../../../logic/services/sequence-service';
-import { forkJoin } from 'rxjs';
 import { StudentSequenceService } from '../../../logic/services/student-sequence-service';
 
 @Component({
