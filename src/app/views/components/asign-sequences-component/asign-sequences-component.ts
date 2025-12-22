@@ -98,7 +98,7 @@ export class AsignSequencesComponent implements AfterViewInit {
   }
 
   unassignSequence(sequence: Sequence): void{
-    if (!confirm(`¿Estás seguro de que quieres eliminar la secuencia "${sequence. title}"?`)) {
+    if (!confirm(`¿Estás seguro de que quieres eliminar la secuencia "${sequence.title}"?`)) {
       return;
     }
 
