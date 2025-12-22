@@ -1,3 +1,5 @@
 <app-header-component></app-header-component>
-<app-menu-component></app-menu-component>
+@if (menuVisible) {
+    <app-menu-component></app-menu-component>
+}
 <router-outlet></router-outlet>

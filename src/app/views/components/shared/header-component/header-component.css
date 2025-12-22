@@ -32,3 +32,24 @@
     width: auto;
     display: block;
 }
+
+.btn-logout {
+    background-color: transparent;
+    border: 1px solid #dee2e6; /* Color suave para no desentonar */
+    color: #dee2e6;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.btn-logout:hover {
+    background-color: #f8f9fa;
+    color: var(--primary-blue); /* Color sutil de alerta al pasar el ratón */
+    border-color: var(--primary-blue);
+}
+
+/* Si usas Bootstrap Icons, asegúrate de tener el CDN o los archivos */
+.bi-box-arrow-right {
+    font-size: 1.1rem;
+}

@@ -1,11 +1,8 @@
 <nav class="navbar navbar-expand-lg custom-navbar">
     <div class="container-fluid px-4">
         <a class="navbar-brand d-flex align-items-center" href="#">
-            
             <div class="logo-container me-3 pe-3">
-                <img src="/images/logo-sacristan.png" 
-                    alt="Logo Instituto Doctor Sacristán" 
-                    class="logo-img">
+                <img src="/images/logo-sacristan.png" alt="Logo Instituto Doctor Sacristán" class="logo-img">
             </div>
 
             <div class="d-flex flex-column justify-content-center">
@@ -13,5 +10,14 @@
                 <span class="brand-subtitle">Gestor de Secuencias</span>
             </div>
         </a>
+
+        @if (loggedIn) {
+            <div class="ms-auto d-flex align-items-center">
+                <button type="submit" class="btn btn-logout d-flex align-items-center gap-2" (click)="logout()">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Cerrar Sesión</span>
+                </button>
+        </div>
+        }
     </div>
 </nav>

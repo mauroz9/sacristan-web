@@ -19,12 +19,12 @@ import { TeacherService } from '../../../logic/services/teacher-service';
 })
 export class ContentListPage implements OnInit {
 
-    constructor(
+  constructor(
     private router: Router,
     private studentService: StudentService,
     private sequenceService: SequenceService,
     private teacherService: TeacherService
-  ) {}
+  ) { }
 
   url = "";
 
@@ -39,15 +39,16 @@ export class ContentListPage implements OnInit {
     title: "Secuencia de pasos",
     subTitle: "Gestiona las secuencias de pictogramas para los estudiantes",
     gender: 0,
-    contentList: this.sequenceList
+    contentList: []
   }
 
   content: Content = this.contentSequence;
+  loading: boolean = true;
 
 
   reloadContent() {
     this.getData();
-    
+
     this.infoMessage = localStorage.getItem('infoMessage');
     if (this.infoMessage) {
       localStorage.removeItem('infoMessage');
@@ -59,30 +60,30 @@ export class ContentListPage implements OnInit {
   }
 
   async getData() {
+
     this.url = this.router.url;
     if (this.url.includes('/students')) {
       this.studentList = await firstValueFrom(this.studentService.getStudent());
     } else if (this.url.includes('/teachers')) {
       this.teacherList = await firstValueFrom(this.teacherService.getTeachers());
+    } else if (this.url.includes('/sequences')) {
+      this.sequenceList = await firstValueFrom(this.sequenceService.getSequences());
     }
     this.loadData()
   }
 
 
   loadData() {
-    this.sequenceService.getSequences().subscribe({
-      next: (data) => {
-        this.sequenceList = data;
+    if (this.url.includes('/sequences')) {
+      for (let sequence of this.sequenceList) {
+        sequence.kind = "secuencia";
+      }
 
-        for (let sequence of this.sequenceList) {
-          sequence.kind = "secuencia";
-        }
+      this.contentSequence.contentList = this.sequenceList;
+      
+      this.content = this.contentSequence;
 
-        this.contentSequence.contentList = this.sequenceList;
-
-        if (this.url.includes('/sequences')) {
-          this.content = this.contentSequence;
-        } else if (this.url.includes('/students')) {
+    } else if (this.url.includes('/students')) {
 
       for (let student of this.studentList) {
         student.kind = "alumno";
@@ -97,11 +98,9 @@ export class ContentListPage implements OnInit {
         contentList: this.studentList
       }
     } else if (this.url.includes('/teachers')) {
-
       for (let teacher of this.teacherList) {
         teacher.kind = "profesor";
       }
-
       this.content = {
         kind: "profesor",
         url: "/teachers",
@@ -110,16 +109,11 @@ export class ContentListPage implements OnInit {
         gender: 1,
         plural: 1,
         contentList: this.teacherList
-      }      
+      }
     } else {
       console.log("Something went wrong loading content list page data");
     }
-      },
-      error: (err) => {
-        console.error('Error al obtener las secuencias: ' + err.message);
-      }
-    }); 
-
+    this.loading = false;
   }
 
 }

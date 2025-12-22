@@ -18,6 +18,7 @@ import { AsignStudentComponent } from "../../asign-student-component/asign-stude
 export class ContentListComponent {
 
   content = input<Content>();
+  loading = input<boolean>();
   reload = output<void>();
   functionality = "";
 

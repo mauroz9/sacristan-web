@@ -17,16 +17,20 @@ export class TeacherRowComponent implements OnInit {
   teacher = input<Teacher>();
   onDelete = output<void>();
   assignatedStudents: number = 0;
+  loading: boolean = false;
 
   ngOnInit(): void {
+    this.loading = true;
     let id = this.teacher()?.id;
     if(id){
       this.teacherService.getAssignedStudentsCount(id).subscribe({
         next: (count) => {          
           this.assignatedStudents = count;
+          this.loading = false;
         },
         error: (err) => {
           console.error('Error al obtener el número de estudiantes asignados: ' + err.message);
+          this.loading = false;
         }
       });
     }
