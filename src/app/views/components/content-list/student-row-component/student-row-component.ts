@@ -16,6 +16,7 @@ export class StudentRowComponent implements OnInit {
 
   student = input<Student>();
   onDelete = output<void>();
+  loading: boolean = false;
 
   sequenceCount: number | null = null;
 
@@ -26,6 +27,7 @@ export class StudentRowComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loading = true;
     if (this.student()?.id) {
       this.loadSequenceCount();
     }
@@ -35,6 +37,7 @@ export class StudentRowComponent implements OnInit {
     this.studentSequenceService.getStudentSequences(this.student()!.id!).subscribe({
       next: (sequences) => {
         this.sequenceCount = sequences.length;
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error al cargar el conteo de secuencias:', error);

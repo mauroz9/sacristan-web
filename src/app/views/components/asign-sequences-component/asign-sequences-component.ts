@@ -24,6 +24,8 @@ export class AsignSequencesComponent implements AfterViewInit {
   assignedSequences: Sequence[] = [];
   availableSequences: Sequence[] = [];
   selectedSequence: Sequence | null = null;
+  loading: boolean = false;
+  loadingSequences: boolean = false;
 
   constructor(private modalService: NgbModal, private router: Router, private studentService: StudentService, private route: ActivatedRoute, private sequenceService: SequenceService, private studentSequenceService: StudentSequenceService) { }
 
@@ -32,12 +34,14 @@ export class AsignSequencesComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.loading = true;
     this.openModal(this.modal);
     const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {
       this.studentId = Number(id);
       this.loadStudentData(this.studentId);
+      this.loadingSequences = true;
       this.loadSequences(this.studentId);
     }
   }
@@ -46,6 +50,7 @@ export class AsignSequencesComponent implements AfterViewInit {
     this.studentService.getStudentById(studentId).subscribe({
       next: (data) => {
         this.student = data;
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error al cargar estudiante', error);
@@ -57,6 +62,7 @@ export class AsignSequencesComponent implements AfterViewInit {
     this.studentSequenceService.getAvailableSequences(studentId).subscribe({
       next: (data) => {
         this.availableSequences = data;
+        this.loadingSequences = false;
       },
       error: (error) => {
         console.error('Error al cargar secuencias disponibles:', error);
@@ -84,8 +90,9 @@ export class AsignSequencesComponent implements AfterViewInit {
 
     this.studentSequenceService.assignSequence(this.studentId!, this.selectedSequence!.id!).subscribe({
       next: () => {
+        this.loadingSequences = true;
         this.loadSequences(this.studentId!);
-        localStorage.setItem('infoMessage', `Secuencia asignada correctamente a ${this.student!.user!.name}`);
+        localStorage.setItem('infoMessage', `Secuencia asignada correctamente a ${this.student!.user!.name} ${this.student!.user!.last_name}`);
         this.selectedSequence = null;
       },
       error: (error) => {
