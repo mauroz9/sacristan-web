@@ -20,4 +20,12 @@ export class ArasaacService {
   getPictogramById(id: number): Observable<ArasaacPictogram>{
     return this.http.get<ArasaacPictogram>(`${baseAPIUrl}/pictograms/${id}`);
   }
+
+  getPictogramsBySearch(search: string): Observable<ArasaacPictogram[]>{
+    return this.http.get<ArasaacPictogram[]>(`${baseAPIUrl}/pictograms/${language}/search/${search}`);
+  }
+
+  getPictogramImage(id: number): Observable<any>{
+    return this.http.get<any>(`https://static.arasaac.org/pictograms/${id}/${id}_2500.png`)
+  }
 }
