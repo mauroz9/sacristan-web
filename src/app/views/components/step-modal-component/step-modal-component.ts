@@ -61,8 +61,13 @@ export class StepModalComponent implements OnInit {
     if (cat !== 'Todas') {
       this.searchControl.setValue(cat);
     } else {
-      this.searchControl.setValue('');
-      this.pictograms = [];
+      this.loading = true;
+    this.arasaacService.getPictograms().pipe(
+      catchError(() => of([]))
+    ).subscribe(results => {
+      this.pictograms = results;
+      this.loading = false;
+    });
     }
   }
 
