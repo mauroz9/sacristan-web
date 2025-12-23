@@ -1,5 +1,8 @@
 import { Component, input, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ArasaacPictogram } from '../../../logic/interfaces/arasaac-interface';
+import { catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { ArasaacService } from '../../../logic/services/arasaac-service';
 
 @Component({
   selector: 'app-step-modal-component',
@@ -15,17 +18,17 @@ export class StepModalComponent implements OnInit{
 
   selectedCategory: string = 'Todas';
 
+  pictograms: ArasaacPictogram[] = [];
+  loading = false;
+
   stepForm = new FormGroup({
     name: new FormControl('', Validators.required),
     imageUrl: new FormControl('', Validators.required)
   });
 
-  availableIcons = [
-    'https://api.arasaac.org/api/pictograms/2347',
-    'https://api.arasaac.org/api/pictograms/2350',
-    'https://api.arasaac.org/api/pictograms/5432',
-    'https://api.arasaac.org/api/pictograms/3210'
-  ];
+  searchControl = new FormControl('', Validators.minLength(3));
+
+  constructor(private arasaacService: ArasaacService){}
 
   categories = ['Higiene', 'Alimentación', 'Vestirse', 'Rutina', 'Colegio', 'Casa'];
 
@@ -36,6 +39,21 @@ export class StepModalComponent implements OnInit{
         imageUrl: this.stepData()!.imageUrl
       });
     }
+
+    this.searchControl.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(term => {
+        if (!term) return of([]);
+        this.loading = true;
+        return this.arasaacService.getPictogramsBySearch(term).pipe(
+          catchError(() => of([]))
+        );
+      })
+    ).subscribe(results => {
+      this.pictograms = results;
+      this.loading = false;
+    });
   }
 
   selectCategory(cat: string) {
