@@ -62,7 +62,7 @@
                     <div class="d-flex gap-3 flex-wrap justify-content-center" style="max-height: 300px; overflow-y: auto;">
                         
                         @for (picto of pictograms; track picto._id) {
-                            @let pictoUrl = 'https://static.arasaac.org/pictograms/' + picto._id + '/' + picto._id + '_500.png';
+                            @let pictoUrl = getPictogramImage(picto._id);
                             
                             <div class="pictogram-option" 
                                  [class.selected]="stepForm.get('imageUrl')?.value === pictoUrl"
