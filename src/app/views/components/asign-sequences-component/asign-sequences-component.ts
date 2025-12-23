@@ -90,6 +90,7 @@ export class AsignSequencesComponent implements AfterViewInit {
 
     this.studentSequenceService.assignSequence(this.studentId!, this.selectedSequence!.id!).subscribe({
       next: () => {
+        this.loadingSequences = true;
         this.loadSequences(this.studentId!);
         localStorage.setItem('infoMessage', `Secuencia asignada correctamente a ${this.student!.user!.name} ${this.student!.user!.last_name}`);
         this.selectedSequence = null;
