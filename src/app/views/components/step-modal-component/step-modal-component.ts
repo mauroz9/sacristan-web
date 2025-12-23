@@ -82,7 +82,8 @@ export class StepModalComponent implements OnInit{
         imageUrl: this.stepForm.value.imageUrl!
       });
       this.stepForm.reset();
-
+      this.searchControl.reset();
+      this.pictograms = [];
     } else {
       this.stepForm.markAllAsTouched();
     }
