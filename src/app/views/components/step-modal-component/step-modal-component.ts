@@ -33,7 +33,6 @@ export class StepModalComponent implements OnInit {
   categories = ['Higiene', 'Alimentación', 'Vestirse', 'Rutina', 'Colegio', 'Casa'];
 
   ngOnInit(): void {
-    // Cargar todos los pictogramas por defecto
     this.loading = true;
     this.arasaacService.getPictograms().pipe(
       catchError(() => of([]))
