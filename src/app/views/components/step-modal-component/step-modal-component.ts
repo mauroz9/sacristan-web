@@ -66,8 +66,12 @@ export class StepModalComponent implements OnInit {
     }
   }
 
+  getPictogramImage(id: number): string {
+    return this.arasaacService.getPictogramImage(id);
+  }
+
   selectImage(id: number) {
-    const url = this.arasaacService.getPictogramImage(id);
+    const url = this.getPictogramImage(id);
     this.stepForm.patchValue({ imageUrl: url });
   }
 
