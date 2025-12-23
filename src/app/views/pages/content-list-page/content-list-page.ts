@@ -61,15 +61,26 @@ export class ContentListPage implements OnInit {
 
   async getData() {
 
-    this.url = this.router.url;
-    if (this.url.includes('/students')) {
-      this.studentList = await firstValueFrom(this.studentService.getStudent());
-    } else if (this.url.includes('/teachers')) {
-      this.teacherList = await firstValueFrom(this.teacherService.getTeachers());
-    } else if (this.url.includes('/sequences')) {
-      this.sequenceList = await firstValueFrom(this.sequenceService.getSequences());
+    try {
+      this.url = this.router.url;
+      if (this.url.includes('/students')) {
+        this.studentList = await firstValueFrom(this.studentService.getStudent());
+      } else if (this.url.includes('/teachers')) {
+        this.teacherList = await firstValueFrom(this.teacherService.getTeachers());
+      } else if (this.url.includes('/sequences')) {
+        this.sequenceList = await firstValueFrom(this.sequenceService.getSequences());
+      }
+      this.loadData();
+    } catch (error: any) {
+      console.error("Error loading data for content list page:", error);      
+      
+      if (error.status === 401) {        
+        alert("Sesión expirada. Por favor, inicia sesión de nuevo.");
+        localStorage.removeItem('auth_token');
+        this.router.navigate(['/login']);
+      }
     }
-    this.loadData()
+    
   }
 
 
