@@ -73,8 +73,8 @@
                                     <p class="mb-0 fw-semibold text-dark">{{ sequence.title }}</p>
                                     <small class="text-muted">{{ sequence.description }}</small>
                                     <div class="mt-1">
-                                        <span class="badge bg-secondary">{{ sequence.category?.name }}</span>
-                                        <span class="badge bg-info ms-2">{{ sequence.steps?.length || 0 }} pasos</span>
+                                        <span class="badge bg-secondary">{{ sequence.category!.name }}</span>
+                                        <span class="badge bg-info ms-2">{{ sequence.steps!.length || 0 }} pasos</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-2">
