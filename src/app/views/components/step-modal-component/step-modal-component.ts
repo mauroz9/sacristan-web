@@ -58,9 +58,20 @@ export class StepModalComponent implements OnInit{
 
   selectCategory(cat: string) {
     this.selectedCategory = cat;
+    if (cat !== 'Todas') {
+      this.searchControl.setValue(cat);
+    } else {
+      this.searchControl.setValue('');
+      this.pictograms = [];
+    }
   }
 
-  selectImage(url: string) {
+  selectImage(id: number) {
+    var url = '';
+    
+    this.arasaacService.getPictogramImage(id).subscribe(req => {
+      url = req;
+    });
     this.stepForm.patchValue({ imageUrl: url });
   }
 
