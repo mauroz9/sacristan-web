@@ -1,5 +1,8 @@
 import { Component, input, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ArasaacPictogram } from '../../../logic/interfaces/arasaac-interface';
+import { catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { ArasaacService } from '../../../logic/services/arasaac-service';
 
 @Component({
   selector: 'app-step-modal-component',
@@ -7,7 +10,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   templateUrl: './step-modal-component.html',
   styleUrl: './step-modal-component.css',
 })
-export class StepModalComponent implements OnInit{
+export class StepModalComponent implements OnInit {
   isVisible = input<Boolean>(false);
   close = output<void>();
   save = output<{ name: string, imageUrl: string }>();
@@ -15,34 +18,81 @@ export class StepModalComponent implements OnInit{
 
   selectedCategory: string = 'Todas';
 
+  pictograms: ArasaacPictogram[] = [];
+  loading = false;
+
   stepForm = new FormGroup({
     name: new FormControl('', Validators.required),
     imageUrl: new FormControl('', Validators.required)
   });
 
-  availableIcons = [
-    'https://api.arasaac.org/api/pictograms/2347',
-    'https://api.arasaac.org/api/pictograms/2350',
-    'https://api.arasaac.org/api/pictograms/5432',
-    'https://api.arasaac.org/api/pictograms/3210'
-  ];
+  searchControl = new FormControl('', Validators.minLength(3));
+
+  constructor(private arasaacService: ArasaacService) { }
 
   categories = ['Higiene', 'Alimentación', 'Vestirse', 'Rutina', 'Colegio', 'Casa'];
 
   ngOnInit(): void {
-    if(this.stepData() !== null){
+    this.loading = true;
+    this.arasaacService.getPictograms().pipe(
+      catchError(() => of([]))
+    ).subscribe(results => {
+      this.pictograms = results;
+      this.loading = false;
+    });
+
+    if (this.stepData() !== null) {
       this.stepForm.patchValue({
         name: this.stepData()!.title,
         imageUrl: this.stepData()!.imageUrl
       });
+
+      this.loading = true;
+      this.arasaacService.getPictogramsBySearch(this.stepData()!.title).pipe(
+        catchError(() => of([]))
+      ).subscribe(results => {
+        this.pictograms = results;
+        this.loading = false;
+      });
     }
+
+    this.searchControl.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(term => {
+        if (!term) return of([]);
+        this.loading = true;
+        return this.arasaacService.getPictogramsBySearch(term).pipe(
+          catchError(() => of([]))
+        );
+      })
+    ).subscribe(results => {
+      this.pictograms = results;
+      this.loading = false;
+    });
   }
 
   selectCategory(cat: string) {
     this.selectedCategory = cat;
+    if (cat !== 'Todas') {
+      this.searchControl.setValue(cat);
+    } else {
+      this.loading = true;
+      this.arasaacService.getPictograms().pipe(
+        catchError(() => of([]))
+      ).subscribe(results => {
+        this.pictograms = results;
+        this.loading = false;
+      });
+    }
   }
 
-  selectImage(url: string) {
+  getPictogramImage(id: number): string {
+    return this.arasaacService.getPictogramImage(id);
+  }
+
+  selectImage(id: number) {
+    const url = this.getPictogramImage(id);
     this.stepForm.patchValue({ imageUrl: url });
   }
 
@@ -53,7 +103,8 @@ export class StepModalComponent implements OnInit{
         imageUrl: this.stepForm.value.imageUrl!
       });
       this.stepForm.reset();
-
+      this.searchControl.reset();
+      this.pictograms = [];
     } else {
       this.stepForm.markAllAsTouched();
     }
@@ -61,6 +112,8 @@ export class StepModalComponent implements OnInit{
 
   onClose() {
     this.stepForm.reset();
+    this.searchControl.reset();
+    this.pictograms = [];
     this.close.emit();
   }
 }
