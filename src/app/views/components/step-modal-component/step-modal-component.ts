@@ -91,6 +91,8 @@ export class StepModalComponent implements OnInit{
 
   onClose() {
     this.stepForm.reset();
+    this.searchControl.reset();
+    this.pictograms = [];
     this.close.emit();
   }
 }
