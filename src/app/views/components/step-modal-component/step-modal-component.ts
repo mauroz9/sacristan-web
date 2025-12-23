@@ -10,7 +10,7 @@ import { ArasaacService } from '../../../logic/services/arasaac-service';
   templateUrl: './step-modal-component.html',
   styleUrl: './step-modal-component.css',
 })
-export class StepModalComponent implements OnInit{
+export class StepModalComponent implements OnInit {
   isVisible = input<Boolean>(false);
   close = output<void>();
   save = output<{ name: string, imageUrl: string }>();
@@ -28,12 +28,12 @@ export class StepModalComponent implements OnInit{
 
   searchControl = new FormControl('', Validators.minLength(3));
 
-  constructor(private arasaacService: ArasaacService){}
+  constructor(private arasaacService: ArasaacService) { }
 
   categories = ['Higiene', 'Alimentación', 'Vestirse', 'Rutina', 'Colegio', 'Casa'];
 
   ngOnInit(): void {
-    if(this.stepData() !== null){
+    if (this.stepData() !== null) {
       this.stepForm.patchValue({
         name: this.stepData()!.title,
         imageUrl: this.stepData()!.imageUrl
@@ -67,11 +67,7 @@ export class StepModalComponent implements OnInit{
   }
 
   selectImage(id: number) {
-    var url = '';
-    
-    this.arasaacService.getPictogramImage(id).subscribe(req => {
-      url = req;
-    });
+    const url = this.arasaacService.getPictogramImage(id);
     this.stepForm.patchValue({ imageUrl: url });
   }
 
