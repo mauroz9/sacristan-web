@@ -73,7 +73,7 @@
                                      loading="lazy">
                             </div>
                         } @empty {
-                            @if (!loading && searchControl.value && searchControl.value.length > 2) {
+                            @if (!loading && searchControl.value && searchControl.value.length >= 3) {
                                 <p class="text-muted small w-100 text-center">No se encontraron pictogramas.</p>
                             }
                         }
