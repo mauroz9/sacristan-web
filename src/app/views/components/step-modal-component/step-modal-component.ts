@@ -15,6 +15,7 @@ export class StepModalComponent implements OnInit {
   close = output<void>();
   save = output<{ name: string, imageUrl: string }>();
   stepData = input<{ title: string, imageUrl: string } | null>(null);
+  isEdit: boolean = false;
 
   selectedCategory: string = 'Todas';
 
@@ -42,6 +43,7 @@ export class StepModalComponent implements OnInit {
     });
 
     if (this.stepData() !== null) {
+      this.isEdit = true;
       this.stepForm.patchValue({
         name: this.stepData()!.title,
         imageUrl: this.stepData()!.imageUrl
