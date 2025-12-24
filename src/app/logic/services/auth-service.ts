@@ -48,10 +48,16 @@ export class AuthService {
   }
   
   async logout(): Promise<void> {
-    await firstValueFrom(this.http.post(`${API_URL}/api/logout`, {}))
-    this.loggedInSubject.next(false);
-    this.doLogout()
-    return;
+    try {
+      await firstValueFrom(this.http.post(`${API_URL}/api/logout`, {}))
+      this.loggedInSubject.next(false);
+      this.doLogout()
+      return;
+    } catch (error: any) {
+      if (error.status === 401) {
+        this.doLogout();
+      }
+    }
   }
 
   doLogout() {
