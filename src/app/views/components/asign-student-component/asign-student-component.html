@@ -6,7 +6,14 @@
                 [routerLink]="'/teachers'"></button>
         </div>
 
-        <div class="modal-body custom-modal-body pt-0 px-4 pb-2">
+        @if (loading) {
+            <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+                <div class="spinner-border text-primary-blue" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        } @else {
+           <div class="modal-body custom-modal-body pt-0 px-4 pb-2">
 
             <h4 class="mb-4 fw-bold">Estudiantes de {{teacher?.user?.name}} {{teacher?.user?.last_name}}</h4>
             <p class="text-muted mb-4 custom-subtitle">Asigna alumnos para este profesor</p>
@@ -70,7 +77,8 @@
             </div>
             }
             }
-        </div>
+        </div> 
+        }
 
         <div class="modal-footer border-top-0 pt-3 pb-4 px-4 justify-content-end">
             <button type="button" class="btn btn-light custom-cancel-btn me-2" (click)="modal.close()"

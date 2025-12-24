@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { TeacherService } from '../../../logic/services/teacher-service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +13,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './asign-student-component.html',
   styleUrl: './asign-student-component.css',
 })
-export class AsignStudentComponent {
+export class AsignStudentComponent implements OnInit {
 
     @ViewChild('modal') modal!: TemplateRef<any>;
 
@@ -21,11 +21,16 @@ export class AsignStudentComponent {
   selectedStudent: Student | null = null; // Use your Student type here
   nonAssignedStudents: Student[] = [];
   assignedStudents: Student[] = [];
+  loading: boolean = false;
 
   constructor (private modalService: NgbModal, private router: Router, private teacherService:TeacherService, private studentService: StudentService, private route: ActivatedRoute) {}
 
   openModal(modalContent: TemplateRef<any>) {
     this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
+  }
+
+  ngOnInit(): void {
+    this.loading = true;
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -38,6 +43,7 @@ export class AsignStudentComponent {
       this.nonAssignedStudents = await firstValueFrom(this.studentService.getStudentsWithoutTeacher());
       this.assignedStudents = await firstValueFrom(this.studentService.getStudentsWithTeacher(teacherId));
     }
+    this.loading = false;
   }
 
   selectStudent(student: Student) {
