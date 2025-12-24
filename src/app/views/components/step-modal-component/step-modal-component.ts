@@ -42,6 +42,7 @@ export class StepModalComponent implements OnInit {
     });
 
     if (this.stepData() !== null) {
+      this.isEdit = true;
       this.stepForm.patchValue({
         title: this.stepData()!.title,
         pictogram_arasaac: this.stepData()!.pictogram_arasaac

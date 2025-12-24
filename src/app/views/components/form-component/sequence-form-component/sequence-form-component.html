@@ -4,94 +4,103 @@
         <h2 class="page-title mb-1">{{ isEditMode ? 'Editar Secuencia' : 'Nueva Secuencia' }}</h2>
         <p class="text-muted mb-4">Define los pasos de la secuencia con pictogramas</p>
 
-        <form [formGroup]="sequenceForm" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-                <label class="form-label text-primary-blue fw-semibold">Título de la secuencia</label>
-                <input type="text" class="form-control custom-input" formControlName="title">
-                @if(sequenceForm.get('title')?.touched && sequenceForm.get('title')?.invalid){
-                <p class="invalid-feedback d-block">Debes indicar un Título</p>
-                }
+        @if (loading) {
+            <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+                <div class="spinner-border text-primary-blue" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label text-primary-blue fw-semibold">Descripción</label>
-                <input type="text" class="form-control custom-input" formControlName="description">
-                @if(sequenceForm.get('description')?.touched && sequenceForm.get('title')?.invalid){
-                <p class="invalid-feedback d-block">Debes indicar una Descripción</p>
-                }
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label text-primary-blue fw-semibold">Categoría</label>
-                <select class="form-select custom-input" formControlName="category_id">
-                    <option [value]="null" disabled selected>Selecciona una categoría</option>
-                    @for (category of categories; track category.id) {
-                        <option [value]="category.id">{{ category.name }}</option>
+        } @else {
+            <form [formGroup]="sequenceForm" (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label class="form-label text-primary-blue fw-semibold">Título de la secuencia</label>
+                    <input type="text" class="form-control custom-input" formControlName="title">
+                    @if(sequenceForm.get('title')?.touched && sequenceForm.get('title')?.invalid){
+                    <p class="invalid-feedback d-block">Debes indicar un Título</p>
                     }
-                </select>
-                @if(sequenceForm.get('category_id')?.touched && sequenceForm.get('category_id')?.invalid){
-                <p class="invalid-feedback d-block">Debes escoger una Categoría</p>
-                }
-            </div>
+                </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary-blue fw-bold mb-0">Pasos</h5>
-                <button type="button" class="btn btn-yellow" (click)="openModal()">
-                    <i class="bi bi-plus-lg me-1"></i> Añadir Paso
-                </button>
-            </div>
+                <div class="mb-3">
+                    <label class="form-label text-primary-blue fw-semibold">Descripción</label>
+                    <input type="text" class="form-control custom-input" formControlName="description">
+                    @if(sequenceForm.get('description')?.touched && sequenceForm.get('title')?.invalid){
+                    <p class="invalid-feedback d-block">Debes indicar una Descripción</p>
+                    }
+                </div>
 
-            <div class="steps-list mb-5" formArrayName="steps">
+                <div class="mb-4">
+                    <label class="form-label text-primary-blue fw-semibold">Categoría</label>
+                    <select class="form-select custom-input" formControlName="category_id">
+                        <option [value]="null" disabled selected>Selecciona una categoría</option>
+                        @for (category of categories; track category.id) {
+                            <option [value]="category.id">{{ category.name }}</option>
+                        }
+                    </select>
+                    @if(sequenceForm.get('category_id')?.touched && sequenceForm.get('category_id')?.invalid){
+                    <p class="invalid-feedback d-block">Debes escoger una Categoría</p>
+                    }
+                </div>
 
-                @for (step of steps.controls; track step; let i = $index) {
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-primary-blue fw-bold mb-0">Pasos</h5>
+                    <button type="button" class="btn btn-yellow" (click)="openModal()">
+                        <i class="bi bi-plus-lg me-1"></i> Añadir Paso
+                    </button>
+                </div>
 
-                <div [formGroupName]="i" class="card step-card mb-3" draggable="true" (dragstart)="onDragStart(i)"
-                    (dragover)="onDragOver($event)" (drop)="onDrop(i)" [class.dragging]="draggedIndex === i">
-                    <div class="card-body d-flex align-items-center p-3">
+                <div class="steps-list mb-5" formArrayName="steps">
 
-                        <div class="drag-handle me-3 text-muted" style="cursor: grab;">
-                            <i class="bi bi-grid-3x2-gap-fill fs-5"></i>
-                        </div>
+                    @for (step of steps.controls; track step; let i = $index) {
+
+                    <div [formGroupName]="i" class="card step-card mb-3" draggable="true" (dragstart)="onDragStart(i)"
+                        (dragover)="onDragOver($event)" (drop)="onDrop(i)" [class.dragging]="draggedIndex === i">
+                        <div class="card-body d-flex align-items-center p-3">
+
+                            <div class="drag-handle me-3 text-muted" style="cursor: grab;">
+                                <i class="bi bi-grid-3x2-gap-fill fs-5"></i>
+                            </div>
 
                         <div class="picto-container me-4">
                             <img [src]="step.get('pictogram_arasaac')?.value" alt="Pictograma" class="img-fluid rounded-circle">
                         </div>
 
-                        <div class="badge-step me-3">
-                            Paso {{ i + 1 }}
+                            <div class="badge-step me-3">
+                                Paso {{ i + 1 }}
+                            </div>
+
+                            <div class="flex-grow-1">
+                                <input type="text"
+                                    class="form-control border-0 bg-transparent fw-bold text-primary-blue fs-5 p-0"
+                                    formControlName="title" readonly>
+                            </div>
+
+                            <button type="button" class="btn text-primary border-0" (click)="modifyStep(i)">
+                                <i class="bi bi-pencil-square fs-4"></i>
+                            </button>
+                            <button type="button" class="btn text-danger border-0" (click)="removeStep(i)">
+                                <i class="bi bi-trash fs-4"></i>
+                            </button>
+
                         </div>
-
-                        <div class="flex-grow-1">
-                            <input type="text"
-                                class="form-control border-0 bg-transparent fw-bold text-primary-blue fs-5 p-0"
-                                formControlName="title" readonly>
-                        </div>
-
-                        <button type="button" class="btn text-primary border-0" (click)="modifyStep(i)">
-                            <i class="bi bi-pencil-square fs-4"></i>
-                        </button>
-                        <button type="button" class="btn text-danger border-0" (click)="removeStep(i)">
-                            <i class="bi bi-trash fs-4"></i>
-                        </button>
-
                     </div>
+                    }
+
+                    @if (steps.length === 0) {
+                    <div class="text-center text-muted py-4 border rounded-3 bg-light mt-3">
+                        No hay pasos añadidos. ¡Dale al botón amarillo!
+                    </div>
+                    }
+
                 </div>
-                }
 
-                @if (steps.length === 0) {
-                <div class="text-center text-muted py-4 border rounded-3 bg-light mt-3">
-                    No hay pasos añadidos. ¡Dale al botón amarillo!
+                <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+                    <button type="button" class="btn btn-outline-secondary px-4" routerLink="/sequences">Cancelar</button>
+                    <button type="submit" class="btn btn-dark-blue px-4">Guardar Cambios</button>
                 </div>
-                }
 
-            </div>
-
-            <div class="d-flex justify-content-end gap-3 pt-3 border-top">
-                <button type="button" class="btn btn-outline-secondary px-4" routerLink="/sequences">Cancelar</button>
-                <button type="submit" class="btn btn-dark-blue px-4">Guardar Cambios</button>
-            </div>
-
-        </form>
+            </form>
+        }
+        
     </div>
 </div>
 
