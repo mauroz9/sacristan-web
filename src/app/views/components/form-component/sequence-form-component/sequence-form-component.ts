@@ -28,7 +28,7 @@ export class SequenceFormComponent implements OnInit {
   isEditMode = false;
   sequenceId: number | null = null;
   editingStepIndex: number | null = null;
-  stepToEdit: { title: string, imageUrl: string } | null = null;
+  stepToEdit: { title: string, pictogram_arasaac: string } | null = null;
   categories: Category[] = [];
 
   constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute, private categorySequenceService: CategorySequenceService) { }
@@ -70,8 +70,8 @@ export class SequenceFormComponent implements OnInit {
 
             sortedSteps.forEach((step: any) => {
               this.addStepToForm({
-                title: step.name, 
-                imageUrl: step.pictogram_arasaac 
+                title: step.title, 
+                pictogram_arasaac: step.pictogram_arasaac 
               });
             });
           }
@@ -81,10 +81,10 @@ export class SequenceFormComponent implements OnInit {
     });
   }
 
-  addStepToForm(step: { title: string, imageUrl: string | null }): void {
+  addStepToForm(step: { title: string, pictogram_arasaac: string | null }): void {
     const newStep = new FormGroup({
       title: new FormControl(step.title),
-      imageUrl: new FormControl(step.imageUrl)
+      pictogram_arasaac: new FormControl(step.pictogram_arasaac)
     });
     this.steps.push(newStep);
   }
@@ -106,15 +106,15 @@ export class SequenceFormComponent implements OnInit {
     this.stepToEdit = null;
   }
 
-  handleSaveStep(step: { name: string, imageUrl: string }): void {
+  handleSaveStep(step: { title: string, pictogram_arasaac: string }): void {
     if (this.editingStepIndex !== null) {
       const stepControl = this.steps.at(this.editingStepIndex) as FormGroup;
       stepControl.patchValue({
-        title: step.name,
-        imageUrl: step.imageUrl
+        title: step.title,
+        pictogram_arasaac: step.pictogram_arasaac
       });
     } else {
-      this.addStepToForm({ title: step.name, imageUrl: step.imageUrl });
+      this.addStepToForm({ title: step.title, pictogram_arasaac: step.pictogram_arasaac });
     }
     this.showModal = false;
   }
@@ -128,7 +128,7 @@ export class SequenceFormComponent implements OnInit {
     this.editingStepIndex = index;
     this.stepToEdit = {
       title: stepMod.get('title')?.value,
-      imageUrl: stepMod.get('imageUrl')?.value
+      pictogram_arasaac: stepMod.get('pictogram_arasaac')?.value
     }
 
     this.showModal = true;
@@ -172,12 +172,12 @@ export class SequenceFormComponent implements OnInit {
         sequence_category_id: formValue.category_id!,
         category: sequenceCategory, 
 
-        steps: (formValue.steps as any[]).map((step, index) => ({
+        steps: (formValue.steps as Step[]).map((step, index) => ({
           id: 0, 
           sequence_id: this.isEditMode ? (this.sequenceId ?? 0) : 0,
           position: index + 1,
           title: step.title,
-          pictogram_arasaac: step.imageUrl,
+          pictogram_arasaac: step.pictogram_arasaac,
           pictogram_custom: null,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()

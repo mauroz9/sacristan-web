@@ -13,8 +13,8 @@ import { ArasaacService } from '../../../logic/services/arasaac-service';
 export class StepModalComponent implements OnInit {
   isVisible = input<Boolean>(false);
   close = output<void>();
-  save = output<{ name: string, imageUrl: string }>();
-  stepData = input<{ title: string, imageUrl: string } | null>(null);
+  save = output<{ title: string, pictogram_arasaac: string }>();
+  stepData = input<{ title: string, pictogram_arasaac: string } | null>(null);
 
   selectedCategory: string = 'Todas';
 
@@ -22,8 +22,8 @@ export class StepModalComponent implements OnInit {
   loading = false;
 
   stepForm = new FormGroup({
-    name: new FormControl('', Validators.required),
-    imageUrl: new FormControl('', Validators.required)
+    title: new FormControl('', Validators.required),
+    pictogram_arasaac: new FormControl('', Validators.required)
   });
 
   searchControl = new FormControl('', Validators.minLength(3));
@@ -43,8 +43,8 @@ export class StepModalComponent implements OnInit {
 
     if (this.stepData() !== null) {
       this.stepForm.patchValue({
-        name: this.stepData()!.title,
-        imageUrl: this.stepData()!.imageUrl
+        title: this.stepData()!.title,
+        pictogram_arasaac: this.stepData()!.pictogram_arasaac
       });
 
       this.loading = true;
@@ -93,14 +93,14 @@ export class StepModalComponent implements OnInit {
 
   selectImage(id: number) {
     const url = this.getPictogramImage(id);
-    this.stepForm.patchValue({ imageUrl: url });
+    this.stepForm.patchValue({ pictogram_arasaac: url });
   }
 
   onSave() {
     if (this.stepForm.valid) {
       this.save.emit({
-        name: this.stepForm.value.name!,
-        imageUrl: this.stepForm.value.imageUrl!
+        title: this.stepForm.value.title!,
+        pictogram_arasaac: this.stepForm.value.pictogram_arasaac!
       });
       this.stepForm.reset();
       this.searchControl.reset();

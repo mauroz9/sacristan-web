@@ -15,10 +15,10 @@
 
                     <div class="mb-3">
                         <label class="form-label text-primary-blue">Nombre del Paso</label>
-                        <input type="text" class="form-control custom-input" formControlName="name"
-                            [class.is-invalid]="stepForm.get('name')?.invalid && stepForm.get('name')?.touched">
+                        <input type="text" class="form-control custom-input" formControlName="title"
+                            [class.is-invalid]="stepForm.get('title')?.invalid && stepForm.get('title')?.touched">
 
-                        @if (stepForm.get('name')?.invalid && stepForm.get('name')?.touched) {
+                        @if (stepForm.get('title')?.invalid && stepForm.get('title')?.touched) {
                         <div class="invalid-feedback">El nombre es obligatorio.</div>
                         }
                     </div>
@@ -61,7 +61,7 @@
                         @for (picto of pictograms; track picto._id) {
                         @let pictoUrl = getPictogramImage(picto._id);
 
-                        <div class="pictogram-option" [class.selected]="stepForm.get('imageUrl')?.value === pictoUrl"
+                        <div class="pictogram-option" [class.selected]="stepForm.get('pictogram_arasaac')?.value === pictoUrl"
                             (click)="selectImage(picto._id)">
                             <img [src]="pictoUrl"
                                 [alt]="(picto.keywords && picto.keywords.length > 0 && picto.keywords[0].keyword) || 'Pictograma sin descripción'"
@@ -74,7 +74,7 @@
                         }
                     </div>
 
-                    @if (stepForm.get('imageUrl')?.invalid && stepForm.get('imageUrl')?.touched) {
+                    @if (stepForm.get('pictogram_arasaac')?.invalid && stepForm.get('pictogram_arasaac')?.touched) {
                     <p class="text-danger small mt-2">Debes seleccionar una imagen.</p>
                     }
 
