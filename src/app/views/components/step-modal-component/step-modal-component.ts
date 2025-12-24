@@ -15,6 +15,7 @@ export class StepModalComponent implements OnInit {
   close = output<void>();
   save = output<{ title: string, pictogram_arasaac: string }>();
   stepData = input<{ title: string, pictogram_arasaac: string } | null>(null);
+  isEdit: boolean = false;
 
   selectedCategory: string = 'Todas';
 

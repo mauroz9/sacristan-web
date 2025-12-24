@@ -12,6 +12,7 @@
 
             <div class="modal-body">
                 <form [formGroup]="stepForm">
+            
 
                     <div class="mb-3">
                         <label class="form-label text-primary-blue">Nombre del Paso</label>
@@ -72,6 +73,7 @@
                     @if (stepForm.get('pictogram_arasaac')?.invalid && stepForm.get('pictogram_arasaac')?.touched) {
                     <p class="text-danger small mt-2">Debes seleccionar una imagen.</p>
                     }
+                    </div>
 
                 </form>
             </div>
