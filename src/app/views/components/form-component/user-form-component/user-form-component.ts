@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../logic/services/user-service';
@@ -11,11 +11,12 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './user-form-component.html',
   styleUrl: './user-form-component.css',
 })
-export class UserFormComponent {
+export class UserFormComponent implements OnInit {
 
   kind = input<string>();
   isEditMode: boolean = false;
   userId: number | null = null;
+  loading: boolean = false;
 
   constructor(private router: Router, private userService:UserService, private route: ActivatedRoute) {}
 
@@ -38,6 +39,10 @@ export class UserFormComponent {
     // photoFormControl: new FormControl('',[Validators.required]),
   });
 
+  ngOnInit(): void {
+    this.loading = true;
+  }
+
   async ngAfterViewInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
   
@@ -45,19 +50,18 @@ export class UserFormComponent {
       const userId = Number(id);
       this.baseUser = await firstValueFrom(this.userService.getUserById(userId));
 
-          this.isEditMode = true;
-          this.userId = Number(id);
-          this.userFormGroup.get('passwordFormControl')?.setValidators([]);
+      this.isEditMode = true;
+      this.userId = Number(id);
+      this.userFormGroup.get('passwordFormControl')?.setValidators([]);
 
-          this.userFormGroup.patchValue({
-            nameFormControl: this.baseUser.name,
-            lastNameFormControl: this.baseUser.last_name,
-            emailFormControl: this.baseUser.email,
-            passwordFormControl: '',
-          });
-
+      this.userFormGroup.patchValue({
+        nameFormControl: this.baseUser.name,
+        lastNameFormControl: this.baseUser.last_name,
+        emailFormControl: this.baseUser.email,
+        passwordFormControl: '',
+      });
     }
-
+    this.loading = false;
   }
 
 }

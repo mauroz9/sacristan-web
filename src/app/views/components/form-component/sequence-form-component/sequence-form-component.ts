@@ -30,11 +30,12 @@ export class SequenceFormComponent implements OnInit {
   editingStepIndex: number | null = null;
   stepToEdit: { title: string, imageUrl: string } | null = null;
   categories: Category[] = [];
+  loading: boolean = false;
 
   constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute, private categorySequenceService: CategorySequenceService) { }
 
   ngOnInit(): void {
-
+    this.loading = true;
     this.categorySequenceService.getCategories().subscribe({
       next: (req) => {
         this.categories = req;
@@ -51,6 +52,8 @@ export class SequenceFormComponent implements OnInit {
       this.isEditMode = true;
       this.sequenceId = Number(id);
       this.loadSequenceData(this.sequenceId);
+    } else {
+      this.loading = false;
     }
   }
 
@@ -76,6 +79,7 @@ export class SequenceFormComponent implements OnInit {
             });
           }
         }
+        this.loading = false;
       },
       error: (err) => console.error('Error al cargar la secuencia:', err)
     });
