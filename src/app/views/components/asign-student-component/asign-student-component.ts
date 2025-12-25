@@ -6,10 +6,11 @@ import { Teacher } from '../../../logic/interfaces/teacher-interface';
 import { Student } from '../../../logic/interfaces/student-interface';
 import { StudentService } from '../../../logic/services/student-service';
 import { firstValueFrom } from 'rxjs';
+import { LoadingComponent } from "../shared/loading-component/loading-component";
 
 @Component({
   selector: 'app-asign-student-component',
-  imports: [RouterLink],
+  imports: [RouterLink, LoadingComponent],
   templateUrl: './asign-student-component.html',
   styleUrl: './asign-student-component.css',
 })

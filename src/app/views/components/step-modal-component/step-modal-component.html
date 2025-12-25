@@ -48,12 +48,7 @@
                     <label class="form-label text-primary-blue mb-2">Selecciona una imagen:</label>
                     
                     @if (loading) {
-                    <div class="text-center py-3">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Cargando...</span>
-                        </div>
-                        <p class="text-muted small mt-2">Buscando pictogramas...</p>
-                    </div>
+                        <app-loading-component [text]="'Buscando pictogramas...'"></app-loading-component>
                     }
 
                     <div class="d-flex gap-3 flex-wrap justify-content-center"

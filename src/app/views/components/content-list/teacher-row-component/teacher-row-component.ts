@@ -3,10 +3,11 @@ import { Teacher } from '../../../../logic/interfaces/teacher-interface';
 import { ActionButtonsComponent } from "../../shared/action-buttons-component/action-buttons-component";
 import { TeacherService } from '../../../../logic/services/teacher-service';
 import { Router } from '@angular/router';
+import { LoadingComponent } from "../../shared/loading-component/loading-component";
 
 @Component({
   selector: 'app-teacher-row-component',
-  imports: [ActionButtonsComponent],
+  imports: [ActionButtonsComponent, LoadingComponent],
   templateUrl: './teacher-row-component.html',
   styleUrl: './teacher-row-component.css',
 })

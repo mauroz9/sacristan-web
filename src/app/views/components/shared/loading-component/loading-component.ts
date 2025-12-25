@@ -1,0 +1,14 @@
+import { Component, input, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-loading-component',
+  imports: [],
+  templateUrl: './loading-component.html',
+  styleUrl: './loading-component.css',
+})
+export class LoadingComponent {
+
+  text = input<string | null>(null);
+  showText = false;
+
+}

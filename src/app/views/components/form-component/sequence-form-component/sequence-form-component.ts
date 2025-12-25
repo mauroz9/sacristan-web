@@ -8,9 +8,10 @@ import { CategorySequenceService } from '../../../../logic/services/category-seq
 import { Category } from '../../../../logic/interfaces/category-sequence-interface';
 import { firstValueFrom } from 'rxjs';
 import { Step } from '../../../../logic/interfaces/sequence-step-interface';
+import { LoadingComponent } from "../../shared/loading-component/loading-component";
 @Component({
   selector: 'app-sequence-form-component',
-  imports: [ReactiveFormsModule, StepModalComponent, RouterLink],
+  imports: [ReactiveFormsModule, StepModalComponent, RouterLink, LoadingComponent],
   templateUrl: './sequence-form-component.html',
   styleUrl: './sequence-form-component.css',
 })

@@ -4,9 +4,10 @@ import { ActionButtonsComponent } from "../../shared/action-buttons-component/ac
 import { Router } from '@angular/router';
 import { StudentService } from '../../../../logic/services/student-service';
 import { StudentSequenceService } from '../../../../logic/services/student-sequence-service';
+import { LoadingComponent } from "../../shared/loading-component/loading-component";
 @Component({
   selector: 'app-student-row-component',
-  imports: [ActionButtonsComponent],
+  imports: [ActionButtonsComponent, LoadingComponent],
   templateUrl: './student-row-component.html',
   styleUrl: './student-row-component.css',
 })

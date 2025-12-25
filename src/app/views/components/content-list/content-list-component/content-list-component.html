@@ -1,11 +1,7 @@
 
 
 @if (loading()) {
-    <div class="text-center py-5">
-        <div class="spinner-border text-dark-blue" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
-    </div>
+    <app-loading-component></app-loading-component>
 } @else {
     <div class="row mb-5 align-items-center">
         <div class="col-md-8">
