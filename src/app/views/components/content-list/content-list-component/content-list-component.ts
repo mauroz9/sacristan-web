@@ -8,10 +8,11 @@ import { StudentFormModalComponent } from "../../form-modals/student-form-modal-
 import { TeacherRowComponent } from "../teacher-row-component/teacher-row-component";
 import { TeacherFormModalComponent } from "../../form-modals/teacher-form-modal-component/teacher-form-modal-component";
 import { AsignStudentComponent } from "../../asign-student-component/asign-student-component";
+import { LoadingComponent } from "../../shared/loading-component/loading-component";
 
 @Component({
   selector: 'app-content-list-component',
-  imports: [SequenceRowComponent, StudentRowComponent, RouterLink, AsignSequencesComponent, StudentFormModalComponent, TeacherRowComponent, TeacherFormModalComponent, AsignStudentComponent],
+  imports: [SequenceRowComponent, StudentRowComponent, RouterLink, AsignSequencesComponent, StudentFormModalComponent, TeacherRowComponent, TeacherFormModalComponent, AsignStudentComponent, LoadingComponent],
   templateUrl: './content-list-component.html',
   styleUrl: './content-list-component.css',
 })

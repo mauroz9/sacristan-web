@@ -7,10 +7,11 @@ import { Student } from '../../../logic/interfaces/student-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { SequenceService } from '../../../logic/services/sequence-service';
 import { StudentSequenceService } from '../../../logic/services/student-sequence-service';
+import { LoadingComponent } from "../shared/loading-component/loading-component";
 
 @Component({
   selector: 'app-asign-sequences-component',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, LoadingComponent],
   templateUrl: './asign-sequences-component.html',
   styleUrl: './asign-sequences-component.css',
 })

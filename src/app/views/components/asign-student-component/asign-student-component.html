@@ -7,11 +7,7 @@
         </div>
 
         @if (loading) {
-            <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
-                <div class="spinner-border text-primary-blue" role="status">
-                    <span class="visually-hidden">Cargando...</span>
-                </div>
-            </div>
+            <app-loading-component></app-loading-component>
         } @else {
            <div class="modal-body custom-modal-body pt-0 px-4 pb-2">
 
