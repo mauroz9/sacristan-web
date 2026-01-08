@@ -9,6 +9,5 @@ import { Component, input } from '@angular/core';
 export class LoadingComponent {
 
   text = input<string | null>(null);
-  showText = false;
 
 }
