@@ -11,11 +11,10 @@ import { Sequence } from '../interfaces/sequence-interface';
   providedIn: 'root',
 })
 export class StudentService {
-
   constructor (private http:HttpClient, private router: Router, private userService:UserService) {}
 
-  getStudent(): Observable<Student[]> {
-    return this.http.get<Student[]>(API_URL + "/api/estudiantes");
+  getStudent(query:string = ""): Observable<Student[]> {
+    return this.http.get<Student[]>(API_URL + "/api/estudiantes?q="+query);
   }
 
   getStudentsWithTeacher(id: number): Observable<Student[]> {
