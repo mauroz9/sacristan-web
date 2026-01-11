@@ -45,7 +45,7 @@
                 }
             </div>
         } @else {
-            @if (loadingStudents) {
+            @if (loadingContent) {
                 <app-loading-component></app-loading-component>
             } @else {
                 @for (item of content()?.contentList; track item.id) {

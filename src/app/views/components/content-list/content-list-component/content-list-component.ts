@@ -29,7 +29,7 @@ export class ContentListComponent {
   content = input<Content>();
   loading = input<boolean>();
   reload = output<void>();
-  loadingStudents = false;
+  loadingContent = false;
   functionality = "";
 
   constructor(private router: Router, private studentService: StudentService) {         
@@ -49,7 +49,7 @@ export class ContentListComponent {
   }
 
   filtarBack(filterText: string) {
-    this.loadingStudents = true
+    this.loadingContent = true
     console.log();
     
     if (this.content()?.kind == "alumno") {
@@ -60,7 +60,7 @@ export class ContentListComponent {
         }
 
         this.content()!.contentList = r
-        this.loadingStudents = false
+        this.loadingContent = false
       });
     }
   }
