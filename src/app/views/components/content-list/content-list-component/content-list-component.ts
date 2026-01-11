@@ -11,6 +11,7 @@ import { AsignStudentComponent } from "../../asign-student-component/asign-stude
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
 import { StudentService } from '../../../../logic/services/student-service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SequenceService } from '../../../../logic/services/sequence-service';
 
 @Component({
   selector: 'app-content-list-component',
@@ -32,7 +33,7 @@ export class ContentListComponent {
   loadingContent = false;
   functionality = "";
 
-  constructor(private router: Router, private studentService: StudentService) {         
+  constructor(private router: Router, private studentService: StudentService, private sequenceService: SequenceService) {         
       if (this.router.url.includes('students/new')) {       
         this.functionality = "newStudent";
       } else if (this.router.url.includes('students/modify')) {
@@ -61,6 +62,18 @@ export class ContentListComponent {
 
         this.content()!.contentList = r
         this.loadingContent = false
+      });
+    }
+
+    if (this.content()?.kind == "secuencia") {
+      this.sequenceService.getSequences(filterText).subscribe(r => {
+
+        for (let sequence of r) {
+          sequence.kind = "secuencia";
+        }
+
+        this.content()!.contentList = r
+        this.loadingStudents = false
       });
     }
   }

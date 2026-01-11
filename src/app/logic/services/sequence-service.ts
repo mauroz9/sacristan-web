@@ -11,8 +11,8 @@ export class SequenceService {
 
   constructor (private http: HttpClient) {}
 
-  getSequences(): Observable<Sequence[]>{
-    return this.http.get<Sequence[]>(API_URL + '/api/secuencias');
+  getSequences(query:string = ""): Observable<Sequence[]>{
+    return this.http.get<Sequence[]>(API_URL + `/api/secuencias?q=${query}`);
   }
 
   getSequenceById(id: number): Observable<Sequence> {
