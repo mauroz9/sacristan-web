@@ -18,6 +18,7 @@ export class ActionButtonsComponent implements OnInit {
   onAssignSequences = output<void>();
   onAssignStudent = output<void>();
   onView = output<void>();
+  onDuplicate = output<void>();
 
   constructor(private router: Router) {}
 

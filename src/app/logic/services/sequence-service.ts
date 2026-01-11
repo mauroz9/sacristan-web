@@ -30,4 +30,8 @@ export class SequenceService {
   deleteSequence(id: number): Observable<any>{
     return this.http.delete(API_URL + `/api/secuencias/${id}`)
   }
+
+  duplicateSequence(id: number): Observable<any> {
+    return this.http.post(API_URL + `/api/secuencias/${id}/duplicate`, {});
+  }
 }
