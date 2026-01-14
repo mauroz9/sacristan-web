@@ -73,7 +73,7 @@ export class ContentListComponent {
         }
 
         this.content()!.contentList = r
-        this.loadingStudents = false
+        this.loadingContent = false
       });
     }
   }
