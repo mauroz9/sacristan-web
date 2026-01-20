@@ -1,54 +1,78 @@
-<div class="container d-flex justify-content-center align-items-center mt-5">
-    <div class="card shadow-lg p-4 w-100" style="max-width: 420px; border-radius: 15px;">
+<div class="main-wrapper d-flex flex-column justify-content-center align-items-center min-vh-100">
+    
+    <div class="card shadow-lg border-0 login-card">
+        <div class="card-body p-4 p-md-5">
 
-        <div class="text-center mb-4">
-            <h2 class="fw-bold text-primary-custom">Bienvenido</h2>
-            <p class="text-muted">Introduce tus credenciales para acceder</p>
-        </div>
-
-        @if (errorMessage) {
-        <div class="alert alert-danger d-flex align-items-center mb-3 py-2" role="alert">
-            <small>{{ errorMessage }}</small>
-            <button type="button" class="btn-close ms-auto" style="font-size: 0.5rem;"
-                (click)="errorMessage = null"></button>
-        </div>
-        }
-
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-                <label class="form-label fw-semibold">Email</label>
-                <input type="email" class="form-control"
-                    [class.is-invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
-                    formControlName="email" placeholder="ejemplo@correo.com">
-                <div class="invalid-feedback">
-                    {{ getEmailErrorMessage() }}
-                </div>
+            <div class="text-center mb-4">
+                <img src="images/logocuaazul.png" alt="Logo Instituto" class="mb-3 rounded-3" style="max-height: 90px; width: auto;">                
+                
+                <h3 class="fw-bold text-primary-custom mb-1">Iniciar Sesión</h3>
+                <p class="text-muted small">Sistema de Gestión Educativa</p>
             </div>
 
-            <div class="mb-4">
-                <label class="form-label fw-semibold">Contraseña</label>
-                <div class="input-group">
-                    <input [type]="showPassword ? 'text' : 'password'" class="form-control"
-                        [class.is-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
-                        formControlName="password" placeholder="••••••••">
-                    <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()" [disabled]="loginForm.get('password')?.value === ''">
-                        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
-                    </button>
-                    <div class="invalid-feedback">
-                        La contraseña debe tener al menos 6 caracteres.
+            @if (errorMessage) {
+            <div class="alert alert-danger d-flex align-items-center mb-3 py-2 small" role="alert">
+                <span>{{ errorMessage }}</span>
+                <button type="button" class="btn-close ms-auto" style="font-size: 0.5rem;"
+                    (click)="errorMessage = null"></button>
+            </div>
+            }
+
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-dark-gray small">Usuario</label>
+                    <div class="input-group custom-input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted ps-3">
+                            <i class="bi bi-person"></i>
+                        </span>
+                        <input type="text" class="form-control bg-light border-start-0 ps-0"
+                            [class.is-invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
+                            formControlName="email" placeholder="Ingrese su nombre de usuario">
+                    </div>
+                    <div class="invalid-feedback d-block" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+                        {{ getEmailErrorMessage() }}
                     </div>
                 </div>
-            </div>
 
-            <button type="submit" class="btn btn-custom-primary w-100 py-2 shadow-sm"
-                [disabled]="loginForm.invalid || isLoading">
-                @if (isLoading) {
-                <span class="spinner-border spinner-border-sm me-2"></span>
-                <span>Conectando...</span>
-                } @else {
-                <span class="fw-bold">Iniciar Sesión</span>
-                }
-            </button>
-        </form>
+                <div class="mb-2">
+                    <label class="form-label fw-bold text-dark-gray small">Contraseña</label>
+                    <div class="input-group custom-input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted ps-3">
+                            <i class="bi bi-lock"></i>
+                        </span>
+                        <input [type]="showPassword ? 'text' : 'password'" class="form-control bg-light border-start-0 border-end-0 ps-0"
+                            [class.is-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+                            formControlName="password" placeholder="Ingrese su contraseña">
+                        <button class="btn bg-light border border-start-0 text-muted pe-3" type="button" (click)="togglePassword()">
+                            <i class="bi" [ngClass]="showPassword ? 'bi-eye' : 'bi-eye-slash'"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-end mb-4">
+                    <a href="#" class="text-decoration-none small text-primary-custom fw-semibold">¿Olvidó su contraseña?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 py-2 mb-4"
+                    [disabled]="loginForm.invalid || isLoading">
+                    @if (isLoading) {
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    <span>Conectando...</span>
+                    } @else {
+                    <span class="fw-bold">Iniciar Sesión</span>
+                    }
+                </button>
+
+                <div class="text-center">
+                    <p class="text-muted small mb-0">¿Necesita ayuda? Contacte con el administrador del sistema</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center text-muted copyright-text">
+        <small>© 2026 Instituto Dr. Sacristán - Todos los derechos</small><br>
+        <small>reservados</small>
     </div>
 </div>
