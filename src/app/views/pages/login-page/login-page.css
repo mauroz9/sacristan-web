@@ -1,7 +1,81 @@
+/* Variables de color basadas en la imagen objetivo */
 :host {
-  display: block;
+    --primary-blue: #1d3b8a; /* Azul oscuro del botón, header y borde superior */
+    --accent-yellow: #ffc107; /* Amarillo del borde inferior */
+    --bg-color: #f0f2fa; /* Fondo general azulado muy claro */
+    --input-bg: #f1f3f5; /* Fondo gris de los inputs */
+    --text-gray: #6c757d;
 }
 
-.mt-10 {
-    margin-top: 10rem;
+.main-wrapper {
+    background-color: var(--bg-color);
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 450px;
+    border-radius: 10px;
+    /* La barra azul superior y la barra amarilla inferior */
+    border-top: 6px solid var(--primary-blue) !important;
+    border-bottom: 6px solid var(--accent-yellow) !important;
+    background-color: white;
+}
+
+/* Estilos para el texto */
+.text-primary-custom {
+    color: var(--primary-blue);
+}
+
+.text-dark-gray {
+    color: #495057;
+}
+
+/* Estilización personalizada de los inputs para simular una sola caja gris */
+.custom-input-group .input-group-text,
+.custom-input-group .form-control,
+.custom-input-group .btn {
+    background-color: var(--input-bg);
+    border-color: #dee2e6;
+}
+
+.custom-input-group .input-group-text {
+    border-right: none; /* Quita borde entre icono e input */
+}
+
+.custom-input-group .form-control {
+    border-left: none;
+    border-right: none;
+}
+.custom-input-group .form-control:focus {
+    box-shadow: none;
+    background-color: var(--input-bg);
+    border-color: #dee2e6; /* Mantiene el borde gris al hacer focus */
+}
+
+.custom-input-group .btn {
+    border-left: none;
+}
+
+/* Botón principal */
+.btn-primary-custom {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+    color: white;
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+.btn-primary-custom:hover {
+    background-color: #152c69;
+    border-color: #152c69;
+}
+
+.btn-primary-custom:disabled {
+    background-color: #1d3b8a;
+    opacity: 0.65;
+}
+
+.copyright-text {
+    font-size: 0.75rem;
 }
