@@ -12,8 +12,8 @@ export class TeacherService {
   constructor (private http: HttpClient, private router: Router) {}
 
 
-  getTeachers(): Observable<Teacher[]> {
-    return this.http.get<Teacher[]>(API_URL + "/api/profesores");
+  getTeachers(filterText:String = ""): Observable<Teacher[]> {
+    return this.http.get<Teacher[]>(API_URL + "/api/profesores?q=" + filterText);
   }
 
   getTeacherById(id: number): Observable<Teacher> {
