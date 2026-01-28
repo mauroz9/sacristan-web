@@ -9,9 +9,7 @@
 
         <div class="col-md-4 text-center">
             @if (loading) {
-                <div class="spinner-border text-dark-blue" role="status" style="width: 1.5rem; height: 1.5rem;">
-                    <span class="visually-hidden">Cargando...</span>
-                </div>
+                <app-loading-component></app-loading-component>
             } @else {
                 <span class="badge-steps">
                     {{assignatedStudents}} Estudiantes asignados

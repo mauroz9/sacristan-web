@@ -11,8 +11,8 @@ export class SequenceService {
 
   constructor (private http: HttpClient) {}
 
-  getSequences(): Observable<Sequence[]>{
-    return this.http.get<Sequence[]>(API_URL + '/api/secuencias');
+  getSequences(query:string = ""): Observable<Sequence[]>{
+    return this.http.get<Sequence[]>(API_URL + `/api/secuencias?q=${query}`);
   }
 
   getSequenceById(id: number): Observable<Sequence> {
@@ -29,5 +29,9 @@ export class SequenceService {
 
   deleteSequence(id: number): Observable<any>{
     return this.http.delete(API_URL + `/api/secuencias/${id}`)
+  }
+
+  duplicateSequence(id: number): Observable<any> {
+    return this.http.post(API_URL + `/api/secuencias/${id}/duplicate`, {});
   }
 }

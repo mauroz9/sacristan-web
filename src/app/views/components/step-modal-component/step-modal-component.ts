@@ -3,10 +3,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ArasaacPictogram } from '../../../logic/interfaces/arasaac-interface';
 import { catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
 import { ArasaacService } from '../../../logic/services/arasaac-service';
+import { LoadingComponent } from "../shared/loading-component/loading-component";
 
 @Component({
   selector: 'app-step-modal-component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, LoadingComponent],
   templateUrl: './step-modal-component.html',
   styleUrl: './step-modal-component.css',
 })

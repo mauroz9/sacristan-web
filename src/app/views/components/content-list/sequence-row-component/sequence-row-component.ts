@@ -48,4 +48,22 @@ export class SequenceRowComponent {
       this.router.navigate(['/sequences/view', id]);
     }
   }
+
+  duplicateSequence(sequence: Sequence): void {
+    if (!confirm(`¿Quieres duplicar la secuencia "${sequence.title}"?`)) {
+      return;
+    }
+
+    this.sequenceService.duplicateSequence(sequence.id).subscribe({
+      next: (duplicateResponse) => {
+        const newSequenceId = duplicateResponse.sequence.id;
+        localStorage.setItem('infoMessage', 'Secuencia duplicada correctamente');
+        this.router.navigate(['/sequences/modify', newSequenceId]);
+      },
+      error: (error) => {
+        console.error('Error al duplicar la secuencia:', error);
+        alert('Error al duplicar la secuencia');
+      }
+    });
+  }
 }

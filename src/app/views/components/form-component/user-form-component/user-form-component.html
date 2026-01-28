@@ -1,10 +1,6 @@
 <div class="modal-body pt-4">
     @if (loading) {
-        <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
-            <div class="spinner-border text-primary-blue" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
+        <app-loading-component></app-loading-component>
     } @else {
         <form [formGroup]="userFormGroup">
             <div class="row mb-3">

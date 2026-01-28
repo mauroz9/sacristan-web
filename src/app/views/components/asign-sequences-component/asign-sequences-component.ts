@@ -7,10 +7,11 @@ import { Student } from '../../../logic/interfaces/student-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { SequenceService } from '../../../logic/services/sequence-service';
 import { StudentSequenceService } from '../../../logic/services/student-sequence-service';
+import { LoadingComponent } from "../shared/loading-component/loading-component";
 
 @Component({
   selector: 'app-asign-sequences-component',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, LoadingComponent],
   templateUrl: './asign-sequences-component.html',
   styleUrl: './asign-sequences-component.css',
 })
@@ -96,13 +97,13 @@ export class AsignSequencesComponent implements AfterViewInit {
         this.selectedSequence = null;
       },
       error: (error) => {
-        console.error('Error al asignar secuencia:',error);
+        console.error('Error al asignar secuencia:', error);
         alert('Error al asignar secuencia. Por favor, intenta de nuevo.')
       }
     });
   }
 
-  unassignSequence(sequence: Sequence): void{
+  unassignSequence(sequence: Sequence): void {
     if (!confirm(`¿Estás seguro de que quieres eliminar la secuencia "${sequence.title}"?`)) {
       return;
     }
@@ -114,15 +115,53 @@ export class AsignSequencesComponent implements AfterViewInit {
         localStorage.setItem('infoMessage', `Secuencia eliminada correctamente`);
       },
       error: (error) => {
-        console.error('Error al desasignar secuencia:',error);
+        console.error('Error al desasignar secuencia:', error);
         alert('Error al eliminar la secuencia.  Por favor, intenta de nuevo.');
       }
     });
   }
 
   personalizeSequence(sequence: Sequence): void {
-    this.modalService.dismissAll();
-    this.router. navigate(['/sequences/modify', sequence.id]);
+    const studentName = this.student?.user?.name || 'este alumno';
+
+    if (!confirm(`¿Quieres crear una versión personalizada de "${sequence.title}" para ${studentName}?\n\nSe desasignará la secuencia original y se creará una copia que podrás modificar.`)) {
+      return;
+    }
+
+    this.loadingSequences = true;
+
+    this.sequenceService.duplicateSequence(sequence.id).subscribe({
+      next: (duplicateResponse) => {
+        const newSequenceId = duplicateResponse.sequence.id;
+
+        this.studentSequenceService.unassignSequence(this.studentId!, sequence.id).subscribe({
+          next: () => {
+            this.studentSequenceService.assignSequence(this.studentId!, newSequenceId).subscribe({
+              next: () => {
+                localStorage.setItem('infoMessage', `Secuencia personalizada creada correctamente para ${studentName}`);
+                this.modalService.dismissAll();
+                this.router.navigate(['/sequences/modify', newSequenceId]);
+              },
+              error: (error) => {
+                console.error('Error al asignar la secuencia duplicada:', error);
+                alert('La secuencia se duplicó pero hubo un error al asignarla');
+                this.loadingSequences = false;
+              }
+            });
+          },
+          error: (error) => {
+            console.error('Error al desasignar la secuencia original:', error);
+            alert('La secuencia se duplicó pero hubo un error al desasignar la original');
+            this.loadingSequences = false;
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error al duplicar la secuencia:', error);
+        alert('Error al crear la secuencia personalizada');
+        this.loadingSequences = false;
+      }
+    });
   }
 
 }

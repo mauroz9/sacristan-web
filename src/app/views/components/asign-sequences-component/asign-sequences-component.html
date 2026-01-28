@@ -6,11 +6,7 @@
         </div>
         
         @if (loading) {
-            <div class="text-center py-5">
-                <div class="spinner-border text-dark-blue" role="status">
-                    <span class="visually-hidden">Cargando...</span>
-                </div>
-            </div>
+            <app-loading-component></app-loading-component>
         } @else {
             <div class="modal-body custom-modal-body pt-0 px-4 pb-2">
             
@@ -54,11 +50,7 @@
             <h6 class="text-start mb-3 fw-semibold">Secuencias asignadas</h6>
 
             @if (loadingSequences) {
-                <div class="text-center py-4">
-                    <div class="spinner-border text-dark-blue" role="status">
-                        <span class="visually-hidden">Cargando...</span>
-                    </div>
-                </div>
+                <app-loading-component></app-loading-component>
             } @else {
                 @if (assignedSequences.length === 0) {
                     <div class="text-center py-4 text-muted">

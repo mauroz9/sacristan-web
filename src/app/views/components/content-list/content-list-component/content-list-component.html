@@ -1,11 +1,7 @@
 
 
 @if (loading()) {
-    <div class="text-center py-5">
-        <div class="spinner-border text-dark-blue" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
-    </div>
+    <app-loading-component></app-loading-component>
 } @else {
     <div class="row mb-5 align-items-center">
         <div class="col-md-8">
@@ -13,8 +9,27 @@
             <p class="page-subtitle">{{content()?.subTitle}}</p>
         </div>
         <div class="col-md-4 text-end">
-            <button class="btn btn-dark-blue" [routerLink]="content()?.url + '/new'">
-                <i class="bi bi-plus-lg me-2"></i> {{content()?.gender == 0 ? 'Nueva' : 'Nuevo'}} {{content()?.kind}}
+            <div class="input-group">
+                <input
+                #filterInput
+                type="text"
+                class="form-control"
+                placeholder="Filtrar por nombre..."
+                (keyup.enter)="filtarBack(filterInput.value)"
+                />
+
+                <button class="btn btn-outline-secondary" (click)="filtarBack(filterInput.value)">
+                <i class="bi bi-search"></i>
+                </button>
+
+                <button class="btn btn-outline-danger" (click)="clearFilter(filterInput)">
+                <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <button class="btn btn-dark-blue mt-2" [routerLink]="content()?.url + '/new'">
+                <i class="bi bi-plus-lg me-2"></i>
+                {{content()?.gender == 0 ? 'Nueva' : 'Nuevo'}} {{content()?.kind}}
             </button>
         </div>
     </div>
@@ -30,18 +45,22 @@
                 }
             </div>
         } @else {
-            @for (item of content()?.contentList; track item.id) {
-                @if (item.kind == 'secuencia') {
-                    <app-sequence-row-component [sequence]="item" (onDelete)="reloadContent()"></app-sequence-row-component>
-                } @else if (item.kind == 'alumno') {
-                    <app-student-row-component [student]="item" (onDelete)="reloadContent()"></app-student-row-component>
-                } @else if (item.kind == 'profesor') {
-                    <app-teacher-row-component [teacher]="item" (onDelete)="reloadContent()"></app-teacher-row-component>
-                }@else {
-                    <div class="text-center py-5 text-muted">
-                        <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
-                        Tipo de contenido no soportado.
-                    </div>
+            @if (loadingContent) {
+                <app-loading-component></app-loading-component>
+            } @else {
+                @for (item of content()?.contentList; track item.id) {
+                    @if (item.kind == 'secuencia') {
+                        <app-sequence-row-component [sequence]="item" (onDelete)="reloadContent()"></app-sequence-row-component>
+                    } @else if (item.kind == 'alumno') {
+                        <app-student-row-component [student]="item" (onDelete)="reloadContent()"></app-student-row-component>
+                    } @else if (item.kind == 'profesor') {
+                        <app-teacher-row-component [teacher]="item" (onDelete)="reloadContent()"></app-teacher-row-component>
+                    }@else {
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
+                            Tipo de contenido no soportado.
+                        </div>
+                    }
                 }
             }
         }

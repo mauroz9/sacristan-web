@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../logic/services/user-service';
 import { User } from '../../../../logic/interfaces/user-interface';
 import { firstValueFrom } from 'rxjs';
+import { LoadingComponent } from "../../shared/loading-component/loading-component";
 
 @Component({
   selector: 'app-user-form-component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, LoadingComponent],
   templateUrl: './user-form-component.html',
   styleUrl: './user-form-component.css',
 })
