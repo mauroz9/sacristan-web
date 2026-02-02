@@ -3,78 +3,47 @@ import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, firstValueFrom, Observable, tap } from 'rxjs';
 import { API_URL } from './env';
+import { JwtUserResponse } from '../interfaces/auth/jwt-user-response';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   
-  private loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
-
-  currentUser = signal<any>(null);
+  constructor(private http: HttpClient, private router: Router) {}
+  loggedInSubject = new BehaviorSubject<boolean>(!!localStorage.getItem('auth_token'));
+  
   isLoggedIn$ = this.loggedInSubject.asObservable();
+  
+  logout() {
+    this.loggedInSubject.next(false);
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('refresh_token');
 
-  constructor(private http: HttpClient, private router: Router){
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      this.currentUser.set({ token }); 
-    }
-  }
-
-  login(credentials: any): Observable<any>{
-    return this.http.post(`${API_URL}/api/login`, credentials).pipe(
-      tap((response: any) => {
-        
-        if (!response.user) {
-          throw new Error('Respuesta inválida del servidor: falta el objeto de usuario.');
-        }
-
-        if (response.user.role_id !== 1) {
-          this.doLogout();
-          throw new Error('Acceso denegado. Solo administradores pueden acceder.');
-        }
-
-        if(response.token){
-          localStorage.setItem('auth_token', response.token)
-          this.currentUser.set(response.token);
-          this.loggedInSubject.next(true);
-        }
+    this.http.post(`${API_URL}/logout`, {}).subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
       },
-      (error) => {
-        console.error('Login error:', error);
-        throw error;
+      error: (err) => {
+        console.error('Error during logout:', err);
+        this.router.navigate(['/login']);
       }
-    ));
+    });
+
   }
   
-  async logout(): Promise<void> {
-    try {
-      await firstValueFrom(this.http.post(`${API_URL}/api/logout`, {}))
-      this.loggedInSubject.next(false);
-      this.doLogout()
-      return;
-    } catch (error: any) {
-      if (error.status === 401) {
-        this.doLogout();
-      }
-    }
-  }
-
-  doLogout() {
-    localStorage.removeItem('auth_token');
-    this.currentUser.set(null);
-    this.router.navigate(['/login']);
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.getToken();
-  }
-
-  getToken(): string | null {
+  getToken() {
     return localStorage.getItem('auth_token');
   }
 
-  isAuthenticated(): boolean {
-    return !!this.getToken();
+
+  public login(data: { email: string; password: string }): Observable<JwtUserResponse> {
+    return this.http.post<JwtUserResponse>(`${API_URL}/login`, data)
   }
+
+  public refreshToken(): Observable<JwtUserResponse> {
+    const refreshToken = localStorage.getItem('refresh_token');
+    return this.http.post<JwtUserResponse>(`${API_URL}/refresh-token`, { refreshToken });
+  }
+
 }
