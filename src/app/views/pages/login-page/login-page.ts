@@ -42,7 +42,7 @@ export class LoginPage implements OnInit {
     if (this.loginForm.valid) {
       this.isLoading = true;
 
-      var data = {
+      const data = {
         "email": this.loginForm.get('email')!.value!,
         "password": this.loginForm.get('password')!.value!
       }
@@ -52,7 +52,7 @@ export class LoginPage implements OnInit {
         next: (res) => {
 
           if (res.roles.includes('ADMIN')) {
-            this.authService.loggedInSubject.next(true);
+            this.authService.setLoggedInStatus(true);
             localStorage.setItem('auth_token', res.token);
             localStorage.setItem('refresh_token', res.refreshToken);
 

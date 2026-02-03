@@ -11,10 +11,17 @@ import { JwtUserResponse } from '../interfaces/auth/jwt-user-response';
 export class AuthService {
   
   constructor(private http: HttpClient, private router: Router) {}
-  loggedInSubject = new BehaviorSubject<boolean>(!!localStorage.getItem('auth_token'));
-  
-  isLoggedIn$ = this.loggedInSubject.asObservable();
-  
+  private loggedInSubject = new BehaviorSubject<boolean>(!!localStorage.getItem('auth_token'));
+    
+  setLoggedInStatus(status: boolean): void {
+    this.loggedInSubject.next(status);
+  }
+
+  getLoggedInStatus(): Observable<boolean> {
+    return this.loggedInSubject.asObservable();
+  }
+
+
   logout() {
     this.loggedInSubject.next(false);
     localStorage.removeItem('auth_token');

@@ -12,15 +12,14 @@ export class HeaderComponent implements OnInit {
 
   loggedIn = false;
   loading = false;
-  private authSub?: Subscription;
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     console.log("Loading header");
 
-    this.authSub = this.authService.isLoggedIn$.subscribe(status => {
-      this.loggedIn = status;
-    });
+    this.authService.getLoggedInStatus().subscribe((status) => {
+      this.loggedIn = status; 
+  });
   }
 
   async logout() {
