@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from './user-service';
 import { API_URL } from './env';
-import { StudentResponse, StudentResponsePaginated } from '../interfaces/user/student/student-interface';
+import { StudentResponse } from '../interfaces/user/student/student-interface';
+import { PageResponse } from '../interfaces/utils/page-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,8 @@ import { StudentResponse, StudentResponsePaginated } from '../interfaces/user/st
 export class StudentService {
   constructor (private http:HttpClient, private router: Router, private userService:UserService) {}
 
-  getStudent(query:string = ""): Observable<StudentResponsePaginated> {
-    return this.http.get<StudentResponsePaginated>(API_URL + "/api/v1/admin/students?q="+query);
+  getStudent(query:string = ""): Observable<PageResponse<StudentResponse>> {
+    return this.http.get<PageResponse<StudentResponse>>(API_URL + "/api/v1/admin/students?q="+query);
   }
 
   // NOT YET

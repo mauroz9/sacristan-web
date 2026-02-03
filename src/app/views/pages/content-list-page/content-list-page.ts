@@ -98,11 +98,11 @@ export class ContentListPage implements OnInit {
     } else if (this.url.includes('/students')) {
       
       for (let student of this.studentList) {
-        student.kind = "student";
+        student.kind = "alumno";
       }      
 
       this.content = {
-        kind: "student",
+        kind: "alumno",
         url: "/students",
         title: "Listado de alumnos",
         subTitle: "Gestiona los alumnos del centro",
