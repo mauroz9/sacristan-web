@@ -21,7 +21,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
         
         const isLoginRequest = authReq.url.includes('/login');
-        const isRefreshRequest = authReq.url.includes('/refresh');
+        const isRefreshRequest = authReq.url.includes('/refresh-token');
         
         if (!isLoginRequest && !isRefreshRequest) {
           return handle401Error(authReq, next, authService);
@@ -42,8 +42,7 @@ function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authServ
       switchMap((tokenResponse: JwtUserResponse) => {
         isRefreshing = false;
         
-        localStorage.setItem('auth_token', tokenResponse.token);
-        localStorage.setItem('refresh_token', tokenResponse.refreshToken);
+        authService.saveLogInData(tokenResponse);
 
         refreshTokenSubject.next(tokenResponse.token);
         return next(addToken(request, tokenResponse.token));

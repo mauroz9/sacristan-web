@@ -4,7 +4,7 @@ export interface JwtUserResponse {
     lastName: string,
     email: string,
     username: string,
-    token: string
-    refreshToken: string
+    token: string,
+    refreshToken: string,
     roles: string[]
 }

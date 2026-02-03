@@ -55,6 +55,11 @@ export class AuthService {
 
   public refreshToken(): Observable<JwtUserResponse> {
     const refreshToken = localStorage.getItem('refresh_token');
+
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
     return this.http.post<JwtUserResponse>(`${API_URL}/refresh-token`, { refreshToken });
   }
 
