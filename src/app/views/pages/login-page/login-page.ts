@@ -52,9 +52,7 @@ export class LoginPage implements OnInit {
         next: (res) => {
 
           if (res.roles.includes('ADMIN')) {
-            this.authService.setLoggedInStatus(true);
-            localStorage.setItem('auth_token', res.token);
-            localStorage.setItem('refresh_token', res.refreshToken);
+            this.authService.saveLogInData(res);
 
             this.router.navigate(['/sequences']);
           } else {
@@ -64,7 +62,6 @@ export class LoginPage implements OnInit {
 
         },
         error: (err) => {
-          this.isLoading = false;
           this.handleAuthError(err);
         },
         complete: () => this.isLoading = false
@@ -73,6 +70,7 @@ export class LoginPage implements OnInit {
   }
 
   private handleAuthError(err: any) {
+    this.isLoading = false;
     if (err.status === 401) {
       this.errorMessage = 'Credenciales incorrectas. Por favor, inténtalo de nuevo.';
     } else if (err.status === 403 || err.message === 'No tienes permisos') {

@@ -15,8 +15,6 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    console.log("Loading header");
-
     this.authService.getLoggedInStatus().subscribe((status) => {
       this.loggedIn = status; 
   });

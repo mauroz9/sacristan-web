@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, firstValueFrom, Observable, tap } from 'rxjs';
+import { BehaviorSubject,  Observable} from 'rxjs';
 import { API_URL } from './env';
 import { JwtUserResponse } from '../interfaces/auth/jwt-user-response';
 
@@ -9,6 +9,11 @@ import { JwtUserResponse } from '../interfaces/auth/jwt-user-response';
   providedIn: 'root',
 })
 export class AuthService {
+  saveLogInData(res: JwtUserResponse) {
+    this.setLoggedInStatus(true);
+    localStorage.setItem('auth_token', res.token);
+    localStorage.setItem('refresh_token', res.refreshToken);
+  }
   
   constructor(private http: HttpClient, private router: Router) {}
   private loggedInSubject = new BehaviorSubject<boolean>(!!localStorage.getItem('auth_token'));

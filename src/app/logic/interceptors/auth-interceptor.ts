@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth-service';
-import { BehaviorSubject, catchError, filter, firstValueFrom, switchMap, take, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, switchMap, take, throwError } from 'rxjs';
 import { JwtUserResponse } from '../interfaces/auth/jwt-user-response';
 
 let isRefreshing = false;
