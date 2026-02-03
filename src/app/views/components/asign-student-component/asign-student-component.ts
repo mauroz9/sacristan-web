@@ -3,10 +3,10 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { TeacherService } from '../../../logic/services/teacher-service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Teacher } from '../../../logic/interfaces/teacher-interface';
-import { Student } from '../../../logic/interfaces/student-interface';
 import { StudentService } from '../../../logic/services/student-service';
 import { firstValueFrom } from 'rxjs';
 import { LoadingComponent } from "../shared/loading-component/loading-component";
+import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
 
 @Component({
   selector: 'app-asign-student-component',
@@ -19,9 +19,9 @@ export class AsignStudentComponent implements OnInit {
     @ViewChild('modal') modal!: TemplateRef<any>;
 
   teacher: Teacher | null = null;
-  selectedStudent: Student | null = null; // Use your Student type here
-  nonAssignedStudents: Student[] = [];
-  assignedStudents: Student[] = [];
+  selectedStudent: StudentResponse | null = null; // Use your Student type here
+  nonAssignedStudents: StudentResponse[] = [];
+  assignedStudents: StudentResponse[] = [];
   loading: boolean = false;
 
   constructor (private modalService: NgbModal, private router: Router, private teacherService:TeacherService, private studentService: StudentService, private route: ActivatedRoute) {}
@@ -47,22 +47,22 @@ export class AsignStudentComponent implements OnInit {
     this.loading = false;
   }
 
-  selectStudent(student: Student) {
+  selectStudent(student: StudentResponse) {
     this.selectedStudent = student; 
   }
 
   assignStudent() {
     if (this.selectedStudent) {
       this.studentService.assignTeacherToStudent(this.selectedStudent!.id!, this.teacher!.id!);
-      localStorage.setItem('infoMessage', `Estudiante ${this.selectedStudent.user!.name} ${this.selectedStudent.user!.last_name} asignado al profesor ${this.teacher!.user!.name} ${this.teacher!.user!.last_name} correctamente.`);
+      localStorage.setItem('infoMessage', `Estudiante ${this.selectedStudent.name} ${this.selectedStudent.lastName} asignado al profesor ${this.teacher!.user!.name} ${this.teacher!.user!.lastName} correctamente.`);
       this.modalService.dismissAll();
       this.router.navigate(['/teachers']);
     }
   }
 
-  unassignStudent(student: Student) { 
+  unassignStudent(student: StudentResponse) { 
     this.studentService.unassignTeacherFromStudent(student.id!);
-    localStorage.setItem('infoMessage', `Estudiante ${student.user!.name} ${student.user!.last_name} desvinculado del profesor ${this.teacher!.user!.name} ${this.teacher!.user!.last_name} correctamente.`);
+    localStorage.setItem('infoMessage', `Estudiante ${student.name} ${student.lastName} desvinculado del profesor ${this.teacher!.user!.name} ${this.teacher!.user!.lastName} correctamente.`);
     this.modalService.dismissAll();
     this.router.navigate(['/teachers']);
   }

@@ -3,11 +3,11 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StudentService } from '../../../logic/services/student-service';
-import { Student } from '../../../logic/interfaces/student-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { SequenceService } from '../../../logic/services/sequence-service';
 import { StudentSequenceService } from '../../../logic/services/student-sequence-service';
 import { LoadingComponent } from "../shared/loading-component/loading-component";
+import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
 
 @Component({
   selector: 'app-asign-sequences-component',
@@ -19,7 +19,7 @@ export class AsignSequencesComponent implements AfterViewInit {
 
   @ViewChild('modal') modal!: TemplateRef<any>;
 
-  student: Student | null = null;
+  student: StudentResponse | null = null;
   studentId: number | null = null;
   sequences: Sequence[] = [];
   assignedSequences: Sequence[] = [];
@@ -93,7 +93,7 @@ export class AsignSequencesComponent implements AfterViewInit {
       next: () => {
         this.loadingSequences = true;
         this.loadSequences(this.studentId!);
-        localStorage.setItem('infoMessage', `Secuencia asignada correctamente a ${this.student!.user!.name} ${this.student!.user!.last_name}`);
+        localStorage.setItem('infoMessage', `Secuencia asignada correctamente a ${this.student!.name} ${this.student!.lastName}`);
         this.selectedSequence = null;
       },
       error: (error) => {
@@ -112,7 +112,7 @@ export class AsignSequencesComponent implements AfterViewInit {
       next: () => {
         this.loadSequences(this.studentId!);
 
-        localStorage.setItem('infoMessage', `Secuencia eliminada correctamente`);
+        localStorage.setItem('infoMessage', `Secuencia eliminada correctamente para ${this.student!.name} ${this.student!.lastName}`);
       },
       error: (error) => {
         console.error('Error al desasignar secuencia:', error);
@@ -122,7 +122,7 @@ export class AsignSequencesComponent implements AfterViewInit {
   }
 
   personalizeSequence(sequence: Sequence): void {
-    const studentName = this.student?.user?.name || 'este alumno';
+    const studentName = this.student?.name || 'este alumno';
 
     if (!confirm(`¿Quieres crear una versión personalizada de "${sequence.title}" para ${studentName}?\n\nSe desasignará la secuencia original y se creará una copia que podrás modificar.`)) {
       return;

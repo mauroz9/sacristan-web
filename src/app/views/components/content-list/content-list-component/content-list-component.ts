@@ -54,14 +54,14 @@ export class ContentListComponent {
     this.loadingContent = true
     console.log();
     
-    if (this.content()?.kind == "alumno") {
+    if (this.content()?.kind == "student") {
       this.studentService.getStudent(filterText).subscribe(r => {
 
-        for (let student of r) {
-          student.kind = "alumno";
+        for (let student of r.content) {
+          student.kind = "student";
         }
 
-        this.content()!.contentList = r
+        this.content()!.contentList = r.content
         this.loadingContent = false
       });
     } else if (this.content()?.kind == "secuencia") {

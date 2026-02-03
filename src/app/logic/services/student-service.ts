@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Student } from '../interfaces/student-interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from './user-service';
 import { API_URL } from './env';
-import { Sequence } from '../interfaces/sequence-interface';
+import { StudentResponse, StudentResponsePaginated } from '../interfaces/user/student/student-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -13,28 +12,32 @@ import { Sequence } from '../interfaces/sequence-interface';
 export class StudentService {
   constructor (private http:HttpClient, private router: Router, private userService:UserService) {}
 
-  getStudent(query:string = ""): Observable<Student[]> {
-    return this.http.get<Student[]>(API_URL + "/api/estudiantes?q="+query);
+  getStudent(query:string = ""): Observable<StudentResponsePaginated> {
+    return this.http.get<StudentResponsePaginated>(API_URL + "/api/v1/admin/students?q="+query);
   }
 
-  getStudentsWithTeacher(id: number): Observable<Student[]> {
-    return this.http.get<Student[]>(API_URL + "/api/estudiantes/con-profesor/" + id);
+  // NOT YET
+  getStudentsWithTeacher(id: number): Observable<StudentResponse[]> {
+    return this.http.get<StudentResponse[]>(API_URL + "/api/v1/admin/students/con-profesor/" + id);
+  }
+  
+  
+  // NOT YET
+  getStudentsWithoutTeacher(): Observable<StudentResponse[]> {
+    return this.http.get<StudentResponse[]>(API_URL + "/api/v1/admin/students/sin-profesor");
   }
 
-  getStudentsWithoutTeacher(): Observable<Student[]> {
-    return this.http.get<Student[]>(API_URL + "/api/estudiantes/sin-profesor");
-  }
-
-  getStudentById(studentId: number): Observable<Student> {
-    return this.http.get<Student>(API_URL + "/api/estudiantes/" + studentId);
+  getStudentById(studentId: number): Observable<StudentResponse> {
+    return this.http.get<StudentResponse>(API_URL + "/api/v1/admin/students/" + studentId);
   }
 
   deleteStudent(id: number) {
-    return this.http.delete(API_URL + "/api/estudiantes/" + id)
+    return this.http.delete(API_URL + "/api/v1/admin/students/" + id)
   }
 
+  // NOT YET
   assignTeacherToStudent(studentId: number, teacherId: number) {
-    return this.http.put(API_URL + "/api/estudiantes/" + studentId + "/asignar-profesor/" + teacherId, {}).subscribe({
+    return this.http.put(API_URL + "/api/v1/admin/students/" + studentId + "/asignar-profesor/" + teacherId, {}).subscribe({
       next: (data) => {
       },
       error: (error) => {
@@ -43,8 +46,9 @@ export class StudentService {
     }); 
   }
 
+  // NOT YET
   unassignTeacherFromStudent(studentId: number) {
-    return this.http.put(API_URL + "/api/estudiantes/" + studentId + "/desasignar-profesor", {}).subscribe({
+    return this.http.put(API_URL + "/api/v1/admin/students/" + studentId + "/desasignar-profesor", {}).subscribe({
       next: (data) => {
         console.log("Teacher unassigned from student successfully");
       },
@@ -53,18 +57,20 @@ export class StudentService {
       }
     });
   }
+  
+  // NOT YET
+  // sendStudent(formData: any) {
+  //   let processedFormData:StudentResponse = this.convertFormDataToStudent(formData);
+  //   if(processedFormData.user.id){
+  //     this.updateStudent(processedFormData);
+  //   } else {
+  //     this.addStudent(processedFormData);
+  //   }
+  // }
 
-  sendStudent(formData: any) {
-    let processedFormData:Student = this.convertFormDataToStudent(formData);
-    if(processedFormData.user.id){
-      this.updateStudent(processedFormData);
-    } else {
-      this.addStudent(processedFormData);
-    }
-  }
-
-  addStudent(formData: Student) {
-    this.http.post(API_URL + "/api/estudiantes/", formData.user).subscribe({
+  // NOT YET
+  addStudent(formData: StudentResponse) {
+    this.http.post(API_URL + "/api/v1/admin/students/", formData).subscribe({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
         this.router.navigate(['/students']);
@@ -75,9 +81,10 @@ export class StudentService {
     });
   }
 
-  updateStudent(formData: Student) {    
+  // NOT YET
+  updateStudent(formData: StudentResponse) {    
 
-    this.http.put(API_URL + "/api/usuarios/" + formData.user.id, formData.user).subscribe(
+    this.http.put(API_URL + "/api/usuarios/" + formData.id, formData).subscribe(
       {
         next: (data) => {
           
@@ -91,28 +98,28 @@ export class StudentService {
     );
   }
 
-  convertFormDataToStudent(formData: any): Student {
-    let student: Student = {
-      kind: 'alumno',
-      user: {
-        id: formData.id,
-        name: formData.nameFormControl,
-        last_name: formData.lastNameFormControl,
-        email: formData.emailFormControl,
-        role_id: 2,
-        password: formData.passwordFormControl,
-        password_confirmation: formData.passwordFormControl
-      }
-    }
+  // NOT YET
+  // convertFormDataToStudent(formData: any): StudentResponse {
+  //   let student: StudentResponse = {
+  //     kind: 'student',
+  //     role: 'student',
+  //     user: {
+  //       id: formData.id,
+  //       name: formData.nameFormControl,
+  //       lastName: formData.lastNameFormControl,
+  //       email: formData.emailFormControl
+  //     },
+  //     teacher: null
+  //   }
 
-    if (formData.passwordFormControl === '') { 
-      delete student.user.password;
-    } else {
-      student.user.password_confirmation = formData.passwordFormControl;
-    }
+  //   if (formData.passwordFormControl === '') { 
+  //     delete student.user.password;
+  //   } else {
+  //     student.user.password_confirmation = formData.passwordFormControl;
+  //   }
 
-    return student;
+  //   return student;
 
-  }
+  // }
 
 }

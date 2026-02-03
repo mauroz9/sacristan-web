@@ -36,7 +36,7 @@ export class TeacherFormModalComponent {
         formData.id = this.userFormComponent.userId;
       }
       
-      this.teacherService.sendTeacher(formData);
+      // this.teacherService.sendTeacher(formData);
       this.modalService.dismissAll();
     } else {
       userFormGroup.markAllAsTouched();

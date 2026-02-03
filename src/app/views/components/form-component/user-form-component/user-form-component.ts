@@ -2,7 +2,6 @@ import { Component, input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../logic/services/user-service';
-import { User } from '../../../../logic/interfaces/user-interface';
 import { firstValueFrom } from 'rxjs';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
 
@@ -21,7 +20,7 @@ export class UserFormComponent implements OnInit {
 
   constructor(private router: Router, private userService:UserService, private route: ActivatedRoute) {}
 
-  baseUser : User = {
+  baseUser : any = {
     id: 0,
     name: '',
     last_name: '',

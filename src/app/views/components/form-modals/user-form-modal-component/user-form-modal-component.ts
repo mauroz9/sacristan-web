@@ -33,7 +33,7 @@ export class UserFormModalComponent {
         formData.id = this.userFormComponent.userId;
       }
       
-      this.userService.sendUser(formData);
+      // this.userService.sendUser(formData);
     } else {
       userFormGroup.markAllAsTouched();
     }

@@ -35,7 +35,7 @@ export class StudentFormModalComponent {
         formData.id = this.userFormComponent.userId;
       }
       
-      this.studentService.sendStudent(formData);
+      //this.studentService.sendStudent(formData);
       this.modalService.dismissAll();
     } else {
       userFormGroup.markAllAsTouched();
