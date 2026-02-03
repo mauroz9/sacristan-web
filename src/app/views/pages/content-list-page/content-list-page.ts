@@ -9,8 +9,6 @@ import { firstValueFrom } from 'rxjs';
 import { Teacher } from '../../../logic/interfaces/teacher-interface';
 import { TeacherService } from '../../../logic/services/teacher-service';
 import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
-import { LoginPage } from '../login-page/login-page';
-
 
 @Component({
   selector: 'app-content-list-page',

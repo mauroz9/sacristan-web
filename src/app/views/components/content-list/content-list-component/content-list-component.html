@@ -48,7 +48,7 @@
             @if (loadingContent) {
                 <app-loading-component></app-loading-component>
             } @else {
-                @for (item of content()?.contentList; track item) {
+                @for (item of content()?.contentList; track item.id) {
                     @if (item.kind == 'secuencia') {
                         <app-sequence-row-component [sequence]="item" (onDelete)="reloadContent()"></app-sequence-row-component>
                     } @else if (item.kind == 'alumno') {

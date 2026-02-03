@@ -42,9 +42,11 @@ export class StudentRowComponent implements OnInit {
       error: (error) => {
         console.error('Error al cargar el conteo de secuencias:', error);
         this.sequenceCount = 0;
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
-    this.loading = false;
   }
 
   assignSequences() {
