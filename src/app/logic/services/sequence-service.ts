@@ -12,26 +12,26 @@ export class SequenceService {
   constructor (private http: HttpClient) {}
 
   getSequences(query:string = ""): Observable<Sequence[]>{
-    return this.http.get<Sequence[]>(API_URL + `/api/sequences?q=${query}`);
+    return this.http.get<Sequence[]>(API_URL + `/api/v1/sequences?q=${query}`);
   }
 
   getSequenceById(id: number): Observable<Sequence> {
-    return this.http.get<Sequence>(API_URL + `/api/sequences/${id}`);
+    return this.http.get<Sequence>(API_URL + `/api/v1/sequences/${id}`);
   }
 
   addSequence(newSequence: Sequence): Observable<any>{
-    return this.http.post(API_URL + '/api/sequences', newSequence);
+    return this.http.post(API_URL + '/api/v1/sequences', newSequence);
   }
 
   modifySequence(modifySequence: Sequence): Observable<any>{
-    return this.http.put(API_URL + `/api/sequences/${modifySequence.id}`, modifySequence);
+    return this.http.put(API_URL + `/api/v1/sequences/${modifySequence.id}`, modifySequence);
   }
 
   deleteSequence(id: number): Observable<any>{
-    return this.http.delete(API_URL + `/api/sequences/${id}`)
+    return this.http.delete(API_URL + `/api/v1/sequences/${id}`)
   }
 
   duplicateSequence(id: number): Observable<any> {
-    return this.http.post(API_URL + `/api/sequences/${id}/duplicate`, {});
+    return this.http.post(API_URL + `/api/v1/sequences/${id}/duplicate`, {});
   }
 }

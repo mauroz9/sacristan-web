@@ -12,10 +12,10 @@ export class CategorySequenceService {
   constructor (private http: HttpClient) {}
 
   getCategories(): Observable<Category[]>{
-    return this.http.get<Category[]>(API_URL + '/api/categories');
+    return this.http.get<Category[]>(API_URL + '/api/v1/categories');
   }
 
   getCategoryById(id: number): Observable<Category>{
-    return this.http.get<Category>(API_URL + `/api/categories/${id}`);
+    return this.http.get<Category>(API_URL + `/api/v1/categories/${id}`);
   }
 }
