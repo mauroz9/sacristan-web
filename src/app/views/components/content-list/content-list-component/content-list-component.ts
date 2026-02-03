@@ -57,11 +57,11 @@ export class ContentListComponent {
     if (this.content()?.kind == "alumno") {
       this.studentService.getStudent(filterText).subscribe(r => {
 
-        for (let student of r) {
+        for (let student of r.content) {
           student.kind = "alumno";
         }
 
-        this.content()!.contentList = r
+        this.content()!.contentList = r.content
         this.loadingContent = false
       });
     } else if (this.content()?.kind == "secuencia") {

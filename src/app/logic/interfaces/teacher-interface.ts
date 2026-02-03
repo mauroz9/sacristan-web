@@ -1,7 +1,7 @@
-import { User } from "./user-interface";
+import { UserResponse } from "./user/user-interface";
 
 export interface Teacher {
     kind: 'profesor',
     id?: number,
-    user: User
+    user: UserResponse
 }

@@ -28,14 +28,14 @@ export class TeacherService {
     return this.http.get<number>(API_URL + "/api/profesores/" + id + "/estudiantes-asignados");
   }
 
-  sendTeacher(formData: any) {
-    let processedFormData:Teacher = this.convertFormDataToTeacher(formData);
-    if(processedFormData.user.id){
-      this.updateTeacher(processedFormData);
-    } else {
-      this.addTeacher(processedFormData);
-    }
-  }
+  // sendTeacher(formData: any) {
+  //   let processedFormData:Teacher = this.convertFormDataToTeacher(formData);
+  //   if(processedFormData.user.id){
+  //     this.updateTeacher(processedFormData);
+  //   } else {
+  //     this.addTeacher(processedFormData);
+  //   }
+  // }
   addTeacher(formData: Teacher) {
     this.http.post(API_URL + "/api/profesores/", formData.user).subscribe({
       next: (data) => {
@@ -62,30 +62,30 @@ export class TeacherService {
     );
   }
 
-  convertFormDataToTeacher(formData: any): Teacher {
-    let teacher: Teacher = {
-      kind: 'profesor',
-      user: {
-        id: formData.id,
-        name: formData.nameFormControl,
-        last_name: formData.lastNameFormControl,
-        email: formData.emailFormControl,
-        password: formData.passwordFormControl,
-        password_confirmation: formData.passwordFormControl,
-        role_id: 3,
-      },
-    };
+  // convertFormDataToTeacher(formData: any): Teacher {
+  //   let teacher: Teacher = {
+  //     kind: 'profesor',
+  //     user: {
+  //       id: formData.id,
+  //       name: formData.nameFormControl,
+  //       last_name: formData.lastNameFormControl,
+  //       email: formData.emailFormControl,
+  //       password: formData.passwordFormControl,
+  //       password_confirmation: formData.passwordFormControl,
+  //       role_id: 3,
+  //     },
+  //   };
 
-    if (formData.id) {
-      teacher.user.id = formData.id;
-    }
+  //   if (formData.id) {
+  //     teacher.user.id = formData.id;
+  //   }
 
-    if (formData.passwordFormControl === '') {
-      delete teacher.user.password;
-    } else {
-      teacher.user.password_confirmation = formData.passwordFormControl;
-    }
-    return teacher;
-  }
+  //   if (formData.passwordFormControl === '') {
+  //     delete teacher.user.password;
+  //   } else {
+  //     teacher.user.password_confirmation = formData.passwordFormControl;
+  //   }
+  //   return teacher;
+  // }
   
 }

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from '../interfaces/user-interface';
 import { Router } from '@angular/router';
 import { API_URL } from './env';
+import { UserResponse } from '../interfaces/user/user-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,25 +12,25 @@ export class UserService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(API_URL + "/api/usuarios/");
+  getUsers(): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>(API_URL + "/api/usuarios/");
   }
 
-  getUserById(userId: number): Observable<User> {
-    return this.http.get<User>(`${API_URL}/api/usuarios/${userId}`);
+  getUserById(userId: number): Observable<UserResponse> {
+    return this.http.get<UserResponse>(`${API_URL}/api/usuarios/${userId}`);
   }
 
-  sendUser(formData: any) {
-    formData = this.convertFormDataToUser(formData);
-    if(formData.id){
-      this.updateUser(formData);
-    } else {
-      this.addUser(formData);
-    }
-  }
+  // sendUser(formData: any) {
+  //   formData = this.convertFormDataToUser(formData);
+  //   if(formData.id){
+  //     this.updateUser(formData);
+  //   } else {
+  //     this.addUser(formData);
+  //   }
+  // }
 
 
-  addUser(formData: User) {
+  addUser(formData: UserResponse) {
     this.http.post(API_URL + "/api/usuarios/", formData).subscribe
     ({
       next: (data) => {
@@ -43,7 +43,7 @@ export class UserService {
     });
   }
 
-  updateUser(formData: User) {
+  updateUser(formData: UserResponse) {
     this.http.put(API_URL + "/api/usuarios/" + formData.id, formData).subscribe({
       next: (data) => {
         localStorage.setItem('infoMessage', 'Usuario modificado correctamente');
@@ -54,21 +54,17 @@ export class UserService {
     });
   }
 
-  convertFormDataToUser(formData: any): User {
-    let user: User = {
-      id: formData.id,
-      name: formData.nameFormControl,
-      last_name: formData.lastNameFormControl,
-      email: formData.emailFormControl,
-      role_id: formData.roleIdFormControl,
-      password: formData.passwordFormControl,
-      password_confirmation: formData.passwordFormControl
-    }
+  // convertFormDataToUser(formData: any): UserResponse {
+  //   let user: UserResponse = {
+  //     id: formData.id,
+  //     name: formData.nameFormControl,
+  //     lastName: formData.lastNameFormControl,
+  //     email: formData.emailFormControl
+  //     username: formData.usernameFormControl
+  //   }
 
-    if (formData.passwordFormControl === '') { 
-      delete user.password;
-    }
-    return user;
-  }
+
+  //   return user;
+  // }
 
 }

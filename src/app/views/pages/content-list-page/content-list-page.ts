@@ -5,11 +5,10 @@ import { ContentListComponent } from '../../components/content-list/content-list
 import { Router } from '@angular/router';
 import { StudentService } from '../../../logic/services/student-service';
 import { SequenceService } from '../../../logic/services/sequence-service';
-import { Student } from '../../../logic/interfaces/student-interface';
 import { firstValueFrom } from 'rxjs';
 import { Teacher } from '../../../logic/interfaces/teacher-interface';
 import { TeacherService } from '../../../logic/services/teacher-service';
-
+import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
 
 @Component({
   selector: 'app-content-list-page',
@@ -29,7 +28,7 @@ export class ContentListPage implements OnInit {
   url = "";
 
   sequenceList: Sequence[] = [];
-  studentList: Student[] = []
+  studentList: StudentResponse[] = []
   teacherList: Teacher[] = [];
   infoMessage: string | null = null;
 
@@ -64,7 +63,7 @@ export class ContentListPage implements OnInit {
     try {
       this.url = this.router.url;
       if (this.url.includes('/students')) {
-        this.studentList = await firstValueFrom(this.studentService.getStudent());
+        this.studentList = (await firstValueFrom(this.studentService.getStudent())).content;
       } else if (this.url.includes('/teachers')) {
         this.teacherList = await firstValueFrom(this.teacherService.getTeachers());
       } else if (this.url.includes('/sequences')) {
@@ -95,10 +94,10 @@ export class ContentListPage implements OnInit {
       this.content = this.contentSequence;
 
     } else if (this.url.includes('/students')) {
-
+      
       for (let student of this.studentList) {
         student.kind = "alumno";
-      }
+      }      
 
       this.content = {
         kind: "alumno",
