@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EmailValidator, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../logic/services/auth-service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'; // Importante para *ngIf
@@ -30,9 +30,8 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem('auth_token')) {
-      this.router.navigate(['/sequences']);
-    }    
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('refresh_token');  
   }
 
   togglePassword() {
@@ -42,19 +41,43 @@ export class LoginPage implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
+
+      const data = {
+        "email": this.loginForm.get('email')!.value!,
+        "password": this.loginForm.get('password')!.value!
+      }
       
       // El valor del formulario se puede pasar directamente
-      this.authService.login(this.loginForm.value).subscribe({
-        next: () => {
-          this.router.navigate(['/sequences']);
+      this.authService.login(data).subscribe({
+        next: (res) => {
+
+          if (res.roles.includes('ADMIN')) {
+            this.authService.saveLogInData(res);
+
+            this.router.navigate(['/sequences']);
+          } else {
+            this.handleAuthError({status: 403, message: 'No tienes permisos'});
+          }
+
+
         },
         error: (err) => {
-          console.error('Error de login:', err);
-          this.isLoading = false;
-          this.errorMessage = err.error?.message || 'Error al iniciar sesión';
+          this.handleAuthError(err);
         },
         complete: () => this.isLoading = false
       });
     }
   }
+
+  private handleAuthError(err: any) {
+    this.isLoading = false;
+    if (err.status === 401) {
+      this.errorMessage = 'Credenciales incorrectas. Por favor, inténtalo de nuevo.';
+    } else if (err.status === 403 || err.message === 'No tienes permisos') {
+      this.errorMessage = 'No dispones de la autorización necesaria para acceder a esta web.';
+    } else {
+      this.errorMessage = 'Error del servidor. Por favor, inténtalo más tarde.';
+    }
+  }
+
 }
