@@ -55,8 +55,11 @@ export class SequenceRowComponent {
     }
 
     this.sequenceService.duplicateSequence(sequence.id).subscribe({
-      next: (duplicateResponse) => {
-        const newSequenceId = duplicateResponse.sequence.id;
+      next: (duplicatedSequenceResponse) => {
+        console.log(duplicatedSequenceResponse);
+        
+        const newSequenceId = duplicatedSequenceResponse.id;
+        
         localStorage.setItem('infoMessage', 'Secuencia duplicada correctamente');
         this.router.navigate(['/sequences/modify', newSequenceId]);
       },
