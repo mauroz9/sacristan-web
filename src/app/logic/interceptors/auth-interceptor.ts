@@ -17,6 +17,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
   
   return next(authReq).pipe(
+    // IF ERROR STATUS 0 SEND TO LOGIN AND SAY THAT THE SERVER IS DOWN, CONTACT WITH SYSTEM ADMIN
     catchError((error) => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
         

@@ -57,7 +57,7 @@
                             </div>
 
                         <div class="picto-container me-4">
-                            <img [src]="step.get('pictogram_arasaac')?.value" alt="Pictograma" class="img-fluid rounded-circle">
+                            <img [src]="'https://api.arasaac.org/api/pictograms/' + step.get('arasaacPictogramId')?.value" alt="Pictograma" class="img-fluid rounded-circle">
                         </div>
 
                             <div class="badge-step me-3">

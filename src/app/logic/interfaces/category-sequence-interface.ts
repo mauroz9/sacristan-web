@@ -1,6 +1,14 @@
 export interface Category {
   id: number;
   name: string;
-  created_at: string;
-  updated_at: string;
+}
+
+export interface CategoryResponse {
+  content: Category[];
+  page: {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+  };
 }
