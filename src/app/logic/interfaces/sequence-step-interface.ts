@@ -10,7 +10,7 @@ export interface Step {
 export interface StepRequest {
   title: string;
   position: number;
-  estimatedDuration: string;
+  estimatedDuration: string | null;
   arasaacPictogramId: number | null;
   sequenceId: number;
 }

@@ -179,11 +179,11 @@ export class SequenceFormComponent implements OnInit {
         steps: (formValue.steps as StepRequest[]).map((step, index) => ({
           title: step.title,
           position: index + 1,
-          estimatedDuration: "0",
+          estimatedDuration: null,
           arasaacPictogramId: step.arasaacPictogramId,
           sequenceId: this.isEditMode ? (this.sequenceId ?? 0) : 0,
         })),
-        estimatedDuration: "",
+        estimatedDuration: null,
         allowGoBack: false
       };
       
@@ -194,8 +194,21 @@ export class SequenceFormComponent implements OnInit {
         ? this.sequenceService.modifySequence(this.sequenceId!, newSequence) 
         : this.sequenceService.addSequence(newSequence);
 
-      await firstValueFrom(request$);
-      
+      console.log(request$);
+
+      request$.subscribe( (res) => {
+        console.log(
+          res
+        );
+        
+      },
+      (err) => {
+        console.error('Error al guardar la secuencia:', err);
+        alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
+      }
+    )
+
+
       localStorage.setItem('infoMessage', this.isEditMode ? 'Secuencia modificada correctamente' : 'Secuencia creada correctamente');
       this.router.navigate(["/sequences"]);
       

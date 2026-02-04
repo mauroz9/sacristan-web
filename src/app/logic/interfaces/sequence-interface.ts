@@ -16,7 +16,7 @@ export interface SequenceRequest {
   kind: 'secuencia'
   title: string;
   description: string;
-  estimatedDuration: string;
+  estimatedDuration: string | null;
   allowGoBack: boolean;
   categoryId: number;
   steps: StepRequest[];
