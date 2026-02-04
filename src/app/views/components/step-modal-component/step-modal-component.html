@@ -57,7 +57,7 @@
                         @for (picto of pictograms; track picto._id) {
                         @let pictoUrl = getPictogramImage(picto._id);
 
-                        <div class="pictogram-option" [class.selected]="stepForm.get('pictogram_arasaac')?.value === pictoUrl"
+                        <div class="pictogram-option" [class.selected]="stepForm.get('arasaacPictogramId')?.value === picto._id"
                             (click)="selectImage(picto._id)">
                             <img [src]="pictoUrl"
                                 [alt]="(picto.keywords && picto.keywords.length > 0 && picto.keywords[0].keyword) || 'Pictograma sin descripción'"
@@ -65,7 +65,7 @@
                         </div>
                     }
 
-                    @if (stepForm.get('pictogram_arasaac')?.invalid && stepForm.get('pictogram_arasaac')?.touched) {
+                    @if (stepForm.get('arasaacPictogramId')?.invalid && stepForm.get('arasaacPictogramId')?.touched) {
                     <p class="text-danger small mt-2">Debes seleccionar una imagen.</p>
                     }
                     </div>

@@ -1,10 +1,16 @@
 export interface Step {
   id: number;
-  sequence_id: number;
   title: string;
   position: number;
-  pictogram_arasaac: string | null;
+  estimatedDuration: number;
+  arasaacPictogramId: number | null;
   pictogram_custom: string | null;
-  created_at: string;
-  updated_at: string;
+}
+
+export interface StepRequest {
+  title: string;
+  position: number;
+  estimatedDuration: string;
+  arasaacPictogramId: number | null;
+  sequenceId: number;
 }

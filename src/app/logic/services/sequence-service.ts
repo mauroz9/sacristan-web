@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Sequence } from '../interfaces/sequence-interface';
+import { Sequence, SequenceRequest } from '../interfaces/sequence-interface';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from './env';
@@ -19,12 +19,12 @@ export class SequenceService {
     return this.http.get<Sequence>(API_URL + `/api/v1/sequences/${id}`);
   }
 
-  addSequence(newSequence: Sequence): Observable<any>{
+  addSequence(newSequence: SequenceRequest): Observable<any>{
     return this.http.post(API_URL + '/api/v1/sequences', newSequence);
   }
 
-  modifySequence(modifySequence: Sequence): Observable<any>{
-    return this.http.put(API_URL + `/api/v1/sequences/${modifySequence.id}`, modifySequence);
+  modifySequence(sequenceId: number, modifySequence: SequenceRequest): Observable<any>{
+    return this.http.put(API_URL + `/api/v1/sequences/${sequenceId}`, modifySequence);
   }
 
   deleteSequence(id: number): Observable<any>{
