@@ -22,7 +22,7 @@ export class StudentService {
 
   // NOT YET
   getStudentsWithTeacher(id: number): Observable<StudentResponse[]> {
-    return this.http.get<StudentResponse[]>(this.API_URL + "/con-profesor" + id);
+    return this.http.get<StudentResponse[]>(this.API_URL + "/con-profesor/" + id);
   }
   
   // NOT YET
