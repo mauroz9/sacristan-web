@@ -103,7 +103,6 @@ export class StudentService {
       {
         next: (data) => {
           localStorage.setItem('infoMessage', 'Alumno actualizado correctamente');
-          this.router.navigate(['/students']);
         },
         error: (error) => {
           console.error("Error updating student", error);
