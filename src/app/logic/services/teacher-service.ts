@@ -12,23 +12,23 @@ import { PageResponse } from '../interfaces/utils/page-interface';
 export class TeacherService {
   constructor (private http: HttpClient, private router: Router) {}
 
-    API_URL = API_URL + "/api/v1/admin/teachers";
+  API_URL = API_URL + "/api/v1/admin/teachers";
 
-    getTeachers(filterText:String = ""): Observable<PageResponse<TeacherResponse>> {
-      return this.http.get<PageResponse<TeacherResponse>>(this.API_URL + "?q=" + filterText);
-    }
+  getTeachers(filterText:String = ""): Observable<PageResponse<TeacherResponse>> {
+    return this.http.get<PageResponse<TeacherResponse>>(this.API_URL + "?q=" + filterText);
+  }
 
-    getStudentCountByTeacher(id: number): Observable<number> {
-      return this.http.get<number>(this.API_URL + "/" + id + "/student-count");
-    };
+  getStudentCountByTeacher(id: number): Observable<number> {
+    return this.http.get<number>(this.API_URL + "/" + id + "/student-count");
+  };
 
-    getTeacherById(id: number): Observable<TeacherResponse> {
-      return this.http.get<TeacherResponse>(this.API_URL + "/" + id);
-    }
+  getTeacherById(id: number): Observable<TeacherResponse> {
+    return this.http.get<TeacherResponse>(this.API_URL + "/" + id);
+  }
 
-    deleteTeacher(id: number) {
-      return this.http.delete(this.API_URL + "/" + id)
-    }
+  deleteTeacher(id: number) {
+    return this.http.delete(this.API_URL + "/" + id)
+  }
 
   // sendTeacher(formData: any) {
   //   let processedFormData:Teacher = this.convertFormDataToTeacher(formData);
