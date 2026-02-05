@@ -64,7 +64,11 @@ export class StudentRowComponent implements OnInit {
           this.onDelete.emit();
         },
         error: (err) => {
-          alert('Error al borrar el alumno: ' + err.message);
+          if (err.status == 401) {
+            localStorage.setItem('errorMessage', 'Sesión expirada. Por favor, inicia sesión de nuevo.');
+          } else {
+            alert('Error al borrar el alumno: ' + err.message);
+          }
         }
       });
     }

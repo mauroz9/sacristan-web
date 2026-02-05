@@ -1,44 +1,43 @@
-/* Variables de color (puedes moverlas a styles.css global si prefieres) */
-.text-primary-blue {
-    color: var(--primary-blue) !important;
+/* Color Variable */
+:root {
+  --primary-blue: #2c4a8a; /* Matches the header and button */
 }
 
-/* Borde azul superior del modal */
-.student-modal-content {
-    border-radius: 8px;
-    width: 100%;
+.bg-primary-blue { background-color: var(--primary-blue); }
+.btn-primary-blue { background-color: var(--primary-blue); border: none; }
+
+/* Custom Input Styling */
+.input-group-custom {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-/* Estilo personalizado para inputs y selects (fondo gris) */
+.icon-input {
+  position: absolute;
+  left: 15px;
+  color: #9ea7ad;
+  font-size: 1.1rem;
+}
+
 .custom-input {
-    background-color: #d0d0d0; /* Un poco más oscuro al hacer foco */
-    border: none;
-    padding: 10px 15px;
+  padding-left: 45px !important;
+  height: 50px;
+  border-radius: 12px !important;
+  border: 1px solid #dee2e6;
+  background-color: #fff;
 }
 
-/* Área de subida de fotos */
-.upload-area {
-    border: 2px dashed #ccc; /* Borde discontinuo */
-    background-color: #f8f9fa;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    min-height: 150px;
+.custom-input::placeholder {
+  color: #adb5bd;
 }
 
-.upload-area:hover {
-    background-color: #e9ecef;
-    border-color: var(--primary-blue);
-    color: var(--primary-blue) !important;
+.form-label {
+  color: #495057;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
 }
 
-/* Input file oculto que cubre el área */
-.file-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
+.rounded-pill {
+    border-radius: 10px !important; /* The image shows slightly squared rounded buttons, adjust as needed */
 }

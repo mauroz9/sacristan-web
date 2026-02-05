@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from './user-service';
 import { API_URL } from './env';
 import { StudentResponse } from '../interfaces/user/student/student-interface';
 import { PageResponse } from '../interfaces/utils/page-interface';
+import { CreateUser } from '../interfaces/user/user-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -13,32 +14,33 @@ import { PageResponse } from '../interfaces/utils/page-interface';
 export class StudentService {
   constructor (private http:HttpClient, private router: Router, private userService:UserService) {}
 
+  API_URL = API_URL + "/api/v1/admin/students";
+
   getStudent(query:string = ""): Observable<PageResponse<StudentResponse>> {
-    return this.http.get<PageResponse<StudentResponse>>(API_URL + "/api/v1/admin/students?q="+query);
+    return this.http.get<PageResponse<StudentResponse>>(this.API_URL + "?q="+query);
   }
 
   // NOT YET
   getStudentsWithTeacher(id: number): Observable<StudentResponse[]> {
-    return this.http.get<StudentResponse[]>(API_URL + "/api/v1/admin/students/con-profesor/" + id);
+    return this.http.get<StudentResponse[]>(this.API_URL + "/con-profesor" + id);
   }
-  
   
   // NOT YET
   getStudentsWithoutTeacher(): Observable<StudentResponse[]> {
-    return this.http.get<StudentResponse[]>(API_URL + "/api/v1/admin/students/sin-profesor");
+    return this.http.get<StudentResponse[]>(this.API_URL + "/sin-profesor");
   }
 
   getStudentById(studentId: number): Observable<StudentResponse> {
-    return this.http.get<StudentResponse>(API_URL + "/api/v1/admin/students/" + studentId);
+    return this.http.get<StudentResponse>(this.API_URL + "/" + studentId);
   }
 
   deleteStudent(id: number) {
-    return this.http.delete(API_URL + "/api/v1/admin/students/" + id)
+    return this.http.delete(this.API_URL + "/" + id)
   }
 
   // NOT YET
   assignTeacherToStudent(studentId: number, teacherId: number) {
-    return this.http.put(API_URL + "/api/v1/admin/students/" + studentId + "/asignar-profesor/" + teacherId, {}).subscribe({
+    return this.http.put(this.API_URL + "/" + studentId + "/asignar-profesor/" + teacherId, {}).subscribe({
       next: (data) => {
       },
       error: (error) => {
@@ -49,7 +51,7 @@ export class StudentService {
 
   // NOT YET
   unassignTeacherFromStudent(studentId: number) {
-    return this.http.put(API_URL + "/api/v1/admin/students/" + studentId + "/desasignar-profesor", {}).subscribe({
+    return this.http.put(this.API_URL + "/" + studentId + "/desasignar-profesor", {}).subscribe({
       next: (data) => {
         console.log("Teacher unassigned from student successfully");
       },
@@ -59,68 +61,68 @@ export class StudentService {
     });
   }
   
-  // NOT YET
-  // sendStudent(formData: any) {
-  //   let processedFormData:StudentResponse = this.convertFormDataToStudent(formData);
-  //   if(processedFormData.user.id){
-  //     this.updateStudent(processedFormData);
-  //   } else {
-  //     this.addStudent(processedFormData);
-  //   }
-  // }
+  sendStudent(formData: any) {
+    let originalId = formData.id || null
+    if(originalId){
+      formData = this.userService.convertFormDataToUpdateUser(formData);
+      this.updateStudent(formData, originalId);
+    } else {
+      formData = this.userService.convertFormDataToCreateUser(formData);
+      this.addStudent(formData);
+    }
+  }
 
-  // NOT YET
-  addStudent(formData: StudentResponse) {
-    this.http.post(API_URL + "/api/v1/admin/students/", formData).subscribe({
-      next: (data) => {
-        localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
+  addStudent(formData: CreateUser) {
+    console.log(formData);
+    
+    this.http.post(this.API_URL, formData).pipe(
+      finalize(() => {
+        console.log("Returning to students");
         this.router.navigate(['/students']);
+      })
+    ).subscribe({
+      next: (data) => {
+        console.log(data);
+        localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
       },
       error: (error) => {
-        console.error("Error adding student", error);
+        console.error("Error adding student", error);        
+        let errorMessage = 'Error al añadir el alumno: '
+        this.errorHandler(error, errorMessage);
       }
     });
   }
 
-  // NOT YET
-  updateStudent(formData: StudentResponse) {    
-
-    this.http.put(API_URL + "/api/usuarios/" + formData.id, formData).subscribe(
+  updateStudent(formData: StudentResponse, originalId: number) {        
+    this.http.put(this.API_URL + "/" + originalId, formData).pipe(
+      finalize(() => {
+        console.log("Returning to students");
+        this.router.navigate(['/students']);
+      })
+    ).subscribe(
       {
         next: (data) => {
-          
           localStorage.setItem('infoMessage', 'Alumno actualizado correctamente');
           this.router.navigate(['/students']);
         },
         error: (error) => {
           console.error("Error updating student", error);
+          let errorMessage = 'Error al actualizar al alumno: '
+          this.errorHandler(error, errorMessage);
         }
       }
     );
   }
 
-  // NOT YET
-  // convertFormDataToStudent(formData: any): StudentResponse {
-  //   let student: StudentResponse = {
-  //     kind: 'student',
-  //     role: 'student',
-  //     user: {
-  //       id: formData.id,
-  //       name: formData.nameFormControl,
-  //       lastName: formData.lastNameFormControl,
-  //       email: formData.emailFormControl
-  //     },
-  //     teacher: null
-  //   }
-
-  //   if (formData.passwordFormControl === '') { 
-  //     delete student.user.password;
-  //   } else {
-  //     student.user.password_confirmation = formData.passwordFormControl;
-  //   }
-
-  //   return student;
-
-  // }
+  errorHandler(error: any, errorMessage: string) {
+    if (error.status == 400) {
+      if (error.error.error == "001") {
+        errorMessage = errorMessage + "El email " + error.error.detail + " ya está registrado.";
+      }
+      localStorage.setItem('errorMessage',  errorMessage);
+    } else {
+      localStorage.setItem('errorMessage',  "Ha ocurrido un error inesperado.");
+    }
+  }
 
 }

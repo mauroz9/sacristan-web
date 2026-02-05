@@ -32,7 +32,7 @@ export class TeacherFormModalComponent {
     if (userFormGroup.valid) {
       const formData = userFormGroup.value;
 
-      if(this.userFormComponent.isEditMode){
+      if(this.userFormComponent.userId != null){
         formData.id = this.userFormComponent.userId;
       }
       

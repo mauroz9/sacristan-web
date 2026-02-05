@@ -9,6 +9,15 @@
         </div>
     }
 
+    @if (errorMessage) {
+        <div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ errorMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+
     <app-content-list-component (reload)="reloadContent()" [loading]="loading"  [content]="content"></app-content-list-component>
     
     <!-- @if (content.contentList.length != 0) {

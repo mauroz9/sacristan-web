@@ -27,17 +27,22 @@ export class StudentFormModalComponent {
   }
 
   sendData() {
+    console.log("HI>?");
+    
     let userFormGroup = this.userFormComponent.userFormGroup;
     if (userFormGroup.valid) {
+      console.log("ENTRO?");
+      
       const formData = userFormGroup.value;
 
-      if(this.userFormComponent.isEditMode){
+      if(this.userFormComponent.userId != null){
         formData.id = this.userFormComponent.userId;
       }
       
-      //this.studentService.sendStudent(formData);
+      this.studentService.sendStudent(formData);
       this.modalService.dismissAll();
     } else {
+      console.log("Form is invalid");
       userFormGroup.markAllAsTouched();
     }
   }

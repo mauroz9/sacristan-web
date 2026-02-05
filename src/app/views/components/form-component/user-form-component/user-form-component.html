@@ -1,49 +1,74 @@
-<div class="modal-body pt-4">
+<div class="modal-body p-4">
     @if (loading) {
         <app-loading-component></app-loading-component>
     } @else {
         <form [formGroup]="userFormGroup">
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="nombreInput" class="form-label fw-semibold text-primary-blue">Nombre</label>
-                    <input formControlName="nameFormControl" type="text" class="form-control custom-input" id="nombreInput">
+                    <label class="form-label fw-bold">Nombre <span class="text-danger">*</span></label>
+                    <div class="input-group-custom">
+                        <i class="bi bi-person icon-input"></i>
+                        <input formControlName="nameFormControl" type="text" class="form-control custom-input" placeholder="Ingrese el nombre">
+                    </div>
                     @if (userFormGroup.get('nameFormControl')?.invalid && (userFormGroup.get('nameFormControl')?.touched || userFormGroup.get('nameFormControl')?.dirty)) {
-                        <p class="invalid-feedback d-block mb-0"> Debes escribir el nombre</p>
+                        <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir el nombre</p>
                     }
                 </div>
                 <div class="col-md-6">
-                    <label for="apellidosInput" class="form-label fw-semibold text-primary-blue">Apellidos</label>
-                    <input formControlName="lastNameFormControl" type="text" class="form-control custom-input" id="apellidosInput">
+                    <label class="form-label fw-bold">Apellidos <span class="text-danger">*</span></label>
+                    <div class="input-group-custom">
+                        <i class="bi bi-person-circle icon-input"></i>
+                        <input formControlName="lastNameFormControl" type="text" class="form-control custom-input" placeholder="Ingrese los apellidos">
+                    </div>
                     @if (userFormGroup.get('lastNameFormControl')?.invalid && (userFormGroup.get('lastNameFormControl')?.touched || userFormGroup.get('lastNameFormControl')?.dirty)) {
-                        <p class="invalid-feedback d-block mb-0"> Debes escribir el apellido</p>
+                        <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir el apellido</p>
                     }
                 </div>
             </div>
-
 
             <div class="row mb-3">
-                <div class="col-md-12">
-                    <label for="emailInput" class="form-label fw-semibold text-primary-blue">Email</label>
-                    <input formControlName="emailFormControl" type="email" class="form-control custom-input" id="emailInput">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                    <div class="input-group-custom">
+                        <i class="bi bi-envelope icon-input"></i>
+                        <input formControlName="emailFormControl" type="email" class="form-control custom-input" placeholder="ejemplo@correo.com">
+                    </div>
                     @if (userFormGroup.get('emailFormControl')?.invalid && (userFormGroup.get('emailFormControl')?.touched || userFormGroup.get('emailFormControl')?.dirty)) {
-                        <p class="invalid-feedback d-block mb-0"> Debes escribir el email</p>
+                        <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir un email válido</p>
                     }
                 </div>
-                <div class="">
-                    <label for="passwordInput" class="form-label fw-semibold text-primary-blue">Contraseña</label>
-                    <input formControlName="passwordFormControl" type="password" class="form-control custom-input" id="passwordInput">
-                    @if (userFormGroup.get('passwordFormControl')?.invalid && (userFormGroup.get('passwordFormControl')?.touched || userFormGroup.get('passwordFormControl')?.dirty)) {
-                        @if (userFormGroup.get('passwordFormControl')?.errors?.['minlength']) {
-                            <p class="invalid-feedback d-block mb-0"> La contraseña debe tener al menos 8 caracteres</p>
-                        } @else {
-                            <p class="invalid-feedback d-block mb-0"> Debes escribir la contraseña</p>
-                        }
-                    }
-                    @if (isEditMode) {
-                        <small class="form-text text-muted">Deja este campo vacío si no deseas cambiar la contraseña.</small>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Nombre de usuario <span class="text-danger">*</span></label>
+                    <div class="input-group-custom">
+                        <i class="bi bi-person icon-input"></i>
+                        <input formControlName="usernameFormControl" type="text" class="form-control custom-input" placeholder="nombre usuario">
+                    </div>
+                    @if (userFormGroup.get('usernameFormControl')?.invalid && (userFormGroup.get('usernameFormControl')?.touched || userFormGroup.get('usernameFormControl')?.dirty)) {
+                        <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir el nombre de usuario</p>
                     }
                 </div>
             </div>
+
+            @if (userId == null) {
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Contraseña <span class="text-danger">*</span></label>
+                        <div class="input-group-custom">
+                            <i class="bi bi-lock icon-input"></i>
+                            <input formControlName="passwordFormControl" type="password" class="form-control custom-input" placeholder="Mínimo 6 caracteres">
+                        </div>
+                        @if (userFormGroup.get('passwordFormControl')?.invalid && (userFormGroup.get('passwordFormControl')?.touched || userFormGroup.get('passwordFormControl')?.dirty)) {
+                            @if (userFormGroup.get('passwordFormControl')?.errors?.['minlength']) {
+                                <p class="invalid-feedback d-block mt-1 mb-0">La contraseña debe tener al menos 6 caracteres</p>
+                            } @else {
+                                <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir la contraseña</p>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+
+            <hr class="my-4 opacity-25">
         </form>
     }
 </div>

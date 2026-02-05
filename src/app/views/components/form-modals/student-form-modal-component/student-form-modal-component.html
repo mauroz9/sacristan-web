@@ -1,17 +1,16 @@
 <ng-template #modal let-modal>
 
     <div class="student-modal-content">
-        <div class="modal-header border-bottom-0 pb-0">
+        <div class="modal-header border-bottom-0 pb-3 background-primary-blue">
             <div>
-                <h5 class="modal-title fw-bold text-primary-blue">{{ functionality() == "modifyStudent" ? 'Modificar' : 'Nuevo' }} Alumno</h5>
-                <p class="text-muted mb-0">Información del alumno</p>
+                <h5 class="modal-title fw-bold">{{ functionality() == "modifyStudent" ? 'Modificar' : 'Nuevo' }} Alumno</h5>
             </div>
-            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()" [routerLink]="'/students'"></button>
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modal.dismiss()" [routerLink]="'/students'"></button>
         </div>
 
         <app-user-form-component [kind]="'student'"></app-user-form-component>
 
-        <div class="modal-footer border-top-0 pt-4 pb-4 pe-4">
+        <div class="modal-footer border-top-0 pt-2 pb-4 pe-4">
             <button type="button" class="btn btn-outline-secondary px-4 me-2" (click)="modal.close()" [routerLink]="'/students'">Cancelar</button>
             <button type="button" class="btn btn-primary-blue px-4" (click)="sendData()">Guardar Cambios</button>
         </div>
