@@ -1,6 +1,6 @@
 /* Color Variable */
 :root {
-  --primary-blue: #2c4a8a; /* Matches the header and button */
+  --primary-blue: #2b4a87; /* Matches the header and button */
 }
 
 .bg-primary-blue { background-color: var(--primary-blue); }
