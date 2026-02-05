@@ -66,6 +66,7 @@ export class StudentRowComponent implements OnInit {
         error: (err) => {
           if (err.status == 401) {
             localStorage.setItem('errorMessage', 'Sesión expirada. Por favor, inicia sesión de nuevo.');
+            this.router.navigate(['/login']);
           } else {
             alert('Error al borrar el alumno: ' + err.message);
           }
