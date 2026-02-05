@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../logic/services/user-service';
 import { firstValueFrom } from 'rxjs';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
-import { CreateUser } from '../../../../logic/interfaces/user/user-interface';
 
 @Component({
   selector: 'app-user-form-component',
