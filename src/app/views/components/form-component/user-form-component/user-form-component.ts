@@ -38,6 +38,7 @@ export class UserFormComponent implements OnInit {
       let baseUser = await firstValueFrom(this.userService.getUserById(this.userId));
       
       this.userFormGroup.get('passwordFormControl')?.setValidators([]);
+      this.userFormGroup.get('passwordFormControl')?.updateValueAndValidity();
 
       this.userFormGroup.patchValue({
         nameFormControl: baseUser.name,
