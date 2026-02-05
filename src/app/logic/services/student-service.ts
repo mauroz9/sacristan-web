@@ -106,7 +106,7 @@ export class StudentService {
         },
         error: (error) => {
           console.error("Error updating student", error);
-          let errorMessage = 'Error al actualizar al alumno: '
+          let errorMessage = 'Error al actualizar el alumno: '
           this.errorHandler(error, errorMessage);
         }
       }
