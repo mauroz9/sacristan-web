@@ -32,6 +32,14 @@ export class LoginPage implements OnInit {
   ngOnInit(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('refresh_token');  
+
+
+
+    this.errorMessage = localStorage.getItem('errorMessage');    
+    if (this.errorMessage) {
+      localStorage.removeItem('errorMessage');
+    }
+
   }
 
   togglePassword() {

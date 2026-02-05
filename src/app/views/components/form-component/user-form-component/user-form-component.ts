@@ -1,4 +1,4 @@
-import { Component, input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../logic/services/user-service';
@@ -14,29 +14,17 @@ import { LoadingComponent } from "../../shared/loading-component/loading-compone
 export class UserFormComponent implements OnInit {
 
   kind = input<string>();
-  isEditMode: boolean = false;
   userId: number | null = null;
   loading: boolean = false;
 
-  constructor(private router: Router, private userService:UserService, private route: ActivatedRoute) {}
-
-  baseUser : any = {
-    id: 0,
-    name: '',
-    last_name: '',
-    email: '',
-    password: '',
-    role_id: 0,
-  }
+  constructor(private router: Router, private userService:UserService, private route: ActivatedRoute, private cdr: ChangeDetectorRef) {}
 
   userFormGroup: FormGroup = new FormGroup({
-    // Define form controls here as needed
     nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
     lastNameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
     emailFormControl: new FormControl('',[Validators.required, Validators.minLength(1), Validators.email]),
+    usernameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
     passwordFormControl: new FormControl('',[Validators.required, Validators.minLength(8)]),
-    // disabilityFormControl: new FormControl('',[Validators.required]),
-    // photoFormControl: new FormControl('',[Validators.required]),
   });
 
   ngOnInit(): void {
@@ -45,23 +33,22 @@ export class UserFormComponent implements OnInit {
 
   async ngAfterViewInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
-  
     if(id){
-      const userId = Number(id);
-      this.baseUser = await firstValueFrom(this.userService.getUserById(userId));
-
-      this.isEditMode = true;
       this.userId = Number(id);
+      let baseUser = await firstValueFrom(this.userService.getUserById(this.userId));
+      
       this.userFormGroup.get('passwordFormControl')?.setValidators([]);
+      this.userFormGroup.get('passwordFormControl')?.updateValueAndValidity();
 
       this.userFormGroup.patchValue({
-        nameFormControl: this.baseUser.name,
-        lastNameFormControl: this.baseUser.last_name,
-        emailFormControl: this.baseUser.email,
-        passwordFormControl: '',
+        nameFormControl: baseUser.name,
+        lastNameFormControl: baseUser.lastName,
+        emailFormControl: baseUser.email,
+        usernameFormControl: baseUser.username,
       });
     }
     this.loading = false;
+    this.cdr.detectChanges(); // Force a re-check
   }
 
 }

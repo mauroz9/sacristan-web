@@ -31,6 +31,7 @@ export class ContentListPage implements OnInit {
   studentList: StudentResponse[] = []
   teacherList: Teacher[] = [];
   infoMessage: string | null = null;
+  errorMessage: string | null = null;
 
   contentSequence: Content = {
     kind: "secuencia",
@@ -51,6 +52,11 @@ export class ContentListPage implements OnInit {
     this.infoMessage = localStorage.getItem('infoMessage');
     if (this.infoMessage) {
       localStorage.removeItem('infoMessage');
+    }
+
+    this.errorMessage = localStorage.getItem('errorMessage');
+    if (this.errorMessage) {
+      localStorage.removeItem('errorMessage');
     }
   }
 
@@ -74,7 +80,9 @@ export class ContentListPage implements OnInit {
       console.error("Error loading data for content list page:", error);      
       
       if (error.status === 401) {        
-        alert("Sesión expirada. Por favor, inicia sesión de nuevo.");
+        console.log("Volviendo al login debido a falta de acceso");
+        
+        localStorage.setItem('errorMessage', 'Sesión expirada. Por favor, inicia sesión de nuevo.');
         localStorage.removeItem('auth_token');
         this.router.navigate(['/login']);
       }
