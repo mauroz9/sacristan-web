@@ -55,11 +55,11 @@
                         <label class="form-label fw-bold">Contraseña <span class="text-danger">*</span></label>
                         <div class="input-group-custom">
                             <i class="bi bi-lock icon-input"></i>
-                            <input formControlName="passwordFormControl" type="password" class="form-control custom-input" placeholder="Mínimo 6 caracteres">
+                            <input formControlName="passwordFormControl" type="password" class="form-control custom-input" placeholder="Mínimo 8 caracteres">
                         </div>
                         @if (userFormGroup.get('passwordFormControl')?.invalid && (userFormGroup.get('passwordFormControl')?.touched || userFormGroup.get('passwordFormControl')?.dirty)) {
                             @if (userFormGroup.get('passwordFormControl')?.errors?.['minlength']) {
-                                <p class="invalid-feedback d-block mt-1 mb-0">La contraseña debe tener al menos 6 caracteres</p>
+                                <p class="invalid-feedback d-block mt-1 mb-0">La contraseña debe tener al menos 8 caracteres</p>
                             } @else {
                                 <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir la contraseña</p>
                             }
