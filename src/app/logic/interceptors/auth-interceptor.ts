@@ -20,13 +20,17 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     // IF ERROR STATUS 0 SEND TO LOGIN AND SAY THAT THE SERVER IS DOWN, CONTACT WITH SYSTEM ADMIN
     catchError((error) => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        
         const isLoginRequest = authReq.url.includes('/login');
         const isRefreshRequest = authReq.url.includes('/refresh-token');
         
         if (!isLoginRequest && !isRefreshRequest) {
           return handle401Error(authReq, next, authService);
         }
+      }
+
+      if (error instanceof HttpErrorResponse && error.status === 0) {
+        localStorage.setItem('errorMessage', 'El servidor no responde. Contacta con el administrador del sistema.');
+        authService.logout();
       }
 
       return throwError(() => error);

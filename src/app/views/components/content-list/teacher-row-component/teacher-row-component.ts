@@ -58,7 +58,15 @@ export class TeacherRowComponent implements OnInit {
             this.onDelete.emit();
           },
           error: (err) => {
-            alert('Error al borrar el profesor: ' + err.message);
+            console.log('Error al borrar el profesor: ');
+            console.log(err);            
+
+            if(err.error.es){              
+              let errorMessage = 'Error al borrar el profesor: ' + err.error.es.message;
+              localStorage.setItem('errorMessage', errorMessage);
+              window.location.reload();
+            }
+
           }
         });
     }

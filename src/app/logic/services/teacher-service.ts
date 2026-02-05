@@ -1,16 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from './env';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { TeacherResponse } from '../interfaces/user/teacher/teacher-interface';
 import { PageResponse } from '../interfaces/utils/page-interface';
+import { UserService } from './user-service';
+import { CreateUser } from '../interfaces/user/user-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TeacherService {
-  constructor (private http: HttpClient, private router: Router) {}
+  constructor (private http: HttpClient, private router: Router, private userService: UserService) {}
 
   API_URL = API_URL + "/api/v1/admin/teachers";
 
@@ -30,64 +32,57 @@ export class TeacherService {
     return this.http.delete(this.API_URL + "/" + id)
   }
 
-  // sendTeacher(formData: any) {
-  //   let processedFormData:Teacher = this.convertFormDataToTeacher(formData);
-  //   if(processedFormData.user.id){
-  //     this.updateTeacher(processedFormData);
-  //   } else {
-  //     this.addTeacher(processedFormData);
-  //   }
-  // }
-  // addTeacher(formData: TeacherResponse  ) {
-  //   this.http.post(this.API_URL + "/", formData.user).subscribe({
-  //     next: (data) => {
-  //       localStorage.setItem('infoMessage', 'Profesor añadido correctamente');
-  //       this.router.navigate(['/teachers']);
-  //     },
-  //     error: (error) => {
-  //       console.error("Error adding teacher", error);
-  //     }
-  //   });
-  // }
+  sendTeacher(formData: any) {
+      let originalId = formData.id || null
+      if(originalId){
+        formData = this.userService.convertFormDataToUpdateUser(formData);
+        this.updateTeacher(formData, originalId);
+      } else {
+        formData = this.userService.convertFormDataToCreateUser(formData);
+        this.addTeacher(formData);
+      }
+    }
+  
+    addTeacher(formData: CreateUser) {
+      console.log(formData);
+      
+      this.http.post(this.API_URL, formData).pipe(
+        finalize(() => {
+          console.log("Returning to teachers");
+          this.router.navigate(['/teachers']);
+        })
+      ).subscribe({
+        next: (data) => {
+          console.log(data);
+          localStorage.setItem('infoMessage', 'Profesor añadido correctamente');
+        },
+        error: (error) => {
+          console.error("Error adding teacher", error);        
+          let errorMessage = 'Error al añadir el profesor: '
+          this.userService.errorHandler(error, errorMessage);
+        }
+      });
+    }
+  
+    updateTeacher(formData: TeacherResponse, originalId: number) {        
+      this.http.put(this.API_URL + "/" + originalId, formData).pipe(
+        finalize(() => {
+          console.log("Returning to teachers");
+          this.router.navigate(['/teachers']);
+        })
+      ).subscribe(
+        {
+          next: (data) => {
+            localStorage.setItem('infoMessage', 'Profesor actualizado correctamente');
+          },
+          error: (error) => {
+            console.error("Error updating teacher", error);
+            let errorMessage = 'Error al actualizar el profesor: '
+            this.userService.errorHandler(error, errorMessage);
+          }
+        }
+      );
+    }
 
-  // updateTeacher(formData: TeacherResponse) {
-  //     this.http.put(this.API_URL + "/" + formData.user.id, formData.user).subscribe(
-  //     {
-  //       next: (data) => {          
-  //         localStorage.setItem('infoMessage', 'Profesor actualizado correctamente');
-  //         this.router.navigate(['/teachers']);
-  //       },
-  //       error: (error) => {
-  //         console.error("Error updating teacher", error);
-  //       }
-  //     }
-  //   );
-  // }
-
-  // convertFormDataToTeacher(formData: any): Teacher {
-  //   let teacher: Teacher = {
-  //     kind: 'profesor',
-  //     user: {
-  //       id: formData.id,
-  //       name: formData.nameFormControl,
-  //       last_name: formData.lastNameFormControl,
-  //       email: formData.emailFormControl,
-  //       password: formData.passwordFormControl,
-  //       password_confirmation: formData.passwordFormControl,
-  //       role_id: 3,
-  //     },
-  //   };
-
-  //   if (formData.id) {
-  //     teacher.user.id = formData.id;
-  //   }
-
-  //   if (formData.passwordFormControl === '') {
-  //     delete teacher.user.password;
-  //   } else {
-  //     teacher.user.password_confirmation = formData.passwordFormControl;
-  //   }
-  //   return teacher;
-  // }
   
 }
