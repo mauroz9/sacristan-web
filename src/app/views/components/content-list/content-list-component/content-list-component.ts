@@ -76,11 +76,11 @@ export class ContentListComponent {
       });
     } else if (this.content()?.kind == "profesor") {
       this.teacherService.getTeachers(filterText).subscribe(r => {
-        for (let teacher of r) {
+        for (let teacher of r.content) {
           teacher.kind = "profesor";
         }
 
-        this.content()!.contentList = r
+        this.content()!.contentList = r.content
         this.loadingContent = false
       });
     }

@@ -4,6 +4,7 @@ import { ActionButtonsComponent } from "../../shared/action-buttons-component/ac
 import { TeacherService } from '../../../../logic/services/teacher-service';
 import { Router } from '@angular/router';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
+import { TeacherResponse } from '../../../../logic/interfaces/user/teacher/teacher-interface';
 
 @Component({
   selector: 'app-teacher-row-component',
@@ -15,7 +16,7 @@ export class TeacherRowComponent implements OnInit {
 
   constructor(private teacherService: TeacherService, private router: Router) {}
   
-  teacher = input<Teacher>();
+  teacher = input<TeacherResponse>();
   onDelete = output<void>();
   assignatedStudents: number = 0;
   loading: boolean = false;
@@ -24,7 +25,7 @@ export class TeacherRowComponent implements OnInit {
     this.loading = true;
     let id = this.teacher()?.id;
     if(id){
-      this.teacherService.getAssignedStudentsCount(id).subscribe({
+      this.teacherService.getStudentCountByTeacher(id).subscribe({
         next: (count) => {          
           this.assignatedStudents = count;
           this.loading = false;

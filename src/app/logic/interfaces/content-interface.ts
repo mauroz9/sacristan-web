@@ -1,5 +1,5 @@
 import { Sequence } from "./sequence-interface";
-import { Teacher } from "./teacher-interface";
+import { TeacherResponse } from "./user/teacher/teacher-interface";
 import { StudentResponse } from "./user/student/student-interface";
 export interface Content {
     kind:string,
@@ -8,5 +8,5 @@ export interface Content {
     subTitle: string,
     gender: number,
     plural?: number,
-    contentList: (Sequence | StudentResponse | Teacher)[]
+    contentList: (Sequence | StudentResponse | TeacherResponse)[]
 }
