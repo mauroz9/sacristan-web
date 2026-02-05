@@ -1,7 +1,7 @@
 import { UserResponse } from "../user-interface";
 
 export interface TeacherResponse extends UserResponse {
-    kind: 'teacher',
+    kind: 'profesor',
     role: String,
     teacher: TeacherResponse
 

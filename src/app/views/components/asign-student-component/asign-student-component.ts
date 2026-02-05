@@ -7,6 +7,7 @@ import { StudentService } from '../../../logic/services/student-service';
 import { firstValueFrom } from 'rxjs';
 import { LoadingComponent } from "../shared/loading-component/loading-component";
 import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
+import { TeacherResponse } from '../../../logic/interfaces/user/teacher/teacher-interface';
 
 @Component({
   selector: 'app-asign-student-component',
@@ -18,7 +19,7 @@ export class AsignStudentComponent implements OnInit {
 
     @ViewChild('modal') modal!: TemplateRef<any>;
 
-  teacher: Teacher | null = null;
+  teacher: TeacherResponse | null = null;
   selectedStudent: StudentResponse | null = null; // Use your Student type here
   nonAssignedStudents: StudentResponse[] = [];
   assignedStudents: StudentResponse[] = [];
@@ -54,7 +55,7 @@ export class AsignStudentComponent implements OnInit {
   assignStudent() {
     if (this.selectedStudent) {
       this.studentService.assignTeacherToStudent(this.selectedStudent!.id!, this.teacher!.id!);
-      localStorage.setItem('infoMessage', `Estudiante ${this.selectedStudent.name} ${this.selectedStudent.lastName} asignado al profesor ${this.teacher!.user!.name} ${this.teacher!.user!.lastName} correctamente.`);
+      localStorage.setItem('infoMessage', `Estudiante ${this.selectedStudent.name} ${this.selectedStudent.lastName} asignado al profesor ${this.teacher!.name} ${this.teacher!.lastName} correctamente.`);
       this.modalService.dismissAll();
       this.router.navigate(['/teachers']);
     }
@@ -62,7 +63,7 @@ export class AsignStudentComponent implements OnInit {
 
   unassignStudent(student: StudentResponse) { 
     this.studentService.unassignTeacherFromStudent(student.id!);
-    localStorage.setItem('infoMessage', `Estudiante ${student.name} ${student.lastName} desvinculado del profesor ${this.teacher!.user!.name} ${this.teacher!.user!.lastName} correctamente.`);
+    localStorage.setItem('infoMessage', `Estudiante ${student.name} ${student.lastName} desvinculado del profesor ${this.teacher!.name} ${this.teacher!.lastName} correctamente.`);
     this.modalService.dismissAll();
     this.router.navigate(['/teachers']);
   }

@@ -9,6 +9,7 @@ import { firstValueFrom } from 'rxjs';
 import { Teacher } from '../../../logic/interfaces/teacher-interface';
 import { TeacherService } from '../../../logic/services/teacher-service';
 import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
+import { TeacherResponse } from '../../../logic/interfaces/user/teacher/teacher-interface';
 
 @Component({
   selector: 'app-content-list-page',
@@ -29,7 +30,7 @@ export class ContentListPage implements OnInit {
 
   sequenceList: Sequence[] = [];
   studentList: StudentResponse[] = []
-  teacherList: Teacher[] = [];
+  teacherList: TeacherResponse[] = [];
   infoMessage: string | null = null;
   errorMessage: string | null = null;
 
@@ -71,7 +72,7 @@ export class ContentListPage implements OnInit {
       if (this.url.includes('/students')) {
         this.studentList = (await firstValueFrom(this.studentService.getStudent())).content;
       } else if (this.url.includes('/teachers')) {
-        this.teacherList = await firstValueFrom(this.teacherService.getTeachers());
+        this.teacherList = (await firstValueFrom(this.teacherService.getTeachers())).content;
       } else if (this.url.includes('/sequences')) {
         this.sequenceList = await firstValueFrom(this.sequenceService.getSequences());
       }
