@@ -88,7 +88,7 @@ export class StudentService {
       error: (error) => {
         console.error("Error adding student", error);        
         let errorMessage = 'Error al añadir el alumno: '
-        this.errorHandler(error, errorMessage);
+        this.userService.errorHandler(error, errorMessage);
       }
     });
   }
@@ -107,21 +107,11 @@ export class StudentService {
         error: (error) => {
           console.error("Error updating student", error);
           let errorMessage = 'Error al actualizar el alumno: '
-          this.errorHandler(error, errorMessage);
+          this.userService.errorHandler(error, errorMessage);
         }
       }
     );
   }
 
-  errorHandler(error: any, errorMessage: string) {
-    if (error.status == 400) {
-      if (error.error.error == "001") {
-        errorMessage = errorMessage + "El email " + error.error.detail + " ya está registrado.";
-      }
-      localStorage.setItem('errorMessage',  errorMessage);
-    } else {
-      localStorage.setItem('errorMessage',  "Ha ocurrido un error inesperado.");
-    }
-  }
 
 }

@@ -28,18 +28,18 @@ export class TeacherFormModalComponent {
   }
 
   sendData() {
-    let userFormGroup = this.userFormComponent.userFormGroup;
-    if (userFormGroup.valid) {
-      const formData = userFormGroup.value;
+  let userFormGroup = this.userFormComponent.userFormGroup;
+  if (userFormGroup.valid) {      
+    const formData = userFormGroup.value;
 
-      if(this.userFormComponent.userId != null){
-        formData.id = this.userFormComponent.userId;
-      }
-      
-      // this.teacherService.sendTeacher(formData);
-      this.modalService.dismissAll();
-    } else {
-      userFormGroup.markAllAsTouched();
+    if(this.userFormComponent.userId != null){
+      formData.id = this.userFormComponent.userId;
     }
+    
+    this.teacherService.sendTeacher(formData);
+    this.modalService.dismissAll();
+  } else {
+    userFormGroup.markAllAsTouched();
   }
+}
 }

@@ -19,39 +19,7 @@ export class UserService {
     return this.http.get<UserResponse>(`${API_URL}/api/v1/admin/users/${userId}`);
   }
 
-  // sendUser(formData: any) {
-  //   formData = this.convertFormDataToUser(formData);
-  //   if(formData.id){
-  //     this.updateUser(formData);
-  //   } else {
-  //     this.addUser(formData);
-  //   }
-  // }
 
-
-  addUser(formData: UserResponse) {
-    this.http.post(API_URL + "/api/usuarios/", formData).subscribe
-    ({
-      next: (data) => {
-        localStorage.setItem('infoMessage', 'Usuario añadido correctamente');
-        this.router.navigate(['/users']);
-      },
-      error: (error) => {
-        console.error("Error adding user", error);
-      }
-    });
-  }
-
-  updateUser(formData: UserResponse) {
-    this.http.put(API_URL + "/api/usuarios/" + formData.id, formData).subscribe({
-      next: (data) => {
-        localStorage.setItem('infoMessage', 'Usuario modificado correctamente');
-      },
-      error: (error) => {
-        console.error("Error updating user", error);
-      }
-    });
-  }
 
   convertFormDataToCreateUser(formData: any): CreateUser {
     return { 
@@ -71,6 +39,15 @@ export class UserService {
         email: formData.emailFormControl,
         username: formData.usernameFormControl,
       }
+  }
+
+  errorHandler(error: any, errorMessage: string) {
+    if (error.status == 400) {
+      errorMessage = errorMessage + error.error.es.message;
+      localStorage.setItem('errorMessage',  errorMessage);
+    } else {
+      localStorage.setItem('errorMessage',  "Ha ocurrido un error inesperado.");
+    }
   }
   
 
