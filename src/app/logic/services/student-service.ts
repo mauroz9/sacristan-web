@@ -20,14 +20,14 @@ export class StudentService {
     return this.http.get<PageResponse<StudentResponse>>(this.API_URL + "?q="+query);
   }
 
-  // NOT YET
+
   getStudentsWithTeacher(id: number): Observable<StudentResponse[]> {
-    return this.http.get<StudentResponse[]>(this.API_URL + "/con-profesor/" + id);
+    return this.http.get<StudentResponse[]>(this.API_URL + "/teacher/" + id);
   }
   
   // NOT YET
   getStudentsWithoutTeacher(): Observable<StudentResponse[]> {
-    return this.http.get<StudentResponse[]>(this.API_URL + "/sin-profesor");
+    return this.http.get<StudentResponse[]>(this.API_URL + "/no-teacher");
   }
 
   getStudentById(studentId: number): Observable<StudentResponse> {
@@ -38,9 +38,8 @@ export class StudentService {
     return this.http.delete(this.API_URL + "/" + id)
   }
 
-  // NOT YET
   assignTeacherToStudent(studentId: number, teacherId: number) {
-    return this.http.put(this.API_URL + "/" + studentId + "/asignar-profesor/" + teacherId, {}).subscribe({
+    return this.http.put(this.API_URL + "/" + studentId + "/assign-teacher/" + teacherId, {}).subscribe({
       next: (data) => {
       },
       error: (error) => {
@@ -51,7 +50,7 @@ export class StudentService {
 
   // NOT YET
   unassignTeacherFromStudent(studentId: number) {
-    return this.http.put(this.API_URL + "/" + studentId + "/desasignar-profesor", {}).subscribe({
+    return this.http.put(this.API_URL + "/" + studentId + "/unassign-teacher", {}).subscribe({
       next: (data) => {
         console.log("Teacher unassigned from student successfully");
       },
