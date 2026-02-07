@@ -41,4 +41,11 @@ export class SequenceDetailComponent implements OnInit {
   goBack() {
     this.router.navigate(['/sequences']);
   }
+
+  goEdit() {
+    if (this.sequence) {
+      this.router.navigate(['/sequences/modify', this.sequence.id]);
+    }
+  }
+
 }

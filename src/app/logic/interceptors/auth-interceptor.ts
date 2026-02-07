@@ -30,7 +30,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
       if (error instanceof HttpErrorResponse && error.status === 0) {
         localStorage.setItem('errorMessage', 'El servidor no responde. Contacta con el administrador del sistema.');
-        authService.logout();
+        authService.local_logout();
       }
 
       return throwError(() => error);
