@@ -26,14 +26,14 @@ export class AuthService {
     return this.loggedInSubject.asObservable();
   }
 
-  local_logout() {
+  localLogout() {
     this.loggedInSubject.next(false);
     localStorage.removeItem('auth_token');
     localStorage.removeItem('refresh_token');
   }
 
   logout() {
-    this.local_logout();
+    this.localLogout();
 
     this.http.post(`${API_URL}/logout`, {}).subscribe({
       next: () => {
