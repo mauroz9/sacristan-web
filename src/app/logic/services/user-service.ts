@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { API_URL } from './env';
 import { CreateUser, UpdateUser, UserResponse } from '../interfaces/user/user-interface';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -41,12 +42,15 @@ export class UserService {
       }
   }
 
-  errorHandler(error: any, errorMessage: string) {
-    if (error.status == 400) {
-      errorMessage = errorMessage + error.error.es.message;
-      localStorage.setItem('errorMessage',  errorMessage);
-    } else {
-      localStorage.setItem('errorMessage',  "Ha ocurrido un error inesperado.");
+  handleFormErrors(errors: any, formGroup: FormGroup) {
+    for (let index = 0; index < errors.length; index++) {
+      const element = errors[index];
+      if(element.field == "username"){
+        formGroup.get('usernameFormControl')?.setErrors({'validation': element.message});
+      }
+      if(element.field == "email"){
+        formGroup.get('emailFormControl')?.setErrors({'validation': element.message});
+      }
     }
   }
   

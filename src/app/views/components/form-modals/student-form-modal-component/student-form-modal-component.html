@@ -11,8 +11,8 @@
         <app-user-form-component [kind]="'student'"></app-user-form-component>
 
         <div class="modal-footer border-top-0 pt-2 pb-4 pe-4">
-            <button type="button" class="btn btn-outline-secondary px-4 me-2" (click)="modal.close()" [routerLink]="'/students'">Cancelar</button>
-            <button type="button" class="btn btn-primary-blue px-4" (click)="sendData()">Guardar Cambios</button>
+            <button type="button" class="btn btn-outline-secondary px-4 me-2 weight-500 color-black" (click)="modal.close()" [routerLink]="'/students'">Cancelar</button>
+            <button type="button" class="btn btn-primary-blue px-4 weight-500" (click)="sendData()">{{ functionality() == "modifyStudent" ? 'Guardar Cambios' : 'Crear Alumno' }}</button>
         </div>
     </div>
 </ng-template>

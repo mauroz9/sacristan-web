@@ -34,8 +34,13 @@
                         <input formControlName="emailFormControl" type="email" class="form-control custom-input" placeholder="ejemplo@correo.com">
                     </div>
                     @if (userFormGroup.get('emailFormControl')?.invalid && (userFormGroup.get('emailFormControl')?.touched || userFormGroup.get('emailFormControl')?.dirty)) {
-                        <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir un email válido</p>
+                        @if (userFormGroup.get('emailFormControl')?.errors?.['validation']) {
+                            <p class="invalid-feedback d-block mt-1 mb-0">{{ userFormGroup.get('emailFormControl')?.errors?.['validation'] }}</p>
+                        } @else {
+                            <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir un email válido</p>
+                        }
                     }
+                    
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Nombre de usuario <span class="text-danger">*</span></label>
@@ -44,8 +49,13 @@
                         <input formControlName="usernameFormControl" type="text" class="form-control custom-input" placeholder="nombre usuario">
                     </div>
                     @if (userFormGroup.get('usernameFormControl')?.invalid && (userFormGroup.get('usernameFormControl')?.touched || userFormGroup.get('usernameFormControl')?.dirty)) {
-                        <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir el nombre de usuario</p>
+                        @if (userFormGroup.get('usernameFormControl')?.errors?.['validation']) {
+                            <p class="invalid-feedback d-block mt-1 mb-0">{{ userFormGroup.get('usernameFormControl')?.errors?.['validation'] }}</p>
+                        } @else {
+                            <p class="invalid-feedback d-block mt-1 mb-0">Debes escribir el nombre de usuario</p>
+                        }
                     }
+                    
                 </div>
             </div>
 

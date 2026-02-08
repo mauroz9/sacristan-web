@@ -55,7 +55,7 @@ export class ContentListComponent {
     console.log();
     
     if (this.content()?.kind == "alumno") {
-      this.studentService.getStudent(filterText).subscribe(r => {
+      this.studentService.getStudents(filterText).subscribe(r => {
 
         for (let student of r.content) {
           student.kind = "alumno";

@@ -8,3 +8,11 @@
     background-color: #162e6b; /* Un azul un poco más oscuro */
     color: white;
 }
+
+.weight-500 {
+    font-weight: 500;
+}
+
+.color-black {
+    color: black;
+}

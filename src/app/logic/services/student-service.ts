@@ -7,6 +7,7 @@ import { API_URL } from './env';
 import { StudentResponse } from '../interfaces/user/student/student-interface';
 import { PageResponse } from '../interfaces/utils/page-interface';
 import { CreateUser } from '../interfaces/user/user-interface';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class StudentService {
 
   API_URL = API_URL + "/api/v1/admin/students";
 
-  getStudent(query:string = ""): Observable<PageResponse<StudentResponse>> {
+  getStudents(query:string = ""): Observable<PageResponse<StudentResponse>> {
     return this.http.get<PageResponse<StudentResponse>>(this.API_URL + "?q="+query);
   }
 
@@ -25,7 +26,6 @@ export class StudentService {
     return this.http.get<StudentResponse[]>(this.API_URL + "/teacher/" + id);
   }
   
-  // NOT YET
   getStudentsWithoutTeacher(): Observable<StudentResponse[]> {
     return this.http.get<StudentResponse[]>(this.API_URL + "/no-teacher");
   }
@@ -48,7 +48,6 @@ export class StudentService {
     }); 
   }
 
-  // NOT YET
   unassignTeacherFromStudent(studentId: number) {
     return this.http.put(this.API_URL + "/" + studentId + "/unassign-teacher", {}).subscribe({
       next: (data) => {
@@ -60,57 +59,28 @@ export class StudentService {
     });
   }
   
-  sendStudent(formData: any) {
-    let originalId = formData.id || null
-    if(originalId){
-      formData = this.userService.convertFormDataToUpdateUser(formData);
-      this.updateStudent(formData, originalId);
-    } else {
-      formData = this.userService.convertFormDataToCreateUser(formData);
-      this.addStudent(formData);
-    }
-  }
-
-  addStudent(formData: CreateUser) {
-    console.log(formData);
+  sendStudent(formData: any): Observable<StudentResponse> {
+      let originalId = formData.id || null
+      if(originalId){
+        formData = this.userService.convertFormDataToUpdateUser(formData);
+        return this.updateStudent(formData, originalId);
+      } else {
+        formData = this.userService.convertFormDataToCreateUser(formData);
+        return this.addStudent(formData);
+      }
     
-    this.http.post(this.API_URL, formData).pipe(
-      finalize(() => {
-        console.log("Returning to students");
-        this.router.navigate(['/students']);
-      })
-    ).subscribe({
-      next: (data) => {
-        console.log(data);
-        localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
-      },
-      error: (error) => {
-        console.error("Error adding student", error);        
-        let errorMessage = 'Error al añadir el alumno: '
-        this.userService.errorHandler(error, errorMessage);
-      }
-    });
   }
 
-  updateStudent(formData: StudentResponse, originalId: number) {        
-    this.http.put(this.API_URL + "/" + originalId, formData).pipe(
-      finalize(() => {
-        console.log("Returning to students");
-        this.router.navigate(['/students']);
-      })
-    ).subscribe(
-      {
-        next: (data) => {
-          localStorage.setItem('infoMessage', 'Alumno actualizado correctamente');
-        },
-        error: (error) => {
-          console.error("Error updating student", error);
-          let errorMessage = 'Error al actualizar el alumno: '
-          this.userService.errorHandler(error, errorMessage);
-        }
-      }
-    );
+  addStudent(formData: CreateUser): Observable<StudentResponse> {
+    return this.http.post<StudentResponse>(this.API_URL, formData);
   }
 
+  updateStudent(formData: StudentResponse, originalId: number) : Observable<StudentResponse> {        
+    return this.http.put<StudentResponse>(this.API_URL + "/" + originalId, formData)
+  }
+
+  handleFormErrors(errors: any, formGroup: FormGroup) {
+    this.userService.handleFormErrors(errors, formGroup);
+  }
 
 }

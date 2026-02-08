@@ -4,6 +4,7 @@ import { UserFormComponent } from "../../form-component/user-form-component/user
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StudentService } from '../../../../logic/services/student-service';
 import { TeacherService } from '../../../../logic/services/teacher-service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-teacher-form-modal-component',
@@ -20,26 +21,45 @@ export class TeacherFormModalComponent {
   functionality = input<string>();
 
   openModal(modalContent: TemplateRef<any>) {
-    this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
+    this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false, size: 'lg' });
   }
 
   ngAfterViewInit(): void {
     this.openModal(this.modal);
   }
 
-  sendData() {
-  let userFormGroup = this.userFormComponent.userFormGroup;
-  if (userFormGroup.valid) {      
-    const formData = userFormGroup.value;
+    sendData() {    
+    let userFormGroup = this.userFormComponent.userFormGroup;
+    if (userFormGroup.valid) {
+            const formData = userFormGroup.value;
 
-    if(this.userFormComponent.userId != null){
-      formData.id = this.userFormComponent.userId;
+      if(this.userFormComponent.userId != null){
+        formData.id = this.userFormComponent.userId;
+      }
+      
+      this.teacherService.sendTeacher(formData).subscribe({
+        next: (data) => {
+          console.log("Teacher data sent successfully", data);
+          this.modalService.dismissAll();
+        },
+        error: (error) => {
+          console.error("Error sending teacher data: ");
+          if (error.status == 400) {
+            this.teacherService.handleFormErrors(error.error["invalid-params"], this.userFormComponent.userFormGroup);
+          } else {
+            alert("Ha sucedido un error inesperado, pongase en contacto con el soporte.");
+            console.error(error);
+          }
+        }
+      });
+
+    } else {
+      alert("El formulario no es válido. Por favor, complete todos los campos requeridos correctamente.");
+      userFormGroup.markAllAsTouched();
     }
-    
-    this.teacherService.sendTeacher(formData);
-    this.modalService.dismissAll();
-  } else {
-    userFormGroup.markAllAsTouched();
   }
+
+  
+
 }
-}
+
