@@ -1,10 +1,8 @@
 import { Component, input, TemplateRef, ViewChild } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { UserFormComponent } from "../../form-component/user-form-component/user-form-component";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { StudentService } from '../../../../logic/services/student-service';
 import { TeacherService } from '../../../../logic/services/teacher-service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-teacher-form-modal-component',
@@ -16,7 +14,7 @@ export class TeacherFormModalComponent {
   @ViewChild('modal') modal!: TemplateRef<any>;
   @ViewChild(UserFormComponent) userFormComponent!: UserFormComponent;
 
-  constructor (private modalService: NgbModal, private teacherService: TeacherService) {}
+  constructor (private modalService: NgbModal, private teacherService: TeacherService, private router: Router) {}
 
   functionality = input<string>();
 
@@ -41,6 +39,7 @@ export class TeacherFormModalComponent {
         next: (data) => {
           console.log("Teacher data sent successfully", data);
           this.modalService.dismissAll();
+          this.router.navigate(['/teachers']);
         },
         error: (error) => {
           console.error("Error sending teacher data: ");

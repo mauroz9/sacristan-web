@@ -58,6 +58,7 @@ export class UserService {
         formGroup.get('verifyPasswordFormControl')?.setErrors({'validation': element.message});
       }
     }
+    formGroup.markAllAsTouched();
   }
   
 

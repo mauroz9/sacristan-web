@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { finalize, Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { UserService } from './user-service';
 import { API_URL } from './env';
 import { StudentResponse } from '../interfaces/user/student/student-interface';
@@ -13,7 +12,7 @@ import { FormGroup } from '@angular/forms';
   providedIn: 'root',
 })
 export class StudentService {
-  constructor (private http:HttpClient, private router: Router, private userService:UserService) {}
+  constructor (private http:HttpClient, private userService:UserService) {}
 
   API_URL = API_URL + "/api/v1/admin/students";
 

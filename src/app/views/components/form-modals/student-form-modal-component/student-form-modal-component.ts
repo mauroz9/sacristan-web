@@ -1,5 +1,5 @@
 import { Component, input, TemplateRef, ViewChild } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { UserFormComponent } from "../../form-component/user-form-component/user-form-component";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StudentService } from '../../../../logic/services/student-service';
@@ -14,7 +14,7 @@ export class StudentFormModalComponent {
   @ViewChild('modal') modal!: TemplateRef<any>;
   @ViewChild(UserFormComponent) userFormComponent!: UserFormComponent;
 
-  constructor (private modalService: NgbModal, private studentService: StudentService) {}
+  constructor (private modalService: NgbModal, private studentService: StudentService, private router: Router) {}
 
   functionality = input<string>(); // Usada en el frontend para mostrar si es "Crear" o "Editar".
 
@@ -39,6 +39,7 @@ export class StudentFormModalComponent {
         next: (data) => {
           console.log("Student data sent successfully", data);
           this.modalService.dismissAll();
+          this.router.navigate(['/students']);
         },
         error: (error) => {
           console.error("Error sending student data: ");
