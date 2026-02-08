@@ -30,3 +30,56 @@
 .btn-dark-blue:hover {
     background-color: #162e6b;
 }
+
+/* Custom Navy Color from Image */
+.text-navy {
+  color: #1F3C8B;
+}
+
+.btn-navy {
+  background-color: #1F3C8B;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.btn-navy:hover {
+  background-color: #162e6b;
+  color: white;
+}
+
+/* Card Styling */
+.card {
+  border-radius: 12px;
+}
+
+.form-control:focus, .form-select:focus {
+  box-shadow: none;
+  border-color: #dee2e6;
+}
+
+/* Sort Button Animation */
+.sort-btn {
+  transition: all 0.3s ease;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tooltip-label {
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.7rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.position-relative:hover .tooltip-label {
+  opacity: 1;
+}

@@ -8,5 +8,12 @@ export interface Content {
     subTitle: string,
     gender: number,
     plural?: number,
+    searchparams?: string,
+    sortparams? : SortParam[],
     contentList: (Sequence | StudentResponse | TeacherResponse)[]
+}
+
+export interface SortParam {
+    key: string,
+    value: string
 }

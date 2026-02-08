@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Content } from '../../../logic/interfaces/content-interface';
+import { Content, SortParam } from '../../../logic/interfaces/content-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
 import { Router } from '@angular/router';
@@ -31,6 +31,7 @@ export class ContentListPage implements OnInit {
   sequenceList: Sequence[] = [];
   studentList: StudentResponse[] = []
   teacherList: TeacherResponse[] = [];
+  sortParams: SortParam[] = [];
   infoMessage: string | null = null;
   errorMessage: string | null = null;
 
@@ -39,6 +40,7 @@ export class ContentListPage implements OnInit {
     url: "/sequences",
     title: "Secuencia de pasos",
     subTitle: "Gestiona las secuencias de pictogramas para los estudiantes",
+    searchparams: "Buscar por título o descripción",
     gender: 0,
     contentList: []
   }
@@ -71,8 +73,12 @@ export class ContentListPage implements OnInit {
       this.url = this.router.url;
       if (this.url.includes('/students')) {
         this.studentList = (await firstValueFrom(this.studentService.getStudents())).content;
+        this.sortParams = await firstValueFrom(this.studentService.getSortParams());
+        console.log(this.sortParams);
+        
       } else if (this.url.includes('/teachers')) {
         this.teacherList = (await firstValueFrom(this.teacherService.getTeachers())).content;
+        this.sortParams = await firstValueFrom(this.teacherService.getSortParams());
       } else if (this.url.includes('/sequences')) {
         this.sequenceList = await firstValueFrom(this.sequenceService.getSequences());
       }
@@ -108,18 +114,41 @@ export class ContentListPage implements OnInit {
         student.kind = "alumno";
       }      
 
+      let searchParams = ""
+
+      for (let i = 0; i < this.sortParams.length; i++) {
+        if (i == this.sortParams.length - 1) {
+          searchParams += this.sortParams[i].key.toLowerCase();
+        } else {
+          searchParams += this.sortParams[i].key.toLowerCase() + ", ";
+        }
+      }
+
       this.content = {
         kind: "alumno",
         url: "/students",
         title: "Listado de alumnos",
         subTitle: "Gestiona los alumnos del centro",
         gender: 1,
+        searchparams: "Buscar por " + searchParams,
+        sortparams: this.sortParams,
         contentList: this.studentList
       }
     } else if (this.url.includes('/teachers')) {
       for (let teacher of this.teacherList) {
         teacher.kind = "profesor";
       }
+
+      let searchParams = ""
+
+      for (let i = 0; i < this.sortParams.length; i++) {
+        if (i == this.sortParams.length - 1) {
+          searchParams += this.sortParams[i].key.toLowerCase();
+        } else {
+          searchParams += this.sortParams[i].key.toLowerCase() + ", ";
+        }
+      }
+
       this.content = {
         kind: "profesor",
         url: "/teachers",
@@ -127,6 +156,8 @@ export class ContentListPage implements OnInit {
         subTitle: "Gestiona los profesores del centro",
         gender: 1,
         plural: 1,
+        searchparams: "Buscar por " + searchParams,
+      sortparams: this.sortParams,
         contentList: this.teacherList
       }
     } else {

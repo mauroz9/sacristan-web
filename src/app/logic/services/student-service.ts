@@ -7,17 +7,19 @@ import { StudentResponse } from '../interfaces/user/student/student-interface';
 import { PageResponse } from '../interfaces/utils/page-interface';
 import { CreateUser } from '../interfaces/user/user-interface';
 import { FormGroup } from '@angular/forms';
+import { SortParam } from '../interfaces/content-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudentService {
+  
   constructor (private http:HttpClient, private userService:UserService) {}
 
   API_URL = API_URL + "/api/v1/admin/students";
 
-  getStudents(query:string = ""): Observable<PageResponse<StudentResponse>> {
-    return this.http.get<PageResponse<StudentResponse>>(this.API_URL + "?q="+query);
+  getStudents(query:string = "", sortDir: string = "asc", sortBy: string = "user.name"): Observable<PageResponse<StudentResponse>> {
+    return this.http.get<PageResponse<StudentResponse>>(this.API_URL + "?q="+query+"&sort="+sortBy+","+sortDir);
   }
 
 
@@ -80,6 +82,10 @@ export class StudentService {
 
   handleFormErrors(errors: any, formGroup: FormGroup) {
     this.userService.handleFormErrors(errors, formGroup);
+  }
+
+  getSortParams(): Observable<SortParam[]> {
+    return this.http.get<SortParam[]>(this.API_URL + "/sort-params");
   }
 
 }
