@@ -51,6 +51,12 @@ export class UserService {
       if(element.field == "email"){
         formGroup.get('emailFormControl')?.setErrors({'validation': element.message});
       }
+      if(element.field == "password"){
+        formGroup.get('passwordFormControl')?.setErrors({'validation': element.message});
+      }
+      if(element.field == "verifyPassword"){
+        formGroup.get('verifyPasswordFormControl')?.setErrors({'validation': element.message});
+      }
     }
   }
   
