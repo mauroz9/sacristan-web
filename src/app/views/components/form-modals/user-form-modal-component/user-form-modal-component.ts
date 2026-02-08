@@ -17,7 +17,7 @@ export class UserFormModalComponent {
   constructor (private modalService: NgbModal, private userService: UserService) {}
 
   openModal(modalContent: TemplateRef<any>) {
-    this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
+    this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false, size: 'lg' });
   }
 
   ngAfterViewInit(): void {

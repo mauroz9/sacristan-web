@@ -11,8 +11,8 @@
         <app-user-form-component [kind]="'teacher'"></app-user-form-component>
 
         <div class="modal-footer border-top-0 pt-2 pb-4 pe-4">
-            <button type="button" class="btn btn-outline-secondary px-4 me-2" (click)="modal.close()" [routerLink]="'/teachers'">Cancelar</button>
-            <button type="button" class="btn btn-primary-blue px-4" (click)="sendData()">Guardar Cambios</button>
+            <button type="button" class="btn btn-outline-secondary px-4 me-2 fw-medium text-dark" (click)="modal.close()" [routerLink]="'/teachers'">Cancelar</button>
+            <button type="button" class="btn btn-primary-blue px-4 fw-medium" (click)="sendData()">{{ functionality() == "modifyTeacher" ? 'Guardar Cambios' : 'Crear Profesor' }}</button>
         </div>
     </div>
 </ng-template>

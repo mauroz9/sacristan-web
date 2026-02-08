@@ -1,5 +1,5 @@
 import { Component, input, TemplateRef, ViewChild } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { UserFormComponent } from "../../form-component/user-form-component/user-form-component";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StudentService } from '../../../../logic/services/student-service';
@@ -14,35 +14,46 @@ export class StudentFormModalComponent {
   @ViewChild('modal') modal!: TemplateRef<any>;
   @ViewChild(UserFormComponent) userFormComponent!: UserFormComponent;
 
-  constructor (private modalService: NgbModal, private studentService: StudentService) {}
+  constructor (private modalService: NgbModal, private studentService: StudentService, private router: Router) {}
 
   functionality = input<string>(); // Usada en el frontend para mostrar si es "Crear" o "Editar".
 
   openModal(modalContent: TemplateRef<any>) {
-    this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
+    this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false, size: 'lg' });
   }
 
   ngAfterViewInit(): void {
     this.openModal(this.modal);
   }
 
-  sendData() {
-    console.log("HI>?");
-    
+  sendData() {    
     let userFormGroup = this.userFormComponent.userFormGroup;
     if (userFormGroup.valid) {
-      console.log("ENTRO?");
-      
-      const formData = userFormGroup.value;
+            const formData = userFormGroup.value;
 
       if(this.userFormComponent.userId != null){
         formData.id = this.userFormComponent.userId;
       }
       
-      this.studentService.sendStudent(formData);
-      this.modalService.dismissAll();
+      this.studentService.sendStudent(formData).subscribe({
+        next: (data) => {
+          console.log("Student data sent successfully", data);
+          this.modalService.dismissAll();
+          this.router.navigate(['/students']);
+        },
+        error: (error) => {
+          console.error("Error sending student data: ");
+          if (error.status == 400) {
+            this.studentService.handleFormErrors(error.error["invalid-params"], this.userFormComponent.userFormGroup);
+          } else {
+            alert("Ha sucedido un error inesperado, pongase en contacto con el soporte.");
+            console.error(error);
+          }
+        }
+      });
+
     } else {
-      console.log("Form is invalid");
+      alert("El formulario no es válido. Por favor, complete todos los campos requeridos correctamente.");
       userFormGroup.markAllAsTouched();
     }
   }

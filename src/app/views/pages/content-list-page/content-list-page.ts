@@ -70,7 +70,7 @@ export class ContentListPage implements OnInit {
     try {
       this.url = this.router.url;
       if (this.url.includes('/students')) {
-        this.studentList = (await firstValueFrom(this.studentService.getStudent())).content;
+        this.studentList = (await firstValueFrom(this.studentService.getStudents())).content;
       } else if (this.url.includes('/teachers')) {
         this.teacherList = (await firstValueFrom(this.teacherService.getTeachers())).content;
       } else if (this.url.includes('/sequences')) {
