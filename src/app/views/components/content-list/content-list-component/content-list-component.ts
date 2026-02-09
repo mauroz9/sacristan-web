@@ -67,7 +67,7 @@ export class ContentListComponent {
     let r;
     
     if (this.content()?.kind == "alumno") {
-      r = await firstValueFrom(this.studentService.getStudents(this.searchTerm, this.direction, this.sortBy));
+      r = await firstValueFrom(this.studentService.getStudents(this.searchTerm, this.sortBy, this.direction));
 
       for (let student of r.content) {
         student.kind = "alumno";
@@ -76,16 +76,16 @@ export class ContentListComponent {
       this.content()!.contentList = r.content
 
     } else if (this.content()?.kind == "secuencia") {
-      this.sequenceService.getSequences(this.searchTerm).subscribe(r => {
+      this.sequenceService.getSequences(this.searchTerm, this.sortBy, this.direction).subscribe(r => {
 
-        for (let sequence of r) {
+        for (let sequence of r.content) {
           sequence.kind = "secuencia";
         }
 
-        this.content()!.contentList = r
+        this.content()!.contentList = r.content
       });
     } else if (this.content()?.kind == "profesor") {
-      r = await firstValueFrom(this.teacherService.getTeachers(this.searchTerm, this.direction, this.sortBy));
+      r = await firstValueFrom(this.teacherService.getTeachers(this.searchTerm, this.sortBy, this.direction));
       for (let teacher of r.content) {
         teacher.kind = "profesor";
       }

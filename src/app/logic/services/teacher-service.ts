@@ -18,7 +18,7 @@ export class TeacherService {
 
   API_URL = API_URL + "/api/v1/admin/teachers";
 
-  getTeachers(query:string = "", sortDir: string = "asc", sortBy: string = "user.name"): Observable<PageResponse<TeacherResponse>> {
+  getTeachers(query:string = "", sortBy: string = "user.name", sortDir: string = "asc"): Observable<PageResponse<TeacherResponse>> {
     return this.http.get<PageResponse<TeacherResponse>>(this.API_URL + "?q=" + query + "&sort=" + sortBy + "," + sortDir);
   }
 

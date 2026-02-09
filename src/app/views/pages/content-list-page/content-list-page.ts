@@ -48,7 +48,6 @@ export class ContentListPage implements OnInit {
   content: Content = this.contentSequence;
   loading: boolean = true;
 
-
   reloadContent() {
     this.getData();
 
@@ -80,7 +79,8 @@ export class ContentListPage implements OnInit {
         this.teacherList = (await firstValueFrom(this.teacherService.getTeachers())).content;
         this.sortParams = await firstValueFrom(this.teacherService.getSortParams());
       } else if (this.url.includes('/sequences')) {
-        this.sequenceList = await firstValueFrom(this.sequenceService.getSequences());
+        this.sequenceList = (await firstValueFrom(this.sequenceService.getSequences())).content;
+        this.sortParams = await firstValueFrom(this.sequenceService.getSortParams());
       }
       this.loadData();
     } catch (error: any) {
@@ -107,6 +107,19 @@ export class ContentListPage implements OnInit {
       this.contentSequence.contentList = this.sequenceList;
       
       this.content = this.contentSequence;
+
+      let searchParams = ""
+
+      for (let i = 0; i < this.sortParams.length; i++) {
+        if (i == this.sortParams.length - 1) {
+          searchParams += this.sortParams[i].key.toLowerCase();
+        } else {
+          searchParams += this.sortParams[i].key.toLowerCase() + ", ";
+        }
+      }
+
+      this.content.searchparams = searchParams;
+      this.content.sortparams= this.sortParams
 
     } else if (this.url.includes('/students')) {
       
