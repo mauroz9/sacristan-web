@@ -41,20 +41,20 @@ export class ContentListComponent {
   sortTooltip: string = 'Orden ascendente';
   direction: string = 'asc';
 
-  constructor(private router: Router, private studentService: StudentService, private sequenceService: SequenceService, private teacherService: TeacherService) {         
-      if (this.router.url.includes('students/new')) {       
-        this.functionality = "newStudent";
-      } else if (this.router.url.includes('students/modify')) {
-        this.functionality = "modifyStudent";
-      } else if (this.router.url.includes('students/asign-sequences')) {
-        this.functionality = "assignSequences";
-      } else if (this.router.url.includes('teachers/new')) {
-        this.functionality = "newTeacher";
-      } else if (this.router.url.includes('teachers/modify')) {
-        this.functionality = "modifyTeacher";
-      } else if (this.router.url.includes('teachers/assign-students')) {
-        this.functionality = "assignStudent";
-      }
+  constructor(private router: Router, private studentService: StudentService, private sequenceService: SequenceService, private teacherService: TeacherService) {
+    if (this.router.url.includes('students/new')) {
+      this.functionality = "newStudent";
+    } else if (this.router.url.includes('students/modify')) {
+      this.functionality = "modifyStudent";
+    } else if (this.router.url.includes('students/asign-sequences')) {
+      this.functionality = "assignSequences";
+    } else if (this.router.url.includes('teachers/new')) {
+      this.functionality = "newTeacher";
+    } else if (this.router.url.includes('teachers/modify')) {
+      this.functionality = "modifyTeacher";
+    } else if (this.router.url.includes('teachers/assign-students')) {
+      this.functionality = "assignStudent";
+    }
   }
 
   onSearchChange() {
@@ -65,9 +65,9 @@ export class ContentListComponent {
   async sortContent() {
     console.log("Sort content called");
     let r;
-    
+
     if (this.content()?.kind == "alumno") {
-      r = await firstValueFrom(this.studentService.getStudents(this.searchTerm, this.direction, this.sortBy));
+      r = await firstValueFrom(this.studentService.getStudents(this.searchTerm, this.sortBy, this.direction));
 
       for (let student of r.content) {
         student.kind = "alumno";
@@ -76,16 +76,16 @@ export class ContentListComponent {
       this.content()!.contentList = r.content
 
     } else if (this.content()?.kind == "secuencia") {
-      this.sequenceService.getSequences(this.searchTerm).subscribe(r => {
+      r = await firstValueFrom(this.sequenceService.getSequences(this.searchTerm, this.sortBy, this.direction));
 
-        for (let sequence of r) {
-          sequence.kind = "secuencia";
-        }
+      for (let sequence of r.content) {
+        sequence.kind = "secuencia";
+      }
 
-        this.content()!.contentList = r
-      });
+      this.content()!.contentList = r.content
+
     } else if (this.content()?.kind == "profesor") {
-      r = await firstValueFrom(this.teacherService.getTeachers(this.searchTerm, this.direction, this.sortBy));
+      r = await firstValueFrom(this.teacherService.getTeachers(this.searchTerm, this.sortBy, this.direction));
       for (let teacher of r.content) {
         teacher.kind = "profesor";
       }
@@ -93,12 +93,12 @@ export class ContentListComponent {
       this.content()!.contentList = r.content
     }
 
-    this.loadingContent.set(false); 
+    this.loadingContent.set(false);
   }
 
   onSortParamChange(event: any) {
     this.sortBy = event.target.value;
-    this.loadingContent.set(true);    
+    this.loadingContent.set(true);
     this.sortContent();
   }
 
