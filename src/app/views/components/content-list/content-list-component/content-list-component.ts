@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { SequenceRowComponent } from '../sequence-row-component/sequence-row-component';
 import { Content } from '../../../../logic/interfaces/content-interface';
 import { StudentRowComponent } from "../student-row-component/student-row-component";
@@ -13,16 +13,18 @@ import { StudentService } from '../../../../logic/services/student-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SequenceService } from '../../../../logic/services/sequence-service';
 import { TeacherService } from '../../../../logic/services/teacher-service';
+import { FormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-content-list-component',
-  imports: [SequenceRowComponent, 
-    StudentRowComponent, RouterLink, 
-    AsignSequencesComponent, StudentFormModalComponent, 
-    TeacherRowComponent, TeacherFormModalComponent, 
+  imports: [SequenceRowComponent,
+    StudentRowComponent, RouterLink,
+    AsignSequencesComponent, StudentFormModalComponent,
+    TeacherRowComponent, TeacherFormModalComponent,
     AsignStudentComponent, LoadingComponent,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule, FormsModule, NgClass],
   templateUrl: './content-list-component.html',
   styleUrl: './content-list-component.css',
 })
@@ -31,8 +33,13 @@ export class ContentListComponent {
   content = input<Content>();
   loading = input<boolean>();
   reload = output<void>();
-  loadingContent = false;
+  loadingContent = signal<boolean>(false);
   functionality = "";
+  searchTerm: string = '';
+  sortBy: string = 'user.name';
+  isAscending: boolean = true;
+  sortTooltip: string = 'Orden ascendente';
+  direction: string = 'asc';
 
   constructor(private router: Router, private studentService: StudentService, private sequenceService: SequenceService, private teacherService: TeacherService) {         
       if (this.router.url.includes('students/new')) {       
@@ -50,45 +57,56 @@ export class ContentListComponent {
       }
   }
 
-  filtarBack(filterText: string) {
-    this.loadingContent = true
-    console.log();
+  onSearchChange() {
+    this.loadingContent.set(true);
+    this.sortContent();
+  }
+
+  async sortContent() {
+    console.log("Sort content called");
+    let r;
     
     if (this.content()?.kind == "alumno") {
-      this.studentService.getStudents(filterText).subscribe(r => {
+      r = await firstValueFrom(this.studentService.getStudents(this.searchTerm, this.direction, this.sortBy));
 
-        for (let student of r.content) {
-          student.kind = "alumno";
-        }
+      for (let student of r.content) {
+        student.kind = "alumno";
+      }
 
-        this.content()!.contentList = r.content
-        this.loadingContent = false
-      });
+      this.content()!.contentList = r.content
+
     } else if (this.content()?.kind == "secuencia") {
-      this.sequenceService.getSequences(filterText).subscribe(r => {
+      this.sequenceService.getSequences(this.searchTerm).subscribe(r => {
 
         for (let sequence of r) {
           sequence.kind = "secuencia";
         }
 
         this.content()!.contentList = r
-        this.loadingContent = false
       });
     } else if (this.content()?.kind == "profesor") {
-      this.teacherService.getTeachers(filterText).subscribe(r => {
-        for (let teacher of r.content) {
-          teacher.kind = "profesor";
-        }
+      r = await firstValueFrom(this.teacherService.getTeachers(this.searchTerm, this.direction, this.sortBy));
+      for (let teacher of r.content) {
+        teacher.kind = "profesor";
+      }
 
-        this.content()!.contentList = r.content
-        this.loadingContent = false
-      });
+      this.content()!.contentList = r.content
     }
+
+    this.loadingContent.set(false); 
   }
 
-  clearFilter(filterInput: HTMLInputElement) {
-    filterInput.value = ""
-    this.filtarBack("")
+  onSortParamChange(event: any) {
+    this.sortBy = event.target.value;
+    this.loadingContent.set(true);    
+    this.sortContent();
+  }
+
+  async toggleSort() {
+    this.isAscending = !this.isAscending;
+    this.sortTooltip = this.isAscending ? 'Orden ascendente' : 'Orden descendente';
+    this.direction = this.isAscending ? 'asc' : 'desc';
+    await this.sortContent()
   }
 
   reloadContent() {
