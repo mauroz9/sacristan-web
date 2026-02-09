@@ -1,0 +1,265 @@
+/* Variables de color basadas en la imagen */
+:host {
+    /* Azul oscuro del logo/títulos */
+    --accent-yellow: #F4C430;
+    /* Amarillo del logo */
+    --bg-color: #DEE4EB;
+    /* Gris azulado de fondo general */
+    --card-bg: #ffffff;
+    --text-dark: #1a2b48;
+    --text-muted: #6c757d;
+    --box-bg: #E9EEF4;
+    /* Fondo de la caja de sugerencias */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.container-404 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eef2f5 0%, #dce4ec 100%);
+    padding: 20px;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* --- Tarjeta Principal --- */
+.card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px var(--shadow-color);
+    width: 100%;
+    max-width: 650px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+/* Borde decorativo superior */
+.top-accent {
+    height: 6px;
+    width: 100%;
+    background: var(--primary-blue);
+}
+
+.bottom-accent {
+    height: 6px;
+    width: 100%;
+    background: var(--secondary-yellow)
+}
+
+.card-content {
+    padding: 40px 50px;
+    text-align: center;
+}
+
+/* Contenedor principal de la cabecera */
+.header-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Ajusta este margen según cuánto espacio quieras debajo antes del título "Página no encontrada" */
+  margin-bottom: 30px; 
+  padding-top: 20px;
+}
+
+/* El contenedor flexible que alinea el 4-IMG-4 */
+.integrated-404 {
+  display: flex;
+  align-items: center; /* Centra verticalmente los números y la imagen */
+  justify-content: center;
+  gap: 15px; /* Espacio entre los números y el logo */
+}
+
+/* Estilo para los números '4' */
+.huge-number {
+  font-size: 150px; /* Tamaño gigante */
+  font-weight: 800; /* Muy grueso */
+  line-height: 1;
+  /* Usamos un color gris azulado claro para que no compita demasiado con el título principal,
+     similar al efecto de "fondo" que tenías antes. */
+  color: #dce4ec; 
+  user-select: none; /* Evita que se seleccione como texto */
+}
+
+/* Estilo para la imagen que actúa como '0' */
+.logo-as-zero {
+  /* IMPORTANTE: La altura y anchura deben ser similares al font-size 
+     para que se vea equilibrado. */
+  height: 110px;
+  width: 110px;
+  
+  /* Esto asegura que la imagen sea un círculo perfecto */
+  border-radius: 50%;
+  
+  /* "cover" asegura que si tu logo no es cuadrado, no se estire raro, 
+     sino que rellene el círculo recortando lo que sobre. */
+  object-fit: cover;
+  
+  /* Opcional: Una sombra suave para darle profundidad y separarlo del fondo */
+  box-shadow: 0 8px 20px rgba(35, 64, 114, 0.15);
+  
+  /* Opcional: Si tu PNG tiene fondo transparente, esto asegura un fondo blanco limpio detrás */
+  background-color: white; 
+}
+
+/* RESPONSIVE: Ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+  .huge-number {
+    font-size: 100px;
+  }
+  .logo-as-zero {
+    height: 100px;
+    width: 100px;
+  }
+  .integrated-404 {
+    gap: 10px;
+  }
+}
+
+/* El número "404" gigante de fondo */
+.bg-number {
+    position: absolute;
+    font-size: 140px;
+    font-weight: 700;
+    color: #e9ecef;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+}
+
+/* Logo flotante */
+.logo-box {
+    position: relative;
+    z-index: 2;
+    border-radius: 16px;
+    background: white;
+    /* Pequeño borde blanco alrededor del logo si se desea */
+    box-shadow: 0 4px 12px rgba(35, 64, 114, 0.25);
+    display: inline-block;
+}
+
+/* --- Tipografía --- */
+.title {
+    color: var(--primary-blue);
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.instruction {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* --- Caja de Sugerencias --- */
+.suggestion-box {
+    background-color: var(--box-bg);
+    border-radius: 8px;
+    padding: 20px 30px;
+    text-align: left;
+    margin-bottom: 35px;
+}
+
+.suggestion-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.suggestion-box ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 0;
+    color: #495057;
+}
+
+.suggestion-box ul li {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.suggestion-box ul li:last-child {
+    margin-bottom: 0;
+}
+
+/* --- Botones --- */
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+/* Botón Outline (Volver atrás) */
+.btn-outline {
+    background: transparent;
+    color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.btn-outline:hover {
+    background-color: rgba(35, 64, 114, 0.05);
+}
+
+/* Botón Primary (Ir al inicio) */
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+
+.btn-primary:hover {
+    background-color: #1a3158;
+    box-shadow: 0 4px 6px rgba(35, 64, 114, 0.2);
+}
+
+/* --- Footer --- */
+.footer {
+    font-size: 12px;
+    color: #9aa0a6;
+    text-align: center;
+}
+
+/* --- Responsive --- */
+@media (max-width: 500px) {
+    .actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .card-content {
+        padding: 30px 20px;
+    }
+}

@@ -4,6 +4,7 @@ import { SequenceFormComponent } from './views/components/form-component/sequenc
 import { SequenceDetailComponent } from './views/components/sequence-detail-component/sequence-detail-component';
 import { LoginPage } from './views/pages/login-page/login-page';
 import { authGuard } from './logic/guards/auth-guard';
+import { ContentNotFoundPage } from './views/pages/content-not-found-page/content-not-found-page';
 
 export const routes: Routes = [
     // --- RUTA PÚBLICA (LOGIN) ---
@@ -78,6 +79,12 @@ export const routes: Routes = [
         component: ContentListPage, 
         canActivate: [authGuard]
     },
+    {
+        path: 'not-found',
+        component: ContentNotFoundPage,
+        canActivate: [authGuard],
+        data: { showMenu: false }
+    },
 
     // --- REDIRECCIONES ---
     {
@@ -87,7 +94,7 @@ export const routes: Routes = [
     },
     {
         path: '**', 
-        redirectTo: '/sequences', 
+        redirectTo: '/not-found', 
         pathMatch: 'full'
     },
 ];

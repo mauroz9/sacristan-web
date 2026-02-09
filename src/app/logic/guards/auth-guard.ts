@@ -14,6 +14,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
   if (await firstValueFrom(authService.getLoggedInStatus())) {
     return true;
   } else {
+    localStorage.setItem('errorMessage', 'Debes iniciar sesión para acceder a esta página.');
     router.navigate(['/login']);
     return false;
   }
