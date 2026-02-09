@@ -118,4 +118,9 @@ export class StepModalComponent implements OnInit {
     this.pictograms = [];
     this.close.emit();
   }
+
+  get hasActiveSearch(): boolean {
+    const searchValue = (this.searchControl.value ?? '').trim();
+    return searchValue.length > 0 || this.selectedCategory !== 'Todas';
+  }
 }

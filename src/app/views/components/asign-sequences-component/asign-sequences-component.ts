@@ -131,8 +131,8 @@ export class AsignSequencesComponent implements AfterViewInit {
     this.loadingSequences = true;
 
     this.sequenceService.duplicateSequence(sequence.id).subscribe({
-      next: (duplicateResponse) => {
-        const newSequenceId = duplicateResponse.sequence.id;
+      next: (newSequence) => {
+        const newSequenceId = newSequence.id;
 
         this.studentSequenceService.unassignSequence(this.studentId!, sequence.id).subscribe({
           next: () => {
