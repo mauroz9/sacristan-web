@@ -55,7 +55,7 @@ export const routes: Routes = [
         path: 'sequences/view/:id',
         component: SequenceDetailComponent,
         canActivate: [authGuard],
-        data: { showMenu: false }
+        data: { showMenu: false, showHeader: true }
     },
 
     // --- RUTAS PROTEGIDAS (Students) ---
