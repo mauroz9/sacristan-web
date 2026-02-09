@@ -83,6 +83,7 @@ export class ContentListComponent {
         }
 
         this.content()!.contentList = r
+        this.loadingContent.set(false); 
       });
     } else if (this.content()?.kind == "profesor") {
       r = await firstValueFrom(this.teacherService.getTeachers(this.searchTerm, this.direction, this.sortBy));
