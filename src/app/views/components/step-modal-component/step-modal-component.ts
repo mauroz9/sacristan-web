@@ -120,6 +120,7 @@ export class StepModalComponent implements OnInit {
   }
 
   get hasActiveSearch(): boolean {
-    return (this.searchControl.value?.trim().length ?? 0) > 0 || this.selectedCategory !== 'Todas';
+    const searchValue = (this.searchControl.value ?? '').trim();
+    return searchValue.length > 0 || this.selectedCategory !== 'Todas';
   }
 }
