@@ -84,7 +84,7 @@ export class LoginPage implements OnInit {
     } else if (err.status === 403 || err.message === 'No tienes permisos') {
       this.errorMessage = 'No dispones de la autorización necesaria para acceder a esta web.';
     }else if (err.status === 0) {
-      this.errorMessage = localStorage.getItem('errorMessage');        
+      this.errorMessage = localStorage.getItem('errorMessage')  || 'Parece que hay un problema de conexión. Por favor, revisa tu red e inténtalo de nuevo.';
       if (this.errorMessage) {
         localStorage.removeItem('errorMessage');
       }

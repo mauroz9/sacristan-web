@@ -12,7 +12,6 @@ import { CommonModule } from '@angular/common';
 })
 
 export class SequenceDetailComponent implements OnInit {
-  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   sequence: Sequence | undefined;
   currentIndex: number = 0;
 

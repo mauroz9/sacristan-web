@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-content-not-found-page',
@@ -7,11 +8,14 @@ import { Component } from '@angular/core';
   styleUrl: './content-not-found-page.css',
 })
 export class ContentNotFoundPage {  
+
+  constructor (private router: Router) {}
+
   goBack() {
     window.history.back();
   }
 
   goHome() {
-    window.location.href = '/dashboard'; 
+    this.router.navigate(['/dashboard']);
   }
 }

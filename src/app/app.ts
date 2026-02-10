@@ -28,7 +28,6 @@ export class App {
   ).subscribe(data => {
     this.menuVisible.set(data['showMenu'] !== false);
     this.headerVisible.set(data['showHeader'] !== false); 
-    console.log(this.menuVisible());
   });
 }
 
