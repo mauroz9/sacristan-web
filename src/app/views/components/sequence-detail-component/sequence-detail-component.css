@@ -5,6 +5,18 @@
     --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
+.bg-primary-blue {
+    background-color: var(--primary-blue);
+}
+
+.text-primary-blue {
+    color: var(--primary-blue);
+}
+
+.custom-tooltip {
+    content: attr(data-tip);
+}
+
 .bg-secondary-yellow {
     background-color: var(--secondary-yellow);
 }
