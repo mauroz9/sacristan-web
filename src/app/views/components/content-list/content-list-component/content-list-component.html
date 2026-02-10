@@ -43,11 +43,10 @@
                 <div class="position-relative d-inline-block">
                     <button class="btn sort-btn" 
                         [ngClass]="isAscending ? 'btn-outline-primary' : 'btn-primary'"
-                        (click)="toggleSort()" 
-                        [title]="sortTooltip">
+                        (click)="toggleSort()">
                         <i class="bi" [ngClass]="isAscending ? 'bi-sort-alpha-down' : 'bi-sort-alpha-up-alt'"></i>
                     </button>
-                    <small class="tooltip-label text-muted">{{ sortTooltip }}</small>
+                    <small class="tooltip-label text-white bg-dark p-1">{{ sortTooltip }}</small>
                 </div>
             </div>
 

@@ -73,7 +73,6 @@ export class ContentListPage implements OnInit {
       if (this.url.includes('/students')) {
         this.studentList = (await firstValueFrom(this.studentService.getStudents())).content;
         this.sortParams = await firstValueFrom(this.studentService.getSortParams());
-        console.log(this.sortParams);
         
       } else if (this.url.includes('/teachers')) {
         this.teacherList = (await firstValueFrom(this.teacherService.getTeachers())).content;

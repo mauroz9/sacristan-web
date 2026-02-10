@@ -35,10 +35,10 @@ export class LoginPage implements OnInit {
 
 
 
-    this.errorMessage = localStorage.getItem('errorMessage');    
+    this.errorMessage = localStorage.getItem('errorMessage');        
     if (this.errorMessage) {
       localStorage.removeItem('errorMessage');
-    }
+    }    
 
   }
 
@@ -83,6 +83,11 @@ export class LoginPage implements OnInit {
       this.errorMessage = 'Credenciales incorrectas. Por favor, inténtalo de nuevo.';
     } else if (err.status === 403 || err.message === 'No tienes permisos') {
       this.errorMessage = 'No dispones de la autorización necesaria para acceder a esta web.';
+    }else if (err.status === 0) {
+      this.errorMessage = localStorage.getItem('errorMessage')  || 'Parece que hay un problema de conexión. Por favor, revisa tu red e inténtalo de nuevo.';
+      if (this.errorMessage) {
+        localStorage.removeItem('errorMessage');
+      }
     } else {
       this.errorMessage = 'Error del servidor. Por favor, inténtalo más tarde.';
     }
