@@ -13,7 +13,8 @@ import { filter, map, mergeMap } from 'rxjs';
 export class App {
   protected readonly title = signal('proyecto-instituto-sacristan-pictogramas');
 
-  menuVisible: boolean = true;
+  menuVisible = signal(true);
+  headerVisible = signal(true);
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
   this.router.events.pipe(
@@ -25,7 +26,8 @@ export class App {
     }),
     mergeMap(route => route.data)
   ).subscribe(data => {
-    this.menuVisible = data['showMenu'] !== false;
+    this.menuVisible.set(data['showMenu'] !== false);
+    this.headerVisible.set(data['showHeader'] !== false); 
   });
 }
 

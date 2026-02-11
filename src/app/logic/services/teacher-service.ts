@@ -1,91 +1,65 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from './env';
-import { Teacher } from '../interfaces/teacher-interface';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { TeacherResponse } from '../interfaces/user/teacher/teacher-interface';
+import { PageResponse } from '../interfaces/utils/page-interface';
+import { UserService } from './user-service';
+import { CreateUser } from '../interfaces/user/user-interface';
+import { FormGroup } from '@angular/forms';
+import { SortParam } from '../interfaces/content-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TeacherService {
-  constructor (private http: HttpClient, private router: Router) {}
-
-
-  getTeachers(filterText:String = ""): Observable<Teacher[]> {
-    return this.http.get<Teacher[]>(API_URL + "/api/profesores?q=" + filterText);
-  }
-
-  getTeacherById(id: number): Observable<Teacher> {
-    return this.http.get<Teacher>(API_URL + "/api/profesores/" + id);
-  }
-
-  deleteTeacher(id: number) {
-    return this.http.delete(API_URL + "/api/profesores/" + id)
-  }
-
-  getAssignedStudentsCount(id: number): Observable<number> {
-    return this.http.get<number>(API_URL + "/api/profesores/" + id + "/estudiantes-asignados");
-  }
-
-  sendTeacher(formData: any) {
-    let processedFormData:Teacher = this.convertFormDataToTeacher(formData);
-    if(processedFormData.user.id){
-      this.updateTeacher(processedFormData);
-    } else {
-      this.addTeacher(processedFormData);
-    }
-  }
-  addTeacher(formData: Teacher) {
-    this.http.post(API_URL + "/api/profesores/", formData.user).subscribe({
-      next: (data) => {
-        localStorage.setItem('infoMessage', 'Profesor añadido correctamente');
-        this.router.navigate(['/teachers']);
-      },
-      error: (error) => {
-        console.error("Error adding teacher", error);
-      }
-    });
-  }
-
-  updateTeacher(formData: Teacher) {
-      this.http.put(API_URL + "/api/usuarios/" + formData.user.id, formData.user).subscribe(
-      {
-        next: (data) => {          
-          localStorage.setItem('infoMessage', 'Profesor actualizado correctamente');
-          this.router.navigate(['/teachers']);
-        },
-        error: (error) => {
-          console.error("Error updating teacher", error);
-        }
-      }
-    );
-  }
-
-  convertFormDataToTeacher(formData: any): Teacher {
-    let teacher: Teacher = {
-      kind: 'profesor',
-      user: {
-        id: formData.id,
-        name: formData.nameFormControl,
-        last_name: formData.lastNameFormControl,
-        email: formData.emailFormControl,
-        password: formData.passwordFormControl,
-        password_confirmation: formData.passwordFormControl,
-        role_id: 3,
-      },
-    };
-
-    if (formData.id) {
-      teacher.user.id = formData.id;
-    }
-
-    if (formData.passwordFormControl === '') {
-      delete teacher.user.password;
-    } else {
-      teacher.user.password_confirmation = formData.passwordFormControl;
-    }
-    return teacher;
-  }
   
+  constructor (private http: HttpClient, private userService: UserService) {}
+
+  API_URL = API_URL + "/api/v1/admin/teachers";
+
+  getTeachers(query:string = "", sortBy: string = "user.name", sortDir: string = "asc"): Observable<PageResponse<TeacherResponse>> {
+    return this.http.get<PageResponse<TeacherResponse>>(this.API_URL + "?q=" + query + "&sort=" + sortBy + "," + sortDir);
+  }
+
+  getStudentCountByTeacher(id: number): Observable<number> {
+    return this.http.get<number>(this.API_URL + "/" + id + "/student-count");
+  };
+
+  getTeacherById(id: number): Observable<TeacherResponse> {
+    return this.http.get<TeacherResponse>(this.API_URL + "/" + id);
+  }
+
+  deleteTeacher(id: number): Observable<void> {
+    return this.http.delete<void>(this.API_URL + "/" + id)
+  }
+
+  sendTeacher(formData: any): Observable<TeacherResponse> {
+    let originalId = formData.id || null
+    if(originalId){
+      formData = this.userService.convertFormDataToUpdateUser(formData);
+      return this.updateTeacher(formData, originalId);
+    } else {
+      formData = this.userService.convertFormDataToCreateUser(formData);
+      return this.addTeacher(formData);
+    }
+  }
+
+  addTeacher(formData: CreateUser): Observable<TeacherResponse> {
+    console.log(formData);
+    return this.http.post<TeacherResponse>(this.API_URL, formData)
+  }
+
+  updateTeacher(formData: TeacherResponse, originalId: number): Observable<TeacherResponse> {        
+    return this.http.put<TeacherResponse>(this.API_URL + "/" + originalId, formData)
+  }
+
+  handleFormErrors(errors: any, userFormGroup: FormGroup) {
+    this.userService.handleFormErrors(errors, userFormGroup);
+  }
+
+  getSortParams(): Observable<SortParam[]> {
+    return this.http.get<SortParam[]>(this.API_URL + "/sort-params");
+  }
+
 }

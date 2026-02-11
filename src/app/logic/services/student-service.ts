@@ -1,40 +1,46 @@
 import { Injectable } from '@angular/core';
-import { Student } from '../interfaces/student-interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import { UserService } from './user-service';
 import { API_URL } from './env';
-import { Sequence } from '../interfaces/sequence-interface';
+import { StudentResponse } from '../interfaces/user/student/student-interface';
+import { PageResponse } from '../interfaces/utils/page-interface';
+import { CreateUser } from '../interfaces/user/user-interface';
+import { FormGroup } from '@angular/forms';
+import { SortParam } from '../interfaces/content-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudentService {
-  constructor (private http:HttpClient, private router: Router, private userService:UserService) {}
+  
+  constructor (private http:HttpClient, private userService:UserService) {}
 
-  getStudent(query:string = ""): Observable<Student[]> {
-    return this.http.get<Student[]>(API_URL + "/api/estudiantes?q="+query);
+  API_URL = API_URL + "/api/v1/admin/students";
+
+  getStudents(query:string = "", sortBy: string = "user.name", sortDir: string = "asc"): Observable<PageResponse<StudentResponse>> {
+    return this.http.get<PageResponse<StudentResponse>>(this.API_URL + "?q="+query+"&sort="+sortBy+","+sortDir);
   }
 
-  getStudentsWithTeacher(id: number): Observable<Student[]> {
-    return this.http.get<Student[]>(API_URL + "/api/estudiantes/con-profesor/" + id);
+
+  getStudentsWithTeacher(id: number): Observable<StudentResponse[]> {
+    return this.http.get<StudentResponse[]>(this.API_URL + "/teacher/" + id);
+  }
+  
+  getStudentsWithoutTeacher(): Observable<StudentResponse[]> {
+    return this.http.get<StudentResponse[]>(this.API_URL + "/no-teacher");
   }
 
-  getStudentsWithoutTeacher(): Observable<Student[]> {
-    return this.http.get<Student[]>(API_URL + "/api/estudiantes/sin-profesor");
-  }
-
-  getStudentById(studentId: number): Observable<Student> {
-    return this.http.get<Student>(API_URL + "/api/estudiantes/" + studentId);
+  getStudentById(studentId: number): Observable<StudentResponse> {
+    return this.http.get<StudentResponse>(this.API_URL + "/" + studentId);
   }
 
   deleteStudent(id: number) {
-    return this.http.delete(API_URL + "/api/estudiantes/" + id)
+    return this.http.delete(this.API_URL + "/" + id)
   }
 
   assignTeacherToStudent(studentId: number, teacherId: number) {
-    return this.http.put(API_URL + "/api/estudiantes/" + studentId + "/asignar-profesor/" + teacherId, {}).subscribe({
+    return this.http.put(this.API_URL + "/" + studentId + "/assign-teacher/" + teacherId, {}).subscribe({
       next: (data) => {
       },
       error: (error) => {
@@ -44,7 +50,7 @@ export class StudentService {
   }
 
   unassignTeacherFromStudent(studentId: number) {
-    return this.http.put(API_URL + "/api/estudiantes/" + studentId + "/desasignar-profesor", {}).subscribe({
+    return this.http.put(this.API_URL + "/" + studentId + "/unassign-teacher", {}).subscribe({
       next: (data) => {
         console.log("Teacher unassigned from student successfully");
       },
@@ -53,66 +59,33 @@ export class StudentService {
       }
     });
   }
-
-  sendStudent(formData: any) {
-    let processedFormData:Student = this.convertFormDataToStudent(formData);
-    if(processedFormData.user.id){
-      this.updateStudent(processedFormData);
-    } else {
-      this.addStudent(processedFormData);
-    }
+  
+  sendStudent(formData: any): Observable<StudentResponse> {
+      let originalId = formData.id || null
+      if(originalId){
+        formData = this.userService.convertFormDataToUpdateUser(formData);
+        return this.updateStudent(formData, originalId);
+      } else {
+        formData = this.userService.convertFormDataToCreateUser(formData);
+        return this.addStudent(formData);
+      }
+    
   }
 
-  addStudent(formData: Student) {
-    this.http.post(API_URL + "/api/estudiantes/", formData.user).subscribe({
-      next: (data) => {
-        localStorage.setItem('infoMessage', 'Alumno añadido correctamente');
-        this.router.navigate(['/students']);
-      },
-      error: (error) => {
-        console.error("Error adding student", error);
-      }
-    });
+  addStudent(formData: CreateUser): Observable<StudentResponse> {
+    return this.http.post<StudentResponse>(this.API_URL, formData);
   }
 
-  updateStudent(formData: Student) {    
-
-    this.http.put(API_URL + "/api/usuarios/" + formData.user.id, formData.user).subscribe(
-      {
-        next: (data) => {
-          
-          localStorage.setItem('infoMessage', 'Alumno actualizado correctamente');
-          this.router.navigate(['/students']);
-        },
-        error: (error) => {
-          console.error("Error updating student", error);
-        }
-      }
-    );
+  updateStudent(formData: StudentResponse, originalId: number) : Observable<StudentResponse> {        
+    return this.http.put<StudentResponse>(this.API_URL + "/" + originalId, formData)
   }
 
-  convertFormDataToStudent(formData: any): Student {
-    let student: Student = {
-      kind: 'alumno',
-      user: {
-        id: formData.id,
-        name: formData.nameFormControl,
-        last_name: formData.lastNameFormControl,
-        email: formData.emailFormControl,
-        role_id: 2,
-        password: formData.passwordFormControl,
-        password_confirmation: formData.passwordFormControl
-      }
-    }
+  handleFormErrors(errors: any, formGroup: FormGroup) {
+    this.userService.handleFormErrors(errors, formGroup);
+  }
 
-    if (formData.passwordFormControl === '') { 
-      delete student.user.password;
-    } else {
-      student.user.password_confirmation = formData.passwordFormControl;
-    }
-
-    return student;
-
+  getSortParams(): Observable<SortParam[]> {
+    return this.http.get<SortParam[]>(this.API_URL + "/sort-params");
   }
 
 }

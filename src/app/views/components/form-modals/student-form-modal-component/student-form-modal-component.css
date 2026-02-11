@@ -1,10 +1,15 @@
 
 /* Botón principal azul */
 .btn-primary-blue {
-    background-color: var(--primary-blue);
+    background-color: #2b4a87;
     color: white;
 }
 .btn-primary-blue:hover {
-    background-color: #162e6b; /* Un azul un poco más oscuro */
+    background-color: #1e3460; /* Un azul un poco más oscuro */
+    color: white;
+}
+
+.background-primary-blue {
+    background-color: #2b4a87;
     color: white;
 }

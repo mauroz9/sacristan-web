@@ -14,8 +14,8 @@ import { LoadingComponent } from "../shared/loading-component/loading-component"
 export class StepModalComponent implements OnInit {
   isVisible = input<Boolean>(false);
   close = output<void>();
-  save = output<{ title: string, pictogram_arasaac: string }>();
-  stepData = input<{ title: string, pictogram_arasaac: string } | null>(null);
+  save = output<{ title: string, arasaacPictogramId: number}>();
+  stepData = input<{ title: string, arasaacPictogramId: number} | null>(null);
   isEdit: boolean = false;
 
   selectedCategory: string = 'Todas';
@@ -25,7 +25,7 @@ export class StepModalComponent implements OnInit {
 
   stepForm = new FormGroup({
     title: new FormControl('', Validators.required),
-    pictogram_arasaac: new FormControl('', Validators.required)
+    arasaacPictogramId: new FormControl<number | null>(null, Validators.required)
   });
 
   searchControl = new FormControl('', Validators.minLength(3));
@@ -47,7 +47,7 @@ export class StepModalComponent implements OnInit {
       this.isEdit = true;
       this.stepForm.patchValue({
         title: this.stepData()!.title,
-        pictogram_arasaac: this.stepData()!.pictogram_arasaac
+        arasaacPictogramId: this.stepData()!.arasaacPictogramId
       });
 
       this.loading = true;
@@ -95,15 +95,14 @@ export class StepModalComponent implements OnInit {
   }
 
   selectImage(id: number) {
-    const url = this.getPictogramImage(id);
-    this.stepForm.patchValue({ pictogram_arasaac: url });
+    this.stepForm.patchValue({ arasaacPictogramId: id });
   }
 
   onSave() {
     if (this.stepForm.valid) {
       this.save.emit({
         title: this.stepForm.value.title!,
-        pictogram_arasaac: this.stepForm.value.pictogram_arasaac!
+        arasaacPictogramId: this.stepForm.value.arasaacPictogramId!
       });
       this.stepForm.reset();
       this.searchControl.reset();
@@ -118,5 +117,10 @@ export class StepModalComponent implements OnInit {
     this.searchControl.reset();
     this.pictograms = [];
     this.close.emit();
+  }
+
+  get hasActiveSearch(): boolean {
+    const searchValue = (this.searchControl.value ?? '').trim();
+    return searchValue.length > 0 || this.selectedCategory !== 'Todas';
   }
 }

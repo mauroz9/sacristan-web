@@ -1,6 +1,6 @@
 import { Sequence } from "./sequence-interface";
-import { Student } from "./student-interface";
-import { Teacher } from "./teacher-interface";
+import { TeacherResponse } from "./user/teacher/teacher-interface";
+import { StudentResponse } from "./user/student/student-interface";
 export interface Content {
     kind:string,
     url: string,
@@ -8,5 +8,12 @@ export interface Content {
     subTitle: string,
     gender: number,
     plural?: number,
-    contentList: (Sequence | Student | Teacher)[]
+    searchparams?: string,
+    sortparams? : SortParam[],
+    contentList: (Sequence | StudentResponse | TeacherResponse)[]
+}
+
+export interface SortParam {
+    key: string,
+    value: string
 }

@@ -12,18 +12,22 @@ export class StudentSequenceService {
   constructor(private http: HttpClient) {}
 
   getStudentSequences(studentId: number): Observable<Sequence[]> {
-    return this.http.get<Sequence[]>(`${API_URL}/api/estudiantes/${studentId}/secuencias`);
+    return this.http.get<Sequence[]>(`${API_URL}/api/v1/admin/students/${studentId}/sequences`);
+  }
+
+  getStudentSequenceCount(studentId: number): Observable<number> {
+    return this.http.get<number>(`${API_URL}/api/v1/admin/students/${studentId}/sequence-count`);
   }
 
   getAvailableSequences(studentId: number): Observable<Sequence[]> {
-    return this.http.get<Sequence[]>(`${API_URL}/api/estudiantes/${studentId}/secuencias-disponibles`);
+    return this.http.get<Sequence[]>(`${API_URL}/api/v1/admin/students/${studentId}/sequences-available`);
   }
 
   assignSequence(studentId: number, sequenceId: number): Observable<any> {
-    return this.http.post(`${API_URL}/api/estudiantes/${studentId}/secuencias/${sequenceId}`, {});
+    return this.http.post(`${API_URL}/api/v1/admin/students/${studentId}/sequences/${sequenceId}`, {});
   }
 
   unassignSequence(studentId: number, sequenceId: number): Observable<any> {
-    return this.http.delete(`${API_URL}/api/estudiantes/${studentId}/secuencias/${sequenceId}`);
+    return this.http.delete(`${API_URL}/api/v1/admin/students/${studentId}/sequences/${sequenceId}`);
+    }
   }
-}

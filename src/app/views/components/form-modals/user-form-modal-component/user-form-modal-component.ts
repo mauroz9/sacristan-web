@@ -17,7 +17,7 @@ export class UserFormModalComponent {
   constructor (private modalService: NgbModal, private userService: UserService) {}
 
   openModal(modalContent: TemplateRef<any>) {
-    this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
+    this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false, size: 'lg' });
   }
 
   ngAfterViewInit(): void {
@@ -29,11 +29,11 @@ export class UserFormModalComponent {
     if (userFormGroup.valid) {
       const formData = userFormGroup.value;
 
-      if(this.userFormComponent.isEditMode){
+      if(this.userFormComponent.userId != null){
         formData.id = this.userFormComponent.userId;
       }
       
-      this.userService.sendUser(formData);
+      // this.userService.sendUser(formData);
     } else {
       userFormGroup.markAllAsTouched();
     }

@@ -9,9 +9,9 @@
         @if (loading) {
             <app-loading-component></app-loading-component>
         } @else {
-           <div class="modal-body custom-modal-body pt-0 px-4 pb-2">
+            <div class="modal-body custom-modal-body pt-0 px-4 pb-2">
 
-            <h4 class="mb-4 fw-bold">Estudiantes de {{teacher?.user?.name}} {{teacher?.user?.last_name}}</h4>
+            <h4 class="mb-4 fw-bold">Estudiantes de {{teacher?.name}} {{teacher?.lastName}}</h4>
             <p class="text-muted mb-4 custom-subtitle">Asigna alumnos para este profesor</p>
 
             <h6 class="text-start mb-2 fw-semibold">Asignar estudiante</h6>
@@ -21,7 +21,7 @@
                     <button class="btn dropdown-toggle text-start w-100 custom-dropdown-button" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <span [class.text-muted]="!selectedStudent">
-                            {{ selectedStudent ? (selectedStudent.user!.name + ' ' + selectedStudent.user!.last_name) :
+                            {{ selectedStudent ? (selectedStudent.name + ' ' + selectedStudent.lastName) :
                             'Seleccionar estudiante' }}
                         </span>
                     </button>
@@ -34,7 +34,7 @@
                         @for (student of nonAssignedStudents; track student.id) {
                         <li>
                             <a class="dropdown-item" href="javascript:void(0)" (click)="selectStudent(student)">
-                                {{ student.user!.name }} {{ student.user!.last_name }}
+                                {{ student.name }} {{ student.lastName }}
                             </a>
                         </li>
                         }
@@ -61,9 +61,9 @@
                 <div class="card-body p-3 d-flex justify-content-between align-items-center">
                     <div>
                         <p class="mb-0 fw-semibold text-dark">
-                            {{ student.user!.name }} {{ student.user!.last_name }}
+                            {{ student.name }} {{ student.lastName }}
                         </p>
-                        <small class="text-muted">{{ student.user!.email }}</small>
+                        <small class="text-muted">{{ student.email }}</small>
                     </div>
                     <button type="button" class="btn custom-personalize-btn custom-dark-blue-btn"
                         (click)="unassignStudent(student)">
