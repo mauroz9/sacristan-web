@@ -1,97 +1,116 @@
 <div class="container py-5">
     <div class="form-container bg-white p-4 rounded-4 shadow-sm">
 
-        <h2 class="page-title mb-1">{{ isEditMode ? 'Editar Secuencia' : 'Nueva Secuencia' }}</h2>
-        <p class="text-muted mb-4">Define los pasos de la secuencia con pictogramas</p>
+        <div class="mb-4 pb-2 border-bottom">
+            <div class="d-flex align-items-center mb-1">
+                <button class="back-icon-btn me-3" routerLink="/sequences" aria-label="Volver atrás">
+                    <i class="bi bi-arrow-left fs-4"></i>
+                </button>
+                <h2 class="page-title mb-0 text-dark-blue fw-bold">{{ isEditMode ? 'Editar Secuencia' : 'Nueva Secuencia' }}</h2>
+            </div>
+            <p class="text-muted mb-4">Define los pasos de la secuencia con pictogramas.</p>
+        </div>
 
         @if (loading) {
-            <app-loading-component></app-loading-component>
+            <div class="py-5">
+                <app-loading-component></app-loading-component>
+            </div>
         } @else {
             <form [formGroup]="sequenceForm" (ngSubmit)="onSubmit()">
-                <div class="mb-3">
-                    <label class="form-label text-primary-blue fw-semibold">Título de la secuencia</label>
-                    <input type="text" class="form-control custom-input" formControlName="title">
-                    @if(sequenceForm.get('title')?.touched && sequenceForm.get('title')?.invalid){
-                    <p class="invalid-feedback d-block">Debes indicar un Título</p>
-                    }
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label text-primary-blue fw-semibold">Descripción</label>
-                    <input type="text" class="form-control custom-input" formControlName="description">
-                    @if(sequenceForm.get('description')?.touched && sequenceForm.get('title')?.invalid){
-                    <p class="invalid-feedback d-block">Debes indicar una Descripción</p>
-                    }
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label text-primary-blue fw-semibold">Categoría</label>
-                    <select class="form-select custom-input" formControlName="category_id">
-                        <option [value]="null" disabled selected>Selecciona una categoría</option>
-                        @for (category of categories; track category.id) {
-                            <option [value]="category.id">{{ category.name }}</option>
+                
+                <div class="row mb-3 g-3">
+                    <div class="col-md-7">
+                        <label class="form-label text-primary-blue fw-semibold">Título de la secuencia</label>
+                        <input type="text" class="form-control custom-input" formControlName="title" placeholder="Ej. Lavarse las manos">
+                        @if(sequenceForm.get('title')?.touched && sequenceForm.get('title')?.invalid){
+                            <small class="text-danger mt-1 d-block fw-medium">Debes indicar un Título</small>
                         }
-                    </select>
-                    @if(sequenceForm.get('category_id')?.touched && sequenceForm.get('category_id')?.invalid){
-                    <p class="invalid-feedback d-block">Debes escoger una Categoría</p>
-                    }
+                    </div>
+
+                    <div class="col-md-5">
+                        <label class="form-label text-primary-blue fw-semibold">Categoría</label>
+                        <select class="form-select custom-input" formControlName="category_id">
+                            <option [value]="null" disabled selected>Selecciona una categoría</option>
+                            @for (category of categories; track category.id) {
+                                <option [value]="category.id">{{ category.name }}</option>
+                            }
+                        </select>
+                        @if(sequenceForm.get('category_id')?.touched && sequenceForm.get('category_id')?.invalid){
+                            <small class="text-danger mt-1 d-block fw-medium">Debes escoger una Categoría</small>
+                        }
+                    </div>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="text-primary-blue fw-bold mb-0">Pasos</h5>
-                    <button type="button" class="btn btn-yellow" (click)="openModal()">
-                        <i class="bi bi-plus-lg me-1"></i> Añadir Paso
+                <div class="row mb-5 g-3">
+                    <div class="col-12">
+                        <label class="form-label text-primary-blue fw-semibold">Descripción</label>
+                        <input type="text" class="form-control custom-input" formControlName="description" placeholder="Añade una descripción detallada...">
+                        @if(sequenceForm.get('description')?.touched && sequenceForm.get('description')?.invalid){
+                            <small class="text-danger mt-1 d-block fw-medium">Debes indicar una Descripción</small>
+                        }
+                    </div>
+                </div>
+
+                <div class="bg-light p-4 rounded-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h5 class="text-primary-blue fw-bold mb-0">Pasos de la Secuencia</h5>
+                            <small class="text-muted">Arrastra los pasos para cambiar su orden</small>
+                        </div>
+                        <button type="button" class="btn btn-yellow px-3 shadow-sm" (click)="openModal()">
+                            <i class="bi bi-plus-lg me-1"></i> Añadir Paso
+                        </button>
+                    </div>
+
+                    <div class="steps-list" formArrayName="steps">
+                        
+                        @if (steps.length === 0) {
+                            <div class="text-center py-4 text-muted border border-dashed rounded-3 bg-white">
+                                <i class="bi bi-images fs-2 d-block mb-2"></i>
+                                No hay pasos añadidos. ¡Añade el primer paso con un pictograma!
+                            </div>
+                        }
+
+                        @for (step of steps.controls; track step; let i = $index) {
+                            <div [formGroupName]="i" class="card step-card bg-white mb-3" draggable="true" (dragstart)="onDragStart(i)"
+                                (dragover)="onDragOver($event)" (drop)="onDrop(i)" [class.dragging]="draggedIndex === i">
+                                
+                                <div class="card-body d-flex align-items-center p-3">
+                                    <div class="drag-handle me-3 text-muted" title="Arrastrar para reordenar">
+                                        <i class="bi bi-grid-3x2-gap-fill fs-5"></i>
+                                    </div>
+
+                                    <div class="picto-container me-4 shadow-sm">
+                                        <img [src]="'https://api.arasaac.org/api/pictograms/' + step.get('arasaacPictogramId')?.value" alt="Pictograma" class="img-fluid rounded-circle bg-white">
+                                    </div>
+
+                                    <div class="badge-step shadow-sm me-3">
+                                        Paso {{ i + 1 }}
+                                    </div>
+
+                                    <div class="flex-grow-1">
+                                        <input type="text"
+                                            class="form-control border-0 bg-transparent fw-bold text-primary-blue fs-5 p-0 shadow-none"
+                                            formControlName="title" readonly>
+                                    </div>
+
+                                    <button type="button" class="btn text-primary border-0 rounded-circle action-btn" (click)="modifyStep(i)" title="Editar paso">
+                                        <i class="bi bi-pencil-square fs-5"></i>
+                                    </button>
+                                    <button type="button" class="btn text-danger border-0 rounded-circle action-btn ms-1" (click)="removeStep(i)" title="Eliminar paso">
+                                        <i class="bi bi-trash fs-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-3 pt-3 mt-4 border-top">
+                    <button type="button" class="btn btn-outline-secondary px-4 fw-medium" routerLink="/sequences">Cancelar</button>
+                    <button type="submit" class="btn btn-dark-blue px-4 fw-medium shadow-sm">
+                        <i class="bi bi-floppy me-2"></i> Guardar Secuencia
                     </button>
-                </div>
-
-                <div class="steps-list mb-5" formArrayName="steps">
-
-                    @for (step of steps.controls; track step; let i = $index) {
-
-                    <div [formGroupName]="i" class="card step-card mb-3" draggable="true" (dragstart)="onDragStart(i)"
-                        (dragover)="onDragOver($event)" (drop)="onDrop(i)" [class.dragging]="draggedIndex === i">
-                        <div class="card-body d-flex align-items-center p-3">
-
-                            <div class="drag-handle me-3 text-muted" style="cursor: grab;">
-                                <i class="bi bi-grid-3x2-gap-fill fs-5"></i>
-                            </div>
-
-                        <div class="picto-container me-4">
-                            <img [src]="'https://api.arasaac.org/api/pictograms/' + step.get('arasaacPictogramId')?.value" alt="Pictograma" class="img-fluid rounded-circle">
-                        </div>
-
-                            <div class="badge-step me-3">
-                                Paso {{ i + 1 }}
-                            </div>
-
-                            <div class="flex-grow-1">
-                                <input type="text"
-                                    class="form-control border-0 bg-transparent fw-bold text-primary-blue fs-5 p-0"
-                                    formControlName="title" readonly>
-                            </div>
-
-                            <button type="button" class="btn text-primary border-0" (click)="modifyStep(i)">
-                                <i class="bi bi-pencil-square fs-4"></i>
-                            </button>
-                            <button type="button" class="btn text-danger border-0" (click)="removeStep(i)">
-                                <i class="bi bi-trash fs-4"></i>
-                            </button>
-
-                        </div>
-                    </div>
-                    }
-
-                    @if (steps.length === 0) {
-                    <div class="text-center text-muted py-4 border rounded-3 bg-light mt-3">
-                        No hay pasos añadidos. ¡Dale al botón amarillo!
-                    </div>
-                    }
-
-                </div>
-
-                <div class="d-flex justify-content-end gap-3 pt-3 border-top">
-                    <button type="button" class="btn btn-outline-secondary px-4" routerLink="/sequences">Cancelar</button>
-                    <button type="submit" class="btn btn-dark-blue px-4">Guardar Cambios</button>
                 </div>
 
             </form>
@@ -101,7 +120,7 @@
 </div>
 
 @if(showModal){
-<app-step-modal-component [isVisible]="showModal" (close)="closeModal()" (save)="handleSaveStep($event)"
-    [stepData]="stepToEdit">
-</app-step-modal-component>
+    <app-step-modal-component [isVisible]="showModal" (close)="closeModal()" (save)="handleSaveStep($event)"
+        [stepData]="stepToEdit">
+    </app-step-modal-component>
 }
