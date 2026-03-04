@@ -1,0 +1,29 @@
+<div class="card-row mb-2">
+    <div class="row align-items-center g-0 h-100">
+
+        <div class="col-md-3 ps-4">
+            <span class="fw-medium text-dark-blue fs-5">{{ routine()?.name }}</span>
+        </div>
+
+        <div class="col-md-3">
+            <span class="text-muted d-inline-block text-truncate w-100" [title]="formatDays(routine()?.daysOfTheWeek)">
+                <i class="bi bi-calendar-event me-1"></i> {{ formatDays(routine()?.daysOfTheWeek) }}
+            </span>
+        </div>
+
+        <div class="col-md-2">
+            <span class="text-muted">{{ routine()?.category?.name || 'Sin categoría' }}</span>
+        </div>
+
+        <div class="col-md-2 text-center">
+            <span class="badge-steps"> {{ routine()?.sequences?.length || 0 }} {{routine()?.sequences?.length !== 1 ? "Secuencias" : "Secuencia"}}
+            </span>
+        </div>
+
+        <div class="col-md-2 text-end pe-4">
+            <app-action-buttons-component (onDelete)="deleteRoutine()" (onEdit)="modifyRoutine()"
+                (onView)="viewRoutine()"> </app-action-buttons-component>
+        </div>
+
+    </div>
+</div>
