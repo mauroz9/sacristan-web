@@ -15,7 +15,7 @@ export class RoutineService {
 
     constructor(private http: HttpClient) { }
 
-    getRoutines(query: string = "", sortBy: string = "title", sortDir: string = "asc"): Observable<PageResponse<Routine>> {
+    getRoutines(query: string = "", sortBy: string = "name", sortDir: string = "asc"): Observable<PageResponse<Routine>> {
         return this.http.get<PageResponse<Routine>>(API_URL + `/api/v1/routines?q=${query}&sort=${sortBy},${sortDir}`);
     }
 
