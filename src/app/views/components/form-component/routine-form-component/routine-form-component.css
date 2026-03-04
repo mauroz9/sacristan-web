@@ -1,0 +1,119 @@
+/* Paleta de colores heredada (V1) */
+.text-dark-blue,
+.text-primary-blue {
+    color: #1F3C8B;
+}
+
+.bg-dark-blue {
+    background-color: #1F3C8B;
+}
+
+/* Botones con la estética de la app (V1) */
+.btn-dark-blue {
+    background-color: #1F3C8B;
+    color: white;
+    border: 1px solid #1F3C8B;
+    transition: all 0.2s;
+}
+
+.btn-dark-blue:hover:not(:disabled) {
+    background-color: #152b66;
+    color: white;
+}
+
+.btn-dark-blue:disabled {
+    background-color: #94a3b8;
+    border-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.btn-yellow {
+    background-color: #FFC107;
+    color: #ffffff;
+    border: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-yellow:hover {
+    background-color: #e0a800;
+}
+
+/* Chips de los días (Estructura V2, Colores V1) */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.day-btn {
+    display: inline-block;
+    color: #1F3C8B;
+    border: 1px solid #1F3C8B;
+    background-color: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 50rem; /* Forma de píldora */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.day-btn:hover {
+    background-color: rgba(31, 60, 139, 0.05); /* Sombra azul muy suave */
+}
+
+/* Magia del checked: se tiñe del color oscuro corporativo */
+.btn-check:checked + .day-btn {
+    background-color: #1F3C8B;
+    border-color: #1F3C8B;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(31, 60, 139, 0.2);
+}
+
+/* Tarjetas de Secuencias */
+.sequence-card {
+    border-radius: 8px; /* Radio menos redondeado como tenías en la V1 */
+    transition: all 0.2s ease;
+}
+
+.border-primary-blue {
+    border: 1px solid rgba(31, 60, 139, 0.3) !important;
+}
+
+.sequence-card:hover {
+    border-color: #1F3C8B !important;
+    box-shadow: 0 4px 6px -1px rgba(31, 60, 139, 0.1) !important;
+}
+
+.border-dashed {
+    border-style: dashed !important;
+    border-color: #cbd5e1 !important;
+}
+
+/* Inputs Personalizados estándar */
+.custom-input {
+    background-color: white;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    box-shadow: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.custom-input:focus {
+    border-color: #1F3C8B;
+    box-shadow: 0 0 0 0.25rem rgba(31, 60, 139, 0.1);
+}
+
+.back-icon-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: #1F3C8B;
+    line-height: 1;
+}
+
+.back-icon-btn:hover,
+.back-icon-btn:focus,
+.back-icon-btn:active {
+    background: transparent !important;
+    border: none;
+    box-shadow: none !important;
+    color: #1F3C8B;
+}

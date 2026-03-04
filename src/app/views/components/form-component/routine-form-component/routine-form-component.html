@@ -1,0 +1,121 @@
+<div class="container py-5">
+    <div class="form-container bg-white p-4 rounded-4 shadow-sm">
+        <div class="mb-4 pb-2 border-bottom">
+            <div class="d-flex align-items-center mb-1">
+                <button class="back-icon-btn me-3" routerLink="/routines" aria-label="Volver atrás">
+                    <i class="bi bi-arrow-left fs-4"></i>
+                </button>
+                <h2 class="page-title mb-0 text-dark-blue fw-bold">{{ isEditMode ? 'Editar Rutina' : 'Nueva Rutina' }}</h2>
+            </div>
+            <p class="text-muted mb-4">Configura los datos básicos y añade las secuencias.</p>
+        </div>
+
+        @if (loading) {
+        <div class="py-5">
+            <app-loading-component></app-loading-component>
+        </div>
+        } @else {
+        <form [formGroup]="routineForm" (ngSubmit)="onSubmit()">
+
+            <div class="row mb-4 g-3">
+                <div class="col-md-7">
+                    <label class="form-label text-primary-blue fw-semibold">Nombre de la Rutina</label>
+                    <input type="text" class="form-control custom-input" formControlName="name"
+                        placeholder="Ej. Rutina de Mañana">
+                </div>
+
+                <div class="col-md-5">
+                    <label class="form-label text-primary-blue fw-semibold">Categoría</label>
+                    <select class="form-select custom-input" formControlName="categoryId">
+                        <option [value]="null" disabled>Selecciona una categoría</option>
+                        @for (cat of categories; track cat.id) {
+                        <option [value]="cat.id">{{ cat.name }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <label class="form-label text-primary-blue fw-semibold d-block mb-3">Días de aplicación</label>
+                <div class="d-flex flex-wrap gap-2">
+                    @for (day of daysList; track day.value; let i = $index) {
+                    <div>
+                        <input type="checkbox" class="btn-check" [formControl]="$any(daysFormArray.at(i))"
+                            [id]="'day'+i" autocomplete="off">
+                        <label class="day-btn fw-medium cursor-pointer" [for]="'day'+i">
+                            {{ day.name }}
+                        </label>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="bg-light p-4 rounded-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="text-primary-blue fw-bold mb-0">Secuencias Asignadas</h5>
+                        <small class="text-muted">Ordena las secuencias por su hora de inicio</small>
+                    </div>
+                    <button type="button" class="btn btn-yellow px-3" (click)="addSequenceToForm()">
+                        <i class="bi bi-plus-lg me-1"></i> Añadir Secuencia
+                    </button>
+                </div>
+
+                <div formArrayName="sequences">
+                    @if (sequencesFormArray.length === 0) {
+                    <div class="text-center py-4 text-muted border border-dashed rounded-3 bg-white">
+                        <i class="bi bi-list-task fs-2 d-block mb-2"></i>
+                        No hay secuencias añadidas a esta rutina.
+                    </div>
+                    }
+
+                    @for (item of sequencesFormArray.controls; track item; let i = $index) {
+                    <div [formGroupName]="i"
+                        class="sequence-card bg-white p-3 mb-3 shadow-sm border-primary-blue position-relative">
+
+                        <div class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-dark-blue">
+                            {{ i + 1 }}
+                        </div>
+
+                        <div class="row align-items-end g-3 ps-2">
+                            <div class="col-md-5">
+                                <label class="form-label small fw-bold text-dark">Secuencia</label>
+                                <select class="form-select custom-input" formControlName="sequenceId">
+                                    <option [value]="null" disabled>Selecciona una secuencia...</option>
+                                    @for (s of availableSequences; track s.id) {
+                                    <option [value]="s.id">{{ s.title }}</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold text-dark">Hora de Inicio</label>
+                                <input type="time" class="form-control custom-input" formControlName="startTime">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold text-dark">Hora de Fin</label>
+                                <input type="time" class="form-control custom-input" formControlName="endTime">
+                            </div>
+                            <div class="col-md-1 text-end">
+                                <button type="button" class="btn btn-outline-danger border-0 rounded-circle"
+                                    (click)="removeSequence(i)" title="Eliminar secuencia">
+                                    <i class="bi bi-trash fs-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-3 pt-3 mt-4 border-top">
+                <button type="button" class="btn btn-outline-secondary px-4 fw-medium"
+                    routerLink="/routines">Cancelar</button>
+                <button type="submit" class="btn btn-dark-blue px-4 fw-medium shadow-sm"
+                    [disabled]="routineForm.invalid">
+                    <i class="bi bi-floppy me-2"></i> Guardar Rutina
+                </button>
+            </div>
+        </form>
+        }
+    </div>
+</div>
