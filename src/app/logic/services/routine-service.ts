@@ -23,6 +23,10 @@ export class RoutineService {
         return this.http.get<Routine>(API_URL + `/api/v1/routines/${id}`);
     }
 
+    deleteRoutine(id: number): Observable<any> {
+        return this.http.delete(API_URL + `/api/v1/routines/${id}`);
+    }
+
     getSortParams(): Observable<SortParam[]> {
         return this.http.get<SortParam[]>(API_URL + `/api/v1/routines/sort-params`);
     }
