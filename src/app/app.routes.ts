@@ -86,6 +86,13 @@ export const routes: Routes = [
         data: { showMenu: false }
     },
 
+    // --- RUTAS PROTEGIDAS (Routines) ---
+    {
+        path: 'routines', 
+        component: ContentListPage,
+        canActivate: [authGuard]
+    },
+
     // --- REDIRECCIONES ---
     {
         path: '', 
