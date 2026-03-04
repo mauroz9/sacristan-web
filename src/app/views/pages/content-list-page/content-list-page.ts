@@ -199,7 +199,7 @@ export class ContentListPage implements OnInit {
         url: "/routines",
         title: "Listado de rutinas",
         subTitle: "Gestiona las rutinas de secuencias",
-        gender: 1,
+        gender: 0,
         plural: 1,
         searchparams: "Buscar por " + searchParams,
         sortparams: this.sortParams,
