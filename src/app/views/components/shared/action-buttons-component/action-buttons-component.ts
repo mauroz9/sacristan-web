@@ -12,6 +12,7 @@ export class ActionButtonsComponent implements OnInit {
   isStudent = false;
   isSequence = false;
   isTeacher = false;
+  isRoutine = false;
   
   onDelete = output<void>();
   onEdit = output<void>();
@@ -29,6 +30,8 @@ export class ActionButtonsComponent implements OnInit {
       this.isSequence = true;
     } else if (this.router.url.includes('/teachers')) {
       this.isTeacher = true;
+    } else if (this.router.url.includes('/routines')) {
+      this.isRoutine = true;
     }
   }
   
