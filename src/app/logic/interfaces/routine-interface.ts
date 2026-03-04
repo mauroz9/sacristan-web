@@ -16,3 +16,16 @@ export interface Routine {
     daysOfTheWeek: string[];
     sequences: RoutineSequence[];
 }
+
+export interface RoutineRequest {
+    name: string;
+    categoryId: number;
+    daysOfTheWeek: string[];
+    sequences: SequenceRoutineRequest[];
+}
+
+export interface SequenceRoutineRequest {
+    sequenceId: number;
+    startTime: string;
+    endTime: string;
+}
