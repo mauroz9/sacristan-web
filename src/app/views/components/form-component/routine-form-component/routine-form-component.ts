@@ -14,7 +14,7 @@ import { RoutineRequest } from '../../../../logic/interfaces/routine-interface';
 @Component({
   selector: 'app-routine-form-component',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, LoadingComponent],
   templateUrl: './routine-form-component.html',
   styleUrl: './routine-form-component.css'
 })
