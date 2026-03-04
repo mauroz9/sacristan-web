@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { Routine } from '../interfaces/routine-interface';
+import { Routine, RoutineRequest } from '../interfaces/routine-interface';
 import { Observable } from 'rxjs';
 import { PageResponse } from '../interfaces/utils/page-interface';
 import { API_URL } from './env';
@@ -25,6 +25,14 @@ export class RoutineService {
 
     deleteRoutine(id: number): Observable<any> {
         return this.http.delete(API_URL + `/api/v1/routines/${id}`);
+    }
+
+    addRoutine(routine: RoutineRequest): Observable<RoutineRequest> {
+        return this.http.post<RoutineRequest>(API_URL + '/api/v1/routines', routine);
+    }
+
+    modifyRoutine(id: number, routine: RoutineRequest): Observable<RoutineRequest> {
+        return this.http.put<RoutineRequest>(API_URL + `/api/v1/routines/${id}`, routine);
     }
 
     getSortParams(): Observable<SortParam[]> {
