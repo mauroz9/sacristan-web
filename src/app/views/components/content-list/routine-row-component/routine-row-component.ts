@@ -39,13 +39,6 @@ export class RoutineRowComponent {
       this.router.navigate(['/routines/modify', id]);
     }
   }
-
-  viewRoutine() {
-    const id = this.routine()?.id;
-    if(id){
-      this.router.navigate(['/routines/view', id]);
-    }
-  }
   
   formatDays(days: string[] | undefined): string {
     if (!days || days.length === 0) return 'Sin días asignados';
