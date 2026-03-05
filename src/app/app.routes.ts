@@ -5,6 +5,7 @@ import { SequenceDetailComponent } from './views/components/sequence-detail-comp
 import { LoginPage } from './views/pages/login-page/login-page';
 import { authGuard } from './logic/guards/auth-guard';
 import { ContentNotFoundPage } from './views/pages/content-not-found-page/content-not-found-page';
+import { RoutineFormComponent } from './views/components/form-component/routine-form-component/routine-form-component';
 
 export const routes: Routes = [
     // --- RUTA PÚBLICA (LOGIN) ---
@@ -43,7 +44,8 @@ export const routes: Routes = [
     {
         path: 'sequences/new',
         component: SequenceFormComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { showMenu: false }
     },
     {
         path: 'sequences/modify/:id',
@@ -55,7 +57,7 @@ export const routes: Routes = [
         path: 'sequences/view/:id',
         component: SequenceDetailComponent,
         canActivate: [authGuard],
-        data: { showMenu: false, showHeader: true }
+        data: { showMenu: false }
     },
 
     // --- RUTAS PROTEGIDAS (Students) ---
@@ -82,6 +84,25 @@ export const routes: Routes = [
     {
         path: 'not-found',
         component: ContentNotFoundPage,
+        canActivate: [authGuard],
+        data: { showMenu: false }
+    },
+
+    // --- RUTAS PROTEGIDAS (Routines) ---
+    {
+        path: 'routines', 
+        component: ContentListPage,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'routines/new',
+        component: RoutineFormComponent, 
+        canActivate: [authGuard],
+        data: { showMenu: false }
+    },
+    {
+        path: 'routines/modify/:id',
+        component: RoutineFormComponent,
         canActivate: [authGuard],
         data: { showMenu: false }
     },

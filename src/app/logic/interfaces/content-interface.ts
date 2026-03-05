@@ -1,6 +1,7 @@
 import { Sequence } from "./sequence-interface";
 import { TeacherResponse } from "./user/teacher/teacher-interface";
 import { StudentResponse } from "./user/student/student-interface";
+import { Routine } from "./routine-interface";
 export interface Content {
     kind:string,
     url: string,
@@ -10,7 +11,7 @@ export interface Content {
     plural?: number,
     searchparams?: string,
     sortparams? : SortParam[],
-    contentList: (Sequence | StudentResponse | TeacherResponse)[]
+    contentList: (Sequence | StudentResponse | TeacherResponse | Routine)[]
 }
 
 export interface SortParam {

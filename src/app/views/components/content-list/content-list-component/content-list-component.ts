@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { SequenceRowComponent } from '../sequence-row-component/sequence-row-component';
 import { Content } from '../../../../logic/interfaces/content-interface';
 import { StudentRowComponent } from "../student-row-component/student-row-component";
@@ -16,6 +16,8 @@ import { TeacherService } from '../../../../logic/services/teacher-service';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
+import { RoutineService } from '../../../../logic/services/routine-service';
+import { RoutineRowComponent } from "../routine-row-component/routine-row-component";
 
 @Component({
   selector: 'app-content-list-component',
@@ -24,7 +26,7 @@ import { firstValueFrom } from 'rxjs';
     AsignSequencesComponent, StudentFormModalComponent,
     TeacherRowComponent, TeacherFormModalComponent,
     AsignStudentComponent, LoadingComponent,
-    ReactiveFormsModule, FormsModule, NgClass],
+    ReactiveFormsModule, FormsModule, NgClass, RoutineRowComponent],
   templateUrl: './content-list-component.html',
   styleUrl: './content-list-component.css',
 })
@@ -41,7 +43,7 @@ export class ContentListComponent {
   sortTooltip: string = 'Orden ascendente';
   direction: string = 'asc';
 
-  constructor(private router: Router, private studentService: StudentService, private sequenceService: SequenceService, private teacherService: TeacherService) {
+  constructor(private router: Router, private studentService: StudentService, private sequenceService: SequenceService, private teacherService: TeacherService, private routineService: RoutineService) {
     if (this.router.url.includes('students/new')) {
       this.functionality = "newStudent";
     } else if (this.router.url.includes('students/modify')) {
@@ -91,6 +93,12 @@ export class ContentListComponent {
       }
 
       this.content()!.contentList = r.content
+    } else if (this.content()?.kind == "rutina") {
+      r = await firstValueFrom(this.routineService.getRoutines(this.searchTerm, this.sortBy, this.direction));
+      for (let routine of r.content) {
+        routine.kind = "rutina";
+      }
+      this.content()!.contentList = r.content;
     }
 
     this.loadingContent.set(false);

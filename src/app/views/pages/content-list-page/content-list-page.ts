@@ -10,6 +10,8 @@ import { Teacher } from '../../../logic/interfaces/teacher-interface';
 import { TeacherService } from '../../../logic/services/teacher-service';
 import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
 import { TeacherResponse } from '../../../logic/interfaces/user/teacher/teacher-interface';
+import { RoutineService } from '../../../logic/services/routine-service';
+import { Routine } from '../../../logic/interfaces/routine-interface';
 
 @Component({
   selector: 'app-content-list-page',
@@ -23,7 +25,8 @@ export class ContentListPage implements OnInit {
     private router: Router,
     private studentService: StudentService,
     private sequenceService: SequenceService,
-    private teacherService: TeacherService
+    private teacherService: TeacherService,
+    private routineService: RoutineService
   ) { }
 
   url = "";
@@ -31,6 +34,7 @@ export class ContentListPage implements OnInit {
   sequenceList: Sequence[] = [];
   studentList: StudentResponse[] = []
   teacherList: TeacherResponse[] = [];
+  routineList: Routine[] = [];
   sortParams: SortParam[] = [];
   infoMessage: string | null = null;
   errorMessage: string | null = null;
@@ -80,6 +84,9 @@ export class ContentListPage implements OnInit {
       } else if (this.url.includes('/sequences')) {
         this.sequenceList = (await firstValueFrom(this.sequenceService.getSequences())).content;
         this.sortParams = await firstValueFrom(this.sequenceService.getSortParams());
+      } else if(this.url.includes('/routines')){
+        this.routineList = (await firstValueFrom(this.routineService.getRoutines())).content;
+        this.sortParams = await firstValueFrom(this.routineService.getSortParams());
       }
       this.loadData();
     } catch (error: any) {
@@ -169,8 +176,34 @@ export class ContentListPage implements OnInit {
         gender: 1,
         plural: 1,
         searchparams: "Buscar por " + searchParams,
-      sortparams: this.sortParams,
+        sortparams: this.sortParams,
         contentList: this.teacherList
+      }
+    } else if(this.url.includes("/routines")){
+      for (let routine of this.routineList) {
+        routine.kind = "rutina";
+      }
+
+      let searchParams = ""
+
+      for (let i = 0; i < this.sortParams.length; i++) {
+        if (i == this.sortParams.length - 1) {
+          searchParams += this.sortParams[i].key.toLowerCase();
+        } else {
+          searchParams += this.sortParams[i].key.toLowerCase() + ", ";
+        }
+      }
+
+      this.content = {
+        kind: "rutina",
+        url: "/routines",
+        title: "Listado de rutinas",
+        subTitle: "Gestiona las rutinas de secuencias",
+        gender: 0,
+        plural: 1,
+        searchparams: "Buscar por " + searchParams,
+        sortparams: this.sortParams,
+        contentList: this.routineList
       }
     } else {
       console.log("Something went wrong loading content list page data");

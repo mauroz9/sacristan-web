@@ -1,110 +1,145 @@
-:host {
-    --primary-blue: #1F3C8B;
-    --secondary-yellow: #F4C430;
-}
-
+/* --- PALETA DE COLORES --- */
+.text-dark-blue,
 .text-primary-blue {
-    color: var(--primary-blue);
+    color: #1F3C8B;
 }
 
-.page-title {
-    color: var(--primary-blue);
-    font-weight: 700;
+.bg-dark-blue {
+    background-color: #1F3C8B;
 }
 
-.form-container {
-    border: 1px solid #e0e0e0;
+/* --- BOTONES GENERALES --- */
+.btn-dark-blue {
+    background-color: #1F3C8B;
+    color: white;
+    border: 1px solid #1F3C8B;
+    transition: all 0.2s;
 }
 
-.custom-input {
-    background-color: #E0E0E0;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 15px;
-    color: #333;
-}
-
-.custom-input:focus {
-    background-color: #d6d6d6;
-    box-shadow: none;
-    border: 1px solid var(--primary-blue);
+.btn-dark-blue:hover:not(:disabled) {
+    background-color: #152b66;
+    color: white;
 }
 
 .btn-yellow {
-    background-color: var(--secondary-yellow);
-    color: white;
-    font-weight: 600;
+    background-color: #FFC107;
+    color: #ffffff;
     border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-}
-.btn-yellow:hover {
-    background-color: #dcb02b;
-    color: white;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
+.btn-yellow:hover {
+    background-color: #e0a800;
+}
+
+.action-btn {
+    transition: background-color 0.2s;
+}
+
+.action-btn:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* --- INPUTS PERSONALIZADOS --- */
+.custom-input {
+    background-color: white;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    box-shadow: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.custom-input:focus {
+    border-color: #1F3C8B;
+    box-shadow: 0 0 0 0.25rem rgba(31, 60, 139, 0.1);
+}
+
+.border-dashed {
+    border-style: dashed !important;
+    border-color: #cbd5e1 !important;
+}
+
+/* =========================================================
+   --- ESTILOS ESPECÍFICOS DE LOS PASOS ARRASTRABLES ---
+   ========================================================= */
+
 .step-card {
-    border: 2px solid var(--primary-blue);
+    border: 2px solid rgba(31, 60, 139, 0.2); /* Borde sutil azul claro */
     border-radius: 10px;
-    transition: transform 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .step-card:hover {
-    background-color: #f8f9fa;
+    border-color: #1F3C8B;
+    box-shadow: 0 4px 6px -1px rgba(31, 60, 139, 0.1);
+}
+
+/* Lógica de Drag and Drop */
+.step-card[draggable="true"] {
+    cursor: grab;
+}
+
+.step-card[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+.step-card.dragging {
+    opacity: 0.5;
+    border: 2px dashed #1F3C8B;
+    background-color: #F8FAFC !important;
+    box-shadow: none;
 }
 
 .drag-handle {
     cursor: grab;
-    color: #ccc;
+}
+.drag-handle:active {
+    cursor: grabbing;
 }
 
+/* Pictogramas y badges dentro del paso */
 .picto-container {
     width: 60px;
     height: 60px;
-    background-color: var(--secondary-yellow);
+    background-color: #FFC107; /* Círculo de fondo amarillo */
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    padding: 5px; 
+    padding: 4px; 
 }
 
 .picto-container img {
     max-width: 100%;
     height: auto;
+    object-fit: cover;
 }
 
 .badge-step {
-    background-color: var(--primary-blue);
+    background-color: #1F3C8B;
     color: white;
-    padding: 5px 15px;
+    padding: 6px 16px;
     border-radius: 20px;
     font-weight: 600;
     font-size: 0.9rem;
     white-space: nowrap;
 }
 
-.btn-dark-blue {
-    background-color: var(--primary-blue);
-    color: white;
-    font-weight: 600;
-    border-radius: 6px;
-}
-.btn-dark-blue:hover {
-    background-color: #162e6b;
+.back-icon-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: #1F3C8B;
+    line-height: 1;
 }
 
-.step-card[draggable="true"] {
-    cursor: grab;
-}
-
-.step-card.dragging {
-    opacity: 0.4;
-    border: 2px dashed #999;
-    background-color: #f0f0f0;
-}
-
-.step-card:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.back-icon-btn:hover,
+.back-icon-btn:focus,
+.back-icon-btn:active {
+    background: transparent !important;
+    border: none;
+    box-shadow: none !important;
+    color: #1F3C8B;
 }
