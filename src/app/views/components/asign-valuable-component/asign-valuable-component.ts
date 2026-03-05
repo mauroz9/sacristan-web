@@ -1,0 +1,247 @@
+import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { StudentService } from '../../../logic/services/student-service';
+import { Sequence } from '../../../logic/interfaces/sequence-interface';
+import { SequenceService } from '../../../logic/services/sequence-service';
+import { StudentSequenceService } from '../../../logic/services/student-sequence-service';
+import { LoadingComponent } from "../shared/loading-component/loading-component";
+import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
+import { StudentRoutineService } from '../../../logic/services/student-routine-service';
+import { RoutineList } from '../../../logic/interfaces/routine-interface';
+
+@Component({
+  selector: 'app-asign-valuable-component',
+  imports: [RouterLink, CommonModule, LoadingComponent],
+  templateUrl: './asign-valuable-component.html',
+  styleUrl: './asign-valuable-component.css',
+})
+export class AsignSequencesComponent implements AfterViewInit {
+
+  @ViewChild('modal') modal!: TemplateRef<any>;
+
+  student: StudentResponse | null = null;
+  studentId: number | null = null;
+  sequences: Sequence[] = [];
+  assignedSequences: Sequence[] = [];
+  availableSequences: Sequence[] = [];
+  assignedRoutines: RoutineList[] = [];
+  availableRoutines: RoutineList[] = [];
+  loading: boolean = false;
+  loadingSequences: boolean = false;
+  loadingRoutines: boolean = false;
+  
+  
+  constructor(private modalService: NgbModal, 
+    private router: Router, 
+    private studentService: StudentService, private route: ActivatedRoute, 
+    private sequenceService: SequenceService, private studentSequenceService: StudentSequenceService,
+    private studentRoutineService: StudentRoutineService
+  ) { }
+
+  openModal(modalContent: TemplateRef<any>) {
+    this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false, size: 'lg' });
+  }
+
+  ngAfterViewInit(): void {
+    this.loading = true;
+    this.openModal(this.modal);
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.studentId = Number(id);
+      this.loadStudentData(this.studentId);
+      this.loadingSequences = true;
+      this.loadSequences(this.studentId);
+    
+      this.loadingRoutines = true;
+      this.loadRoutines(this.studentId);
+    }
+  }
+
+  loadStudentData(studentId: number): void {
+    this.studentService.getStudentById(studentId).subscribe({
+      next: (data) => {
+        this.student = data;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar estudiante', error);
+      }
+    });
+  }
+
+  loadRoutines(studentId: number): void {
+    this.studentRoutineService.getAvailableRoutines(studentId).subscribe({
+      next: (data) => {
+        this.availableRoutines = data;
+        this.loadingRoutines = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar secuencias disponibles:', error);
+      }
+    });
+
+    this.studentRoutineService.getStudentRoutines(studentId).subscribe({
+      next: (data) => {
+        this.assignedRoutines = data;
+      },
+      error: (error) => {
+        console.error("Error al cargar secuencias asignadas:", error);
+      }
+    });
+  }
+
+  assignRoutine(routine: RoutineList): void {
+    if (!routine || !this.student) {
+      return;
+    }
+
+    this.studentRoutineService.assignRoutine(this.studentId!, routine.id!).subscribe({
+      next: () => {
+        this.loadingRoutines = true;
+        this.loadRoutines(this.studentId!);
+      },
+      error: (error) => {
+        console.error('Error al asignar secuencia:', error);
+        alert('Error al asignar secuencia. Por favor, intenta de nuevo.')
+      }
+    });
+  }
+
+  unassignRoutine(routine: RoutineList): void {
+    this.studentRoutineService.unassignRoutine(this.studentId!, routine.id!).subscribe({
+      next: () => {
+        this.loadRoutines(this.studentId!);
+
+      },
+      error: (error) => {
+        console.error('Error al desasignar secuencia:', error);
+        alert('Error al eliminar la secuencia.  Por favor, intenta de nuevo.');
+      }
+    });
+  }
+
+  loadSequences(studentId: number): void {
+    this.studentSequenceService.getAvailableSequences(studentId).subscribe({
+      next: (data) => {
+        this.availableSequences = data;
+        this.loadingSequences = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar secuencias disponibles:', error);
+      }
+    });
+
+    this.studentSequenceService.getStudentSequences(studentId).subscribe({
+      next: (data) => {
+        this.assignedSequences = data;
+      },
+      error: (error) => {
+        console.error("Error al cargar secuencias asignadas:", error);
+      }
+    });
+  }
+
+  assignSequence(seq: Sequence): void {
+    if (!seq || !this.student) {
+      return;
+    }
+
+    this.studentSequenceService.assignSequence(this.studentId!, seq.id!).subscribe({
+      next: () => {
+        this.loadingSequences = true;
+        this.loadSequences(this.studentId!);
+      },
+      error: (error) => {
+        console.error('Error al asignar secuencia:', error);
+        alert('Error al asignar secuencia. Por favor, intenta de nuevo.')
+      }
+    });
+  }
+
+  unassignSequence(sequence: Sequence): void {
+    this.studentSequenceService.unassignSequence(this.studentId!, sequence.id!).subscribe({
+      next: () => {
+        this.loadSequences(this.studentId!);
+
+      },
+      error: (error) => {
+        console.error('Error al desasignar secuencia:', error);
+        alert('Error al eliminar la secuencia.  Por favor, intenta de nuevo.');
+      }
+    });
+  }
+
+  // personalizeSequence(sequence: Sequence): void {
+  //   const studentName = this.student?.name || 'este alumno';
+
+  //   if (!confirm(`¿Quieres crear una versión personalizada de "${sequence.title}" para ${studentName}?\n\nSe desasignará la secuencia original y se creará una copia que podrás modificar.`)) {
+  //     return;
+  //   }
+
+  //   this.loadingSequences = true;
+
+  //   this.sequenceService.duplicateSequence(sequence.id).subscribe({
+  //     next: (newSequence) => {
+  //       const newSequenceId = newSequence.id;
+
+  //       this.studentSequenceService.unassignSequence(this.studentId!, sequence.id).subscribe({
+  //         next: () => {
+  //           this.studentSequenceService.assignSequence(this.studentId!, newSequenceId).subscribe({
+  //             next: () => {
+  //               localStorage.setItem('infoMessage', `Secuencia personalizada creada correctamente para ${studentName}`);
+  //               this.modalService.dismissAll();
+  //               this.router.navigate(['/sequences/modify', newSequenceId]);
+  //             },
+  //             error: (error) => {
+  //               console.error('Error al asignar la secuencia duplicada:', error);
+  //               alert('La secuencia se duplicó pero hubo un error al asignarla');
+  //               this.loadingSequences = false;
+  //             }
+  //           });
+  //         },
+  //         error: (error) => {
+  //           console.error('Error al desasignar la secuencia original:', error);
+  //           alert('La secuencia se duplicó pero hubo un error al desasignar la original');
+  //           this.loadingSequences = false;
+  //         }
+  //       });
+  //     },
+  //     error: (error) => {
+  //       console.error('Error al duplicar la secuencia:', error);
+  //       alert('Error al crear la secuencia personalizada');
+  //       this.loadingSequences = false;
+  //     }
+  //   });
+  // }
+
+  switchTab(actualTab: string): void {
+
+    const btnRutinas = document.getElementById('btn-rutinas');
+    const btnSecuencias = document.getElementById('btn-secuencias');
+    const contentRutinas = document.getElementById('content-rutinas');
+    const contentSecuencias = document.getElementById('content-secuencias');
+
+
+    if (actualTab == 'secuencias') {
+      btnSecuencias!.className = 'btn btn-primary rounded-pill flex-fill fw-semibold tab-active';
+      btnRutinas!.className = 'btn text-secondary rounded-pill flex-fill fw-semibold tab-inactive';
+      
+      contentSecuencias!.classList.remove('d-none');
+      contentRutinas!.classList.add('d-none');
+    } else if (actualTab == 'rutinas') {
+
+      btnRutinas!.className = 'btn btn-primary rounded-pill flex-fill fw-semibold tab-active';
+      btnSecuencias!.className = 'btn text-secondary rounded-pill flex-fill fw-semibold tab-inactive';
+      
+      contentRutinas!.classList.remove('d-none');
+      contentSecuencias!.classList.add('d-none');
+    } else {
+      alert('Error: pestaña desconocida');
+    }
+
+  }
+
+}

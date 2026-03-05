@@ -17,6 +17,13 @@ export interface Routine {
     sequences: RoutineSequence[];
 }
 
+export interface RoutineList {
+    id: number;
+    name: string;
+    daysOfWeek: string[];
+    category: Category;
+}
+
 export interface RoutineRequest {
     name: string;
     categoryId: number;

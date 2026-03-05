@@ -1,0 +1,165 @@
+/* 1. Add this to fix the overall modal height */
+.student-modal-content {
+    height: 80vh; /* You can change this to a fixed pixel value like 700px if preferred */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. Update the scroll container */
+.list-scroll-container {
+    flex: 1; /* Takes up all available remaining space */
+    overflow-y: auto;
+    min-height: 0; /* Crucial trick for inner scrolling inside a flex container */
+}
+
+/* Keep your existing scrollbar styles below */
+.list-scroll-container::-webkit-scrollbar {
+    width: 6px;
+}
+.list-scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.list-scroll-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+.list-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Container to restrict modal width for preview purposes */
+.custom-modal-wrapper {
+    max-width: 850px;
+}
+
+/* Tab Styling */
+.tab-container {
+    background-color: #f1f3f5 !important;
+}
+
+.tab-active {
+    background-color: #1c3563 !important;
+    /* Dark blue matching the image */
+    border: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.tab-active:hover {
+    background-color: #132545 !important;
+}
+
+.tab-inactive {
+    background-color: transparent;
+    border: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.tab-inactive:hover {
+    background-color: #e9ecef;
+}
+
+/* List Container & Custom Scrollbar */
+.list-scroll-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.list-scroll-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.list-scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.list-scroll-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+
+.list-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Card Items Styling */
+.item-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease-in-out;
+}
+
+.item-card:hover {
+    border-color: #d1d5db;
+}
+
+/* Icon Box inside cards */
+.icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #f3f4f6;
+    border-radius: 8px;
+    color: #111827;
+    font-size: 1.1rem;
+}
+
+/* Custom Checkbox */
+.custom-checkbox:checked {
+    background-color: #1c3563;
+    border-color: #1c3563;
+}
+
+/* Drag Handle */
+.drag-handle {
+    cursor: grab;
+    padding: 0 5px;
+}
+
+/* Custom Active Badge */
+.custom-badge {
+    background-color: #fef0c7 !important;
+    /* Light yellow background */
+    color: #92400e !important;
+    /* Dark yellow/brown text */
+    font-size: 0.65rem;
+    padding: 0.35em 0.65em;
+    letter-spacing: 0.5px;
+}
+
+/* Custom Close/Remove Button on Right Column */
+.custom-close {
+    font-size: 0.75rem;
+    opacity: 0.4;
+}
+
+.custom-close:hover {
+    opacity: 0.8;
+}
+
+.btn-outline-primary {
+    border-color: #1c3563 !important;
+    color: #1c3563 !important;
+}
+
+
+.btn-outline-primary:hover {
+    background-color: #1c3563 !important;
+    color: white !important;
+}
+
+/* Save Button */
+.btn-save {
+    background-color: #1c3563 !important;
+    border: none;
+}
+
+.btn-save:hover {
+    background-color: #132545 !important;
+}
