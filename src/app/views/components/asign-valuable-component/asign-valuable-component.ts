@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StudentService } from '../../../logic/services/student-service';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
@@ -13,7 +14,7 @@ import { RoutineList } from '../../../logic/interfaces/routine-interface';
 
 @Component({
   selector: 'app-asign-valuable-component',
-  imports: [RouterLink, CommonModule, LoadingComponent],
+  imports: [RouterLink, CommonModule, FormsModule, LoadingComponent],
   templateUrl: './asign-valuable-component.html',
   styleUrl: './asign-valuable-component.css',
 })
@@ -31,6 +32,35 @@ export class AsignSequencesComponent implements AfterViewInit {
   loading: boolean = false;
   loadingSequences: boolean = false;
   loadingRoutines: boolean = false;
+
+  routineSearchTerm: string = '';
+  sequenceSearchTerm: string = '';
+  filteredAvailableRoutines: RoutineList[] = [];
+  filteredAvailableSequences: Sequence[] = [];
+
+  filterRoutines(): void {
+    if (!this.routineSearchTerm.trim()) {
+      this.filteredAvailableRoutines = this.availableRoutines;
+      return;
+    }
+    const term = this.routineSearchTerm.toLowerCase().trim();
+    this.filteredAvailableRoutines = this.availableRoutines.filter(r =>
+      r.name.toLowerCase().includes(term) ||
+      r.category?.name?.toLowerCase().includes(term)
+    );
+  }
+
+  filterSequences(): void {
+    if (!this.sequenceSearchTerm.trim()) {
+      this.filteredAvailableSequences = this.availableSequences;
+      return;
+    }
+    const term = this.sequenceSearchTerm.toLowerCase().trim();
+    this.filteredAvailableSequences = this.availableSequences.filter(s =>
+      s.title.toLowerCase().includes(term) ||
+      s.category?.name?.toLowerCase().includes(term)
+    );
+  }
   
   
   constructor(private modalService: NgbModal, 
@@ -76,6 +106,7 @@ export class AsignSequencesComponent implements AfterViewInit {
     this.studentRoutineService.getAvailableRoutines(studentId).subscribe({
       next: (data) => {
         this.availableRoutines = data;
+        this.filterRoutines();
         this.loadingRoutines = false;
       },
       error: (error) => {
@@ -127,6 +158,7 @@ export class AsignSequencesComponent implements AfterViewInit {
     this.studentSequenceService.getAvailableSequences(studentId).subscribe({
       next: (data) => {
         this.availableSequences = data;
+        this.filterSequences();
         this.loadingSequences = false;
       },
       error: (error) => {
