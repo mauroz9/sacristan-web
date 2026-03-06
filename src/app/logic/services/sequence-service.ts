@@ -13,8 +13,13 @@ export class SequenceService {
 
   constructor (private http: HttpClient) {}
 
-  getSequences(query:string = "", sortBy: string = "title", sortDir: string = "asc"): Observable<PageResponse<Sequence>>{
-    return this.http.get<PageResponse<Sequence>>(API_URL + `/api/v1/sequences?q=${query}&sort=${sortBy},${sortDir}`);
+  getSequences({
+    query = "",
+    sortBy = "title",
+    sortDir = "asc",
+    page = 0
+  }: GetParams = {}): Observable<PageResponse<Sequence>>{
+    return this.http.get<PageResponse<Sequence>>(API_URL + `/api/v1/sequences?q=${query}&sort=${sortBy},${sortDir}&page=${page}`);
   }
 
   getSequenceById(id: number): Observable<Sequence> {
