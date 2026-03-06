@@ -32,8 +32,6 @@ export class UserFormModalComponent {
       if(this.userFormComponent.userId != null){
         formData.id = this.userFormComponent.userId;
       }
-      
-      // this.userService.sendUser(formData);
     } else {
       userFormGroup.markAllAsTouched();
     }

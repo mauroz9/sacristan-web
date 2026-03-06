@@ -78,12 +78,12 @@
                             <app-teacher-row-component [teacher]="item" (onDelete)="reloadContent()"></app-teacher-row-component>
                         } @else if(item.kind == "rutina"){
                             <app-routine-row-component [routine]="item" (onDelete)="reloadContent()"></app-routine-row-component>
-                    }@else {
-                        <div class="text-center py-5 text-muted">
-                            <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
-                            Tipo de contenido no soportado.
-                        </div>
-                    }
+                        }@else {
+                            <div class="text-center py-5 text-muted">
+                                <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
+                                Tipo de contenido no soportado.
+                            </div>
+                        }
                 }
             }
         }

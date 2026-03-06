@@ -124,7 +124,7 @@ export class ContentListPage implements OnInit {
         }
       }
 
-      this.content.searchparams = searchParams;
+      this.content.searchparams = "Buscar por " + searchParams;
       this.content.sortparams= this.sortParams
 
     } else if (this.url.includes('/students')) {
