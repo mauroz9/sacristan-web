@@ -16,7 +16,7 @@ export class ActionButtonsComponent implements OnInit {
   
   onDelete = output<void>();
   onEdit = output<void>();
-  onAssignSequences = output<void>();
+  onAssignValuable = output<void>();
   onAssignStudent = output<void>();
   onView = output<void>();
   onDuplicate = output<void>();

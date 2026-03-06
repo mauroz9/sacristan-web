@@ -49,9 +49,9 @@ export class StudentRowComponent implements OnInit {
     });
   }
 
-  assignSequences() {
+  assignValuable() {
     let id = this.student()?.id;
-    this.router.navigate(['/students/asign-sequences/', id]);
+    this.router.navigate(['/students/assign-valuable/', id]);
   }
 
   deleteStudent() {

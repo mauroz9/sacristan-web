@@ -77,7 +77,7 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
-        path: 'students/asign-sequences/:id',
+        path: 'students/assign-valuable/:id',
         component: ContentListPage, 
         canActivate: [authGuard]
     },

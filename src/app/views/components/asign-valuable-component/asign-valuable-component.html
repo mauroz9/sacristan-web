@@ -1,0 +1,161 @@
+<ng-template #modal let-modal>
+    <div class="student-modal-content shadow-lg">
+
+        @if (loading) {
+            <app-loading-component></app-loading-component>
+        } @else {
+            <div class="card border-0 rounded-4 flex-grow-1 d-flex flex-column overflow-hidden">
+
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="images/studentIMG.jpg" alt="Avatar" class="rounded-circle" width="50" height="50">
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Asignar Secuencias/Rutinas: {{student?.name}} {{student?.lastName}}</h5>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close mt-2" aria-label="Close" (click)="modal.close()"
+                        [routerLink]="'/students'"></button>
+                    </div>
+                </div>
+
+                <div class="card-body px-4 d-flex flex-column overflow-hidden">
+                    <div class="tab-container d-flex bg-light rounded-pill mb-4 p-1">
+                        <button id="btn-rutinas" class="btn btn-primary rounded-pill flex-fill fw-semibold tab-active"
+                            (click)="switchTab('rutinas')">RUTINAS</button>
+                        <button id="btn-secuencias"
+                            class="btn text-secondary rounded-pill flex-fill fw-semibold tab-inactive"
+                            (click)="switchTab('secuencias')">SECUENCIAS</button>
+                    </div>
+
+                    <div id="content-rutinas" class="row g-4 flex-grow-1 overflow-hidden">
+                        <div class="col-md-6 d-flex flex-column h-100">
+                            <h6 class="fw-bold mb-3">Rutinas Disponibles</h6>
+                            @if (availableRoutines.length === 0) {
+                                <div class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                        No hay rutinas disponibles para asignar.
+                                    </div>
+                            } @else {
+                                <div class="input-group mb-3 border rounded-3 overflow-hidden">
+                                    <span class="input-group-text bg-white border-0 text-muted"><i
+                                            class="fas fa-search"></i></span>
+                                    <input type="text" class="form-control border-0 shadow-none ps-0" placeholder="Buscar rutinas..." [(ngModel)]="routineSearchTerm" (ngModelChange)="filterRoutines()">
+                                </div>
+
+                                <div class="list-scroll-container pe-2">
+                                    @for (routine of filteredAvailableRoutines; track routine.id) {
+                                        <div class="card item-card mb-2">
+                                            <div class="card-body p-2 d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <div class="fw-bold fs-6">{{ routine.name }}</div>
+                                                    <div class="text-muted small">{{ routine.category.name }}</div>
+                                                </div>
+                                                <button class="btn btn-outline-primary btn-sm" (click)="assignRoutine(routine)">Asignar</button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <div class="col-md-6 d-flex flex-column h-100">
+                            <h6 class="fw-bold mb-3">Rutinas de {{student?.name}} {{student?.lastName}} Actuales</h6>
+
+                            <div class="list-scroll-container">
+                                <div class="list-scroll-container">
+                                    @if (assignedRoutines.length === 0) {
+                                        <div class="text-center py-5 text-muted">
+                                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                            No hay rutinas asignadas todavía.
+                                        </div>
+                                    } @else {
+                                        @for (routine of assignedRoutines; track routine.id) {
+                                            <div class="card item-card mb-2">
+                                                <div class="card-body p-2 d-flex align-items-center">
+                                                    <div class="flex-grow-1 d-flex flex-column align-items-start">
+                                                        <div class="fw-bold fs-6">{{ routine.name }}</div>
+                                                    </div>
+                                                    <button type="button" class="btn-close custom-close me-2" (click)="unassignRoutine(routine)"></button>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="content-secuencias" class="row g-4 d-none flex-grow-1 overflow-hidden">
+                        <div class="col-md-6 d-flex flex-column h-100">
+                            <h6 class="fw-bold mb-3">Secuencias Disponibles</h6>
+
+                            @if (availableSequences.length === 0) {
+                                    <div class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                        No hay secuencias disponibles para asignar.
+                                    </div>
+                            } @else {
+                                <div class="input-group mb-3 border rounded-3 overflow-hidden">
+                                    <span class="input-group-text bg-white border-0 text-muted"><i
+                                            class="fas fa-search"></i></span>
+                                    <input type="text" class="form-control border-0 shadow-none ps-0"
+                                        placeholder="Buscar secuencias..." [(ngModel)]="sequenceSearchTerm" (ngModelChange)="filterSequences()">
+                                </div>
+
+                                <div class="list-scroll-container pe-2">
+                                    @for (sequence of filteredAvailableSequences; track sequence.id) {
+                                        <div class="card item-card mb-2">
+                                            <div class="card-body p-2 d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <div class="fw-bold fs-6">{{ sequence.title }}</div>
+                                                    <div class="text-muted small">{{ sequence.category.name }}</div>
+                                                </div>
+                                                <button class="btn btn-outline-primary btn-sm" (click)="assignSequence(sequence)">Asignar</button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            </div>
+
+                        <div class="col-md-6 d-flex flex-column h-100">
+                            <h6 class="fw-bold mb-3">Secuencias de {{student?.name}} {{student?.lastName}} Actuales</h6>
+
+                            <div class="list-scroll-container">
+                                @if (assignedSequences.length === 0) {
+                                    <div class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                        No hay secuencias asignadas todavía.
+                                    </div>
+                                } @else {
+                                    @for (sequence of assignedSequences; track sequence.id) {
+                                        <div class="card item-card mb-2">
+                                            <div class="card-body p-2 d-flex align-items-center">
+                                                <div class="flex-grow-1 d-flex flex-column align-items-start">
+                                                    <div class="fw-bold fs-6">{{ sequence.title }}</div>
+                                                </div>
+                                                <button type="button" class="btn-close custom-close me-2" (click)="unassignSequence(sequence)"></button>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+
+        <div class="modal-footer bg-white border-top-0 pb-4 px-4 d-flex justify-content-end align-items-center text-dark">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary btn-save px-4 fw-medium rounded-3" (click)="modal.close()"
+                        [routerLink]="'/students'">Abandonar</button>
+                </div>
+
+        </div>
+    </div>
+</ng-template>
