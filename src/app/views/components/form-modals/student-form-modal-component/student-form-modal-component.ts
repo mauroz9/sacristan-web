@@ -53,7 +53,6 @@ export class StudentFormModalComponent {
       });
 
     } else {
-      alert("El formulario no es válido. Por favor, complete todos los campos requeridos correctamente.");
       userFormGroup.markAllAsTouched();
     }
   }

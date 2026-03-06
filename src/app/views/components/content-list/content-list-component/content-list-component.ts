@@ -16,8 +16,8 @@ import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { RoutineService } from '../../../../logic/services/routine-service';
-import { RoutineRowComponent } from "../routine-row-component/routine-row-component";
 import { AsignSequencesComponent } from "../../asign-valuable-component/asign-valuable-component";
+import { RoutineRowComponent } from "../routine-row-component/routine-row-component";
 
 @Component({
   selector: 'app-content-list-component',
@@ -25,7 +25,7 @@ import { AsignSequencesComponent } from "../../asign-valuable-component/asign-va
     StudentRowComponent, RouterLink, StudentFormModalComponent,
     TeacherRowComponent, TeacherFormModalComponent,
     AsignStudentComponent, LoadingComponent,
-    ReactiveFormsModule, FormsModule, NgClass, RoutineRowComponent, AsignSequencesComponent],
+    ReactiveFormsModule, FormsModule, NgClass, AsignSequencesComponent, RoutineRowComponent],
   templateUrl: './content-list-component.html',
   styleUrl: './content-list-component.css',
 })
@@ -37,7 +37,7 @@ export class ContentListComponent {
   loadingContent = signal<boolean>(false);
   functionality = "";
   searchTerm: string = '';
-  sortBy: string = 'user.name';
+  sortBy: string = '';
   isAscending: boolean = true;
   sortTooltip: string = 'Orden ascendente';
   direction: string = 'asc';
@@ -64,7 +64,6 @@ export class ContentListComponent {
   }
 
   async sortContent() {
-    console.log("Sort content called");
     let r;
 
     if (this.content()?.kind == "alumno") {
