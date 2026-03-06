@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Content, SortParam } from '../../../logic/interfaces/content-interface';
 import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
@@ -12,10 +12,11 @@ import { StudentResponse } from '../../../logic/interfaces/user/student/student-
 import { TeacherResponse } from '../../../logic/interfaces/user/teacher/teacher-interface';
 import { RoutineService } from '../../../logic/services/routine-service';
 import { Routine } from '../../../logic/interfaces/routine-interface';
+import { LoadingComponent } from '../../components/shared/loading-component/loading-component';
 
 @Component({
   selector: 'app-content-list-page',
-  imports: [ContentListComponent],
+  imports: [ContentListComponent, LoadingComponent],
   templateUrl: './content-list-page.html',
   styleUrl: './content-list-page.css',
 })
@@ -38,6 +39,9 @@ export class ContentListPage implements OnInit {
   sortParams: SortParam[] = [];
   infoMessage: string | null = null;
   errorMessage: string | null = null;
+  page = 0;
+  isLoading = false;
+  allLoaded = false;
 
   contentSequence: Content = {
     kind: "secuencia",
@@ -71,11 +75,14 @@ export class ContentListPage implements OnInit {
   }
 
   async getData() {
+    this.page = 0;
 
     try {
       this.url = this.router.url;
       if (this.url.includes('/students')) {
         this.studentList = (await firstValueFrom(this.studentService.getStudents())).content;
+        console.log(this.studentList);
+        
         this.sortParams = await firstValueFrom(this.studentService.getSortParams());
         
       } else if (this.url.includes('/teachers')) {
@@ -103,6 +110,69 @@ export class ContentListPage implements OnInit {
     
   }
 
+  async callPage() {
+    var res: StudentResponse[] | TeacherResponse[] | Sequence[] | Routine[] = [];
+    if (this.isLoading || this.allLoaded) return;
+    this.isLoading = true;
+    
+    this.page++;  
+    this.url = this.router.url;
+
+      if (this.url.includes('/students')) {
+
+        res = (await firstValueFrom(this.studentService.getStudents({page: this.page}))).content;
+
+        if(res.length == 0){
+          this.allLoaded = true;
+        } else {
+          console.log(res);
+          this.studentList.push(...res);
+        }
+
+      } else if (this.url.includes('/teachers')) {
+
+        res = (await firstValueFrom(this.teacherService.getTeachers({page: this.page}))).content;
+
+        if(res.length == 0){
+          this.allLoaded = true;
+        } else {
+          console.log(res);
+          this.teacherList.push(...res);
+        }
+
+      } else if (this.url.includes('/sequences')) {
+        res = (await firstValueFrom(this.sequenceService.getSequences({page: this.page}))).content;
+
+        if(res.length == 0){
+          this.allLoaded = true;
+        } else {
+          console.log(res);
+          this.sequenceList.push(...res);
+        }
+      } else if(this.url.includes('/routines')){
+        res = (await firstValueFrom(this.routineService.getRoutines({page: this.page}))).content
+        if(res.length == 0){
+          this.allLoaded = true;
+        } else {
+          console.log(res);
+          this.routineList.push(...res);
+        }
+      }
+
+      this.isLoading = false;
+      this.loadData();
+  }
+
+  @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
+  ngAfterViewInit() {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        this.callPage();
+      }
+    }, { threshold: 0.1 });
+
+    observer.observe(this.scrollAnchor.nativeElement);
+  }
 
   loadData() {
     if (this.url.includes('/sequences')) {

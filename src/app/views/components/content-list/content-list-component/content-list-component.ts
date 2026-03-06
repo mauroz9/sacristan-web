@@ -67,7 +67,11 @@ export class ContentListComponent {
     let r;
 
     if (this.content()?.kind == "alumno") {
-      r = await firstValueFrom(this.studentService.getStudents(this.searchTerm, this.sortBy, this.direction));
+      r = await firstValueFrom(this.studentService.getStudents({
+        query: this.searchTerm,
+        sortBy: this.sortBy,
+        sortDir: this.direction
+      }));
 
       for (let student of r.content) {
         student.kind = "alumno";
@@ -76,7 +80,11 @@ export class ContentListComponent {
       this.content()!.contentList = r.content
 
     } else if (this.content()?.kind == "secuencia") {
-      r = await firstValueFrom(this.sequenceService.getSequences(this.searchTerm, this.sortBy, this.direction));
+      r = await firstValueFrom(this.sequenceService.getSequences({
+        query: this.searchTerm,
+        sortBy: this.sortBy,
+        sortDir: this.direction
+      }));
 
       for (let sequence of r.content) {
         sequence.kind = "secuencia";
@@ -85,14 +93,22 @@ export class ContentListComponent {
       this.content()!.contentList = r.content
 
     } else if (this.content()?.kind == "profesor") {
-      r = await firstValueFrom(this.teacherService.getTeachers(this.searchTerm, this.sortBy, this.direction));
+      r = await firstValueFrom(this.teacherService.getTeachers({
+        query: this.searchTerm,
+        sortBy: this.sortBy,
+        sortDir: this.direction
+      }));
       for (let teacher of r.content) {
         teacher.kind = "profesor";
       }
 
       this.content()!.contentList = r.content
     } else if (this.content()?.kind == "rutina") {
-      r = await firstValueFrom(this.routineService.getRoutines(this.searchTerm, this.sortBy, this.direction));
+      r = await firstValueFrom(this.routineService.getRoutines({
+        query: this.searchTerm,
+        sortBy: this.sortBy,
+        sortDir: this.direction
+      }));
       for (let routine of r.content) {
         routine.kind = "rutina";
       }

@@ -18,8 +18,13 @@ export class TeacherService {
 
   API_URL = API_URL + "/api/v1/admin/teachers";
 
-  getTeachers(query:string = "", sortBy: string = "user.name", sortDir: string = "asc"): Observable<PageResponse<TeacherResponse>> {
-    return this.http.get<PageResponse<TeacherResponse>>(this.API_URL + "?q=" + query + "&sort=" + sortBy + "," + sortDir);
+  getTeachers({
+    query = "",
+    sortBy = "user.name",
+    sortDir = "asc",
+    page = 0
+  }: GetParams = {}): Observable<PageResponse<TeacherResponse>> {
+    return this.http.get<PageResponse<TeacherResponse>>(this.API_URL + "?q=" + query + "&sort=" + sortBy + "," + sortDir + "&page=" + page);
   }
 
   getStudentCountByTeacher(id: number): Observable<number> {

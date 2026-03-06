@@ -19,6 +19,12 @@
     }
 
     <app-content-list-component (reload)="reloadContent()" [loading]="loading"  [content]="content"></app-content-list-component>
+
+    <div #scrollAnchor class="anchor">
+        @if (isLoading) {
+            <app-loading-component></app-loading-component>
+        }
+    </div>
     
     <!-- @if (content.contentList.length != 0) {
         <div class="pagination-container">
