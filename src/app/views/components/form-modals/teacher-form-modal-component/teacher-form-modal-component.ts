@@ -43,6 +43,7 @@ export class TeacherFormModalComponent {
         },
         error: (error) => {
           console.error("Error sending teacher data: ");
+          console.log(error); 
           if (error.status == 400) {
             this.teacherService.handleFormErrors(error.error["invalid-params"], this.userFormComponent.userFormGroup);
           } else {
@@ -53,12 +54,8 @@ export class TeacherFormModalComponent {
       });
 
     } else {
-      alert("El formulario no es válido. Por favor, complete todos los campos requeridos correctamente.");
       userFormGroup.markAllAsTouched();
     }
   }
-
-  
-
 }
 
