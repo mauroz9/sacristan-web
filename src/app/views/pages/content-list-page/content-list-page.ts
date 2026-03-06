@@ -42,6 +42,9 @@ export class ContentListPage implements OnInit {
   page = 0;
   isLoading = false;
   allLoaded = false;
+  currentQuery = '';
+  currentSortBy = '';
+  currentSortDir = 'asc';
 
   contentSequence: Content = {
     kind: "secuencia",
@@ -118,9 +121,16 @@ export class ContentListPage implements OnInit {
     this.page++;  
     this.url = this.router.url;
 
+      const params: GetParams = {
+        page: this.page,
+        query: this.currentQuery,
+        sortBy: this.currentSortBy || undefined,
+        sortDir: this.currentSortDir
+      };
+
       if (this.url.includes('/students')) {
 
-        res = (await firstValueFrom(this.studentService.getStudents({page: this.page}))).content;
+        res = (await firstValueFrom(this.studentService.getStudents(params))).content;
 
         if(res.length == 0){
           this.allLoaded = true;
@@ -131,7 +141,7 @@ export class ContentListPage implements OnInit {
 
       } else if (this.url.includes('/teachers')) {
 
-        res = (await firstValueFrom(this.teacherService.getTeachers({page: this.page}))).content;
+        res = (await firstValueFrom(this.teacherService.getTeachers(params))).content;
 
         if(res.length == 0){
           this.allLoaded = true;
@@ -141,7 +151,7 @@ export class ContentListPage implements OnInit {
         }
 
       } else if (this.url.includes('/sequences')) {
-        res = (await firstValueFrom(this.sequenceService.getSequences({page: this.page}))).content;
+        res = (await firstValueFrom(this.sequenceService.getSequences(params))).content;
 
         if(res.length == 0){
           this.allLoaded = true;
@@ -150,7 +160,7 @@ export class ContentListPage implements OnInit {
           this.sequenceList.push(...res);
         }
       } else if(this.url.includes('/routines')){
-        res = (await firstValueFrom(this.routineService.getRoutines({page: this.page}))).content
+        res = (await firstValueFrom(this.routineService.getRoutines(params))).content
         if(res.length == 0){
           this.allLoaded = true;
         } else {
@@ -161,6 +171,24 @@ export class ContentListPage implements OnInit {
 
       this.isLoading = false;
       this.loadData();
+  }
+
+  onSortChanged(params: { query: string, sortBy: string, sortDir: string }) {
+    this.currentQuery = params.query;
+    this.currentSortBy = params.sortBy;
+    this.currentSortDir = params.sortDir;
+    this.page = 0;
+    this.allLoaded = false;
+
+    if (this.url.includes('/students')) {
+      this.studentList = [...this.content.contentList] as StudentResponse[];
+    } else if (this.url.includes('/teachers')) {
+      this.teacherList = [...this.content.contentList] as TeacherResponse[];
+    } else if (this.url.includes('/sequences')) {
+      this.sequenceList = [...this.content.contentList] as Sequence[];
+    } else if (this.url.includes('/routines')) {
+      this.routineList = [...this.content.contentList] as Routine[];
+    }
   }
 
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;

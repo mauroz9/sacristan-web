@@ -18,7 +18,7 @@
         </div>
     }
 
-    <app-content-list-component (reload)="reloadContent()" [loading]="loading"  [content]="content"></app-content-list-component>
+    <app-content-list-component (reload)="reloadContent()" (sortChanged)="onSortChanged($event)" [loading]="loading"  [content]="content"></app-content-list-component>
 
     <div #scrollAnchor class="anchor">
         @if (isLoading) {

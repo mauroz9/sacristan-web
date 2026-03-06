@@ -34,6 +34,7 @@ export class ContentListComponent {
   content = input<Content>();
   loading = input<boolean>();
   reload = output<void>();
+  sortChanged = output<{ query: string, sortBy: string, sortDir: string }>();
   loadingContent = signal<boolean>(false);
   functionality = "";
   searchTerm: string = '';
@@ -115,6 +116,7 @@ export class ContentListComponent {
       this.content()!.contentList = r.content;
     }
 
+    this.sortChanged.emit({ query: this.searchTerm, sortBy: this.sortBy, sortDir: this.direction });
     this.loadingContent.set(false);
   }
 
