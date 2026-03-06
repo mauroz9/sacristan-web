@@ -31,7 +31,7 @@
                     <div id="content-rutinas" class="row g-4 flex-grow-1 overflow-hidden">
                         <div class="col-md-6 d-flex flex-column h-100">
                             <h6 class="fw-bold mb-3">Rutinas Disponibles</h6>
-                            @if (availableSequences.length === 0) {
+                            @if (availableRoutines.length === 0) {
                                 <div class="text-center py-5 text-muted">
                                         <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                                         No hay rutinas disponibles para asignar.
@@ -40,11 +40,11 @@
                                 <div class="input-group mb-3 border rounded-3 overflow-hidden">
                                     <span class="input-group-text bg-white border-0 text-muted"><i
                                             class="fas fa-search"></i></span>
-                                    <input type="text" class="form-control border-0 shadow-none ps-0" placeholder="Buscar">
+                                    <input type="text" class="form-control border-0 shadow-none ps-0" placeholder="Buscar rutinas..." [(ngModel)]="routineSearchTerm" (ngModelChange)="filterRoutines()">
                                 </div>
 
                                 <div class="list-scroll-container pe-2">
-                                    @for (routine of availableRoutines; track routine.id) {
+                                    @for (routine of filteredAvailableRoutines; track routine.id) {
                                         <div class="card item-card mb-2">
                                             <div class="card-body p-2 d-flex align-items-center">
                                                 <div class="flex-grow-1">
@@ -100,11 +100,11 @@
                                     <span class="input-group-text bg-white border-0 text-muted"><i
                                             class="fas fa-search"></i></span>
                                     <input type="text" class="form-control border-0 shadow-none ps-0"
-                                        placeholder="Buscar secuencias">
+                                        placeholder="Buscar secuencias..." [(ngModel)]="sequenceSearchTerm" (ngModelChange)="filterSequences()">
                                 </div>
 
                                 <div class="list-scroll-container pe-2">
-                                    @for (sequence of availableSequences; track sequence.id) {
+                                    @for (sequence of filteredAvailableSequences; track sequence.id) {
                                         <div class="card item-card mb-2">
                                             <div class="card-body p-2 d-flex align-items-center">
                                                 <div class="flex-grow-1">
