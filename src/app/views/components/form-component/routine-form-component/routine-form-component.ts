@@ -92,7 +92,7 @@ export class RoutineFormComponent implements OnInit {
       });
 
       routine.sequences.forEach((rs: any) => {
-        this.addSequenceToForm(rs.sequence.id, rs.startTime, rs.endTime);
+        this.addSequenceToForm(rs.id, rs.sequence.id, rs.startTime, rs.endTime);
       });
     });
   }
@@ -100,8 +100,9 @@ export class RoutineFormComponent implements OnInit {
   get daysFormArray() { return this.routineForm.get('daysOfTheWeek') as FormArray; }
   get sequencesFormArray() { return this.routineForm.get('sequences') as FormArray; }
 
-  addSequenceToForm(sequenceId: number | null = null, start: string = '09:00', end: string = '10:00') {
+  addSequenceToForm(id: number | null = null, sequenceId: number | null = null, start: string = '09:00', end: string = '10:00') {
     this.sequencesFormArray.push(new FormGroup({
+      id: new FormControl(id),
       sequenceId: new FormControl(sequenceId, Validators.required),
       startTime: new FormControl(start, Validators.required),
       endTime: new FormControl(end, Validators.required)

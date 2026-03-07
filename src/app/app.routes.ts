@@ -110,7 +110,7 @@ export const routes: Routes = [
     // --- REDIRECCIONES ---
     {
         path: '', 
-        redirectTo: '/sequences', 
+        redirectTo: '/login', 
         pathMatch: 'full'
     },
     {
