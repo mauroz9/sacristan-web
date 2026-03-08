@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RoutineService } from '../../../../logic/services/routine-service';
 import { CategorySequenceService } from '../../../../logic/services/category-sequence-service';
@@ -19,6 +19,7 @@ import { RoutineRequest } from '../../../../logic/interfaces/routine-interface';
   styleUrl: './routine-form-component.css'
 })
 export class RoutineFormComponent implements OnInit {
+
   routineForm = new FormGroup({
     name: new FormControl('', Validators.required),
     categoryId: new FormControl<number | null>(null, Validators.required),
@@ -31,6 +32,7 @@ export class RoutineFormComponent implements OnInit {
   categories: Category[] = [];
   availableSequences: Sequence[] = [];
   loading = false;
+  errorMessage: string | null = null;
 
   daysList = [
     { name: 'Lunes', value: 'MONDAY' },
@@ -61,7 +63,7 @@ export class RoutineFormComponent implements OnInit {
     try {
       const cats = await firstValueFrom(this.categoryService.getCategories());
       this.categories = cats.content;
-      
+
       const seqs = await firstValueFrom(this.sequenceService.getSequences());
       this.availableSequences = seqs.content;
 
@@ -106,7 +108,7 @@ export class RoutineFormComponent implements OnInit {
       sequenceId: new FormControl(sequenceId, Validators.required),
       startTime: new FormControl(start, Validators.required),
       endTime: new FormControl(end, Validators.required)
-    }));
+    }, { validators: this.timeRangeValidator('startTime', 'endTime') }));
   }
 
   removeSequence(index: number) {
@@ -126,7 +128,7 @@ export class RoutineFormComponent implements OnInit {
         sequences: this.routineForm.value.sequences!
       };
 
-      const request = this.isEditMode 
+      const request = this.isEditMode
         ? this.routineService.modifyRoutine(this.routineId!, routine)
         : this.routineService.addRoutine(routine);
 
@@ -135,10 +137,26 @@ export class RoutineFormComponent implements OnInit {
           localStorage.setItem('infoMessage', this.isEditMode ? 'Rutina actualizada' : 'Rutina creada');
           this.router.navigate(['/routines']);
         },
-        error: (err) => alert("Error al guardar: " + err.message)
+        error: (err) => {
+          console.log(err.error);
+
+          this.errorMessage = err.error.detail || 'Error al guardar la rutina';
+
+        }
       });
     } else {
       this.routineForm.markAllAsTouched();
     }
+  }
+
+  private timeRangeValidator(startField: string, endField: string) {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const start = group.get(startField)?.value as string | null;
+      const end = group.get(endField)?.value as string | null;
+
+      if (!start || !end) return null;
+
+      return start < end ? null : { invalidTimeRange: true };
+    };
   }
 }
