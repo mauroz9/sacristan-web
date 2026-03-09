@@ -18,8 +18,15 @@ export class StudentService {
 
   API_URL = API_URL + "/api/v1/admin/students";
 
-  getStudents(query:string = "", sortBy: string = "user.name", sortDir: string = "asc"): Observable<PageResponse<StudentResponse>> {
-    return this.http.get<PageResponse<StudentResponse>>(this.API_URL + "?q="+query+"&sort="+sortBy+","+sortDir);
+
+
+  getStudents({
+    query = "",
+    sortBy = "user.name",
+    sortDir = "asc",
+    page = 0
+  }: GetParams = {}): Observable<PageResponse<StudentResponse>> {
+    return this.http.get<PageResponse<StudentResponse>>(this.API_URL + "?q="+query+"&sort="+sortBy+","+sortDir+"&page="+page);
   }
 
 

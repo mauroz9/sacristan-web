@@ -15,8 +15,13 @@ export class RoutineService {
 
     constructor(private http: HttpClient) { }
 
-    getRoutines(query: string = "", sortBy: string = "name", sortDir: string = "asc"): Observable<PageResponse<Routine>> {
-        return this.http.get<PageResponse<Routine>>(API_URL + `/api/v1/routines?q=${query}&sort=${sortBy},${sortDir}`);
+    getRoutines({
+        query = "",
+        sortBy = "name",
+        sortDir = "asc",
+        page = 0
+    }: GetParams = {}): Observable<PageResponse<Routine>> {
+        return this.http.get<PageResponse<Routine>>(API_URL + `/api/v1/routines?q=${query}&sort=${sortBy},${sortDir}&page=${page}`);
     }
 
     getRoutineById(id: number): Observable<Routine> {

@@ -1,4 +1,11 @@
 <div class="container py-5">
+    @if (errorMessage) {
+            <div class="alert alert-danger d-flex align-items-center mb-3 py-2 small" role="alert">
+                <span>{{ errorMessage }}</span>
+                <button type="button" class="btn-close ms-auto" style="font-size: 0.5rem;"
+                    (click)="errorMessage = null"></button>
+            </div>
+            }
     <div class="form-container bg-white p-4 rounded-4 shadow-sm">
         <div class="mb-4 pb-2 border-bottom">
             <div class="d-flex align-items-center mb-1">
@@ -76,7 +83,6 @@
                         <div class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-dark-blue">
                             {{ i + 1 }}
                         </div>
-
                         <div class="row align-items-end g-3 ps-2">
                             <div class="col-md-5">
                                 <label class="form-label small fw-bold text-dark">Secuencia</label>
@@ -89,11 +95,11 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label small fw-bold text-dark">Hora de Inicio</label>
-                                <input type="time" class="form-control custom-input" formControlName="startTime">
+                                <input type="time" class="form-control custom-input" [class.border-danger]="item.get('startTime')?.invalid || item.hasError('invalidTimeRange')" formControlName="startTime">
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label small fw-bold text-dark">Hora de Fin</label>
-                                <input type="time" class="form-control custom-input" formControlName="endTime">
+                                <input type="time" class="form-control custom-input" [class.border-danger]="item.get('endTime')?.invalid || item.hasError('invalidTimeRange')" formControlName="endTime">
                             </div>
                             <div class="col-md-1 text-end">
                                 <button type="button" class="btn btn-outline-danger border-0 rounded-circle"
