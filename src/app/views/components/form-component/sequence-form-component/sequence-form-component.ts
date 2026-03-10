@@ -10,7 +10,6 @@ import { Category } from '../../../../logic/interfaces/category-sequence-interfa
 import { firstValueFrom } from 'rxjs';
 import { Step, StepRequest } from '../../../../logic/interfaces/sequence-step-interface';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
-import { ArasaacService } from '../../../../logic/services/arasaac-service';
 
 @Component({
   selector: 'app-sequence-form-component',
@@ -43,7 +42,6 @@ export class SequenceFormComponent implements OnInit {
     private sequenceService: SequenceService,
     private route: ActivatedRoute,
     private categorySequenceService: CategorySequenceService,
-    private arasaacService: ArasaacService
   ) { }
 
   ngOnInit(): void {
@@ -92,9 +90,6 @@ export class SequenceFormComponent implements OnInit {
             });
           }
         }
-        console.log(
-          sequence
-        );
         
         this.loading = false;
       },
@@ -193,7 +188,6 @@ export class SequenceFormComponent implements OnInit {
     this.draggedIndex = null;
   }
 
-  //Save sequence
   async onSubmit() {
   if (this.sequenceForm.valid) {
     const formValue = this.sequenceForm.value;
@@ -216,21 +210,14 @@ export class SequenceFormComponent implements OnInit {
         })),
         estimatedDuration: null,
         allowGoBack: false,
-        frontPage: formValue.frontPage ?? this.steps.at(0).get('arasaacPictogramId')?.value ?? null,
+        frontPage: formValue.frontPage ?? this.steps.length > 0 ? this.steps.at(0).get('arasaacPictogramId')?.value : null,
       };
 
       const request$ = this.isEditMode 
         ? this.sequenceService.modifySequence(this.sequenceId!, newSequence) 
         : this.sequenceService.addSequence(newSequence);
 
-      console.log(request$);
-
-      request$.subscribe( (res) => {
-        console.log(
-          res
-        );
-        
-      },
+      request$.subscribe( (res) => {},
       (err) => {
         console.error('Error al guardar la secuencia:', err);
         alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
