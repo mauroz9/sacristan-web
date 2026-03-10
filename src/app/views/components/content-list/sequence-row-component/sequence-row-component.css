@@ -22,3 +22,11 @@
     display: inline-block;
     min-width: 40px;
 }
+
+.text-limit{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
