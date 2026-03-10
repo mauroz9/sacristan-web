@@ -79,6 +79,7 @@ export class ContentListPage implements OnInit {
 
   async getData() {
     this.page = 0;
+    this.allLoaded = false;
 
     try {
       this.url = this.router.url;
@@ -115,7 +116,7 @@ export class ContentListPage implements OnInit {
 
   async callPage() {
     var res: StudentResponse[] | TeacherResponse[] | Sequence[] | Routine[] = [];
-    if (this.isLoading || this.allLoaded) return;
+    if (this.isLoading || this.allLoaded || this.loading) return;
     this.isLoading = true;
     
     this.page++;  
@@ -191,15 +192,16 @@ export class ContentListPage implements OnInit {
     }
   }
 
+  private observer?: IntersectionObserver;
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
   ngAfterViewInit() {
-    const observer = new IntersectionObserver((entries) => {
+    this.observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         this.callPage();
       }
     }, { threshold: 0.1 });
 
-    observer.observe(this.scrollAnchor.nativeElement);
+    this.observer.observe(this.scrollAnchor.nativeElement);
   }
 
   loadData() {
@@ -307,6 +309,12 @@ export class ContentListPage implements OnInit {
       console.log("Something went wrong loading content list page data");
     }
     this.loading = false;
+
+    // Re-observe scroll anchor to trigger infinite scroll if it's still visible
+    if (this.observer && this.scrollAnchor) {
+      this.observer.unobserve(this.scrollAnchor.nativeElement);
+      this.observer.observe(this.scrollAnchor.nativeElement);
+    }
   }
 
 }

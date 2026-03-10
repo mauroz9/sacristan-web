@@ -69,21 +69,22 @@
             @if (loadingContent()) {
                 <app-loading-component></app-loading-component>
             } @else {
-                @for (item of content()?.contentList; track item.id) {
+                @for (item of content()?.contentList; track $index) {
                     @if (item.kind == 'secuencia') {
+                        <span>{{$index}}</span>
                         <app-sequence-row-component [sequence]="item" (onDelete)="reloadContent()"></app-sequence-row-component>
-                        } @else if (item.kind == 'alumno') {
-                            <app-student-row-component [student]="item" (onDelete)="reloadContent()"></app-student-row-component>
-                        } @else if (item.kind == 'profesor') {
-                            <app-teacher-row-component [teacher]="item" (onDelete)="reloadContent()"></app-teacher-row-component>
-                        } @else if(item.kind == "rutina"){
-                            <app-routine-row-component [routine]="item" (onDelete)="reloadContent()"></app-routine-row-component>
-                        }@else {
-                            <div class="text-center py-5 text-muted">
-                                <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
-                                Tipo de contenido no soportado.
-                            </div>
-                        }
+                    } @else if (item.kind == 'alumno') {
+                        <app-student-row-component [student]="item" (onDelete)="reloadContent()"></app-student-row-component>
+                    } @else if (item.kind == 'profesor') {
+                        <app-teacher-row-component [teacher]="item" (onDelete)="reloadContent()"></app-teacher-row-component>
+                    } @else if(item.kind == "rutina"){
+                        <app-routine-row-component [routine]="item" (onDelete)="reloadContent()"></app-routine-row-component>
+                    }@else {
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
+                            Tipo de contenido no soportado.
+                        </div>
+                    }
                 }
             }
         }
