@@ -6,6 +6,7 @@ import { LoginPage } from './views/pages/login-page/login-page';
 import { authGuard } from './logic/guards/auth-guard';
 import { ContentNotFoundPage } from './views/pages/content-not-found-page/content-not-found-page';
 import { RoutineFormComponent } from './views/components/form-component/routine-form-component/routine-form-component';
+import { StatisticsPage } from './views/pages/statistics-page/statistics-page';
 
 export const routes: Routes = [
     // --- RUTA PÚBLICA (LOGIN) ---
@@ -13,6 +14,13 @@ export const routes: Routes = [
         path: 'login', 
         component: LoginPage, 
         data: { showMenu: false }
+    },
+
+    // --- DASHBOARD ---
+    {
+        path: 'statistics',
+        component: StatisticsPage,
+        canActivate: [authGuard]
     },
 
     // --- RUTAS PROTEGIDAS (Sequences) ---
