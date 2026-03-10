@@ -2,17 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { StepModalComponent } from '../../step-modal-component/step-modal-component';
+import { CoverModalComponent } from '../../cover-modal-component/cover-modal-component';
 import { SequenceService } from '../../../../logic/services/sequence-service';
-import { Sequence, SequenceRequest } from '../../../../logic/interfaces/sequence-interface';
+import { SequenceRequest } from '../../../../logic/interfaces/sequence-interface';
 import { CategorySequenceService } from '../../../../logic/services/category-sequence-service';
 import { Category } from '../../../../logic/interfaces/category-sequence-interface';
 import { firstValueFrom } from 'rxjs';
 import { Step, StepRequest } from '../../../../logic/interfaces/sequence-step-interface';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
+import { ArasaacService } from '../../../../logic/services/arasaac-service';
 
 @Component({
   selector: 'app-sequence-form-component',
-  imports: [ReactiveFormsModule, StepModalComponent, RouterLink, LoadingComponent],
+  imports: [ReactiveFormsModule, StepModalComponent, CoverModalComponent, RouterLink, LoadingComponent],
   templateUrl: './sequence-form-component.html',
   styleUrl: './sequence-form-component.css',
 })
@@ -22,11 +24,13 @@ export class SequenceFormComponent implements OnInit {
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
     category_id: new FormControl<number | null>(null, Validators.required),
-    steps: new FormArray([])
+    steps: new FormArray([]),
+    frontPage: new FormControl<number | null>(null)
   });
 
   draggedIndex: number | null = null;
   showModal = false;
+  showCoverModal = false;
   isEditMode = false;
   sequenceId: number | null = null;
   editingStepIndex: number | null = null;
@@ -34,7 +38,13 @@ export class SequenceFormComponent implements OnInit {
   categories: Category[] = [];
   loading: boolean = false;
 
-  constructor(private router: Router, private sequenceService: SequenceService, private route: ActivatedRoute, private categorySequenceService: CategorySequenceService) { }
+  constructor(
+    private router: Router,
+    private sequenceService: SequenceService,
+    private route: ActivatedRoute,
+    private categorySequenceService: CategorySequenceService,
+    private arasaacService: ArasaacService
+  ) { }
 
   ngOnInit(): void {
     this.loading = true;
@@ -66,7 +76,8 @@ export class SequenceFormComponent implements OnInit {
           this.sequenceForm.patchValue({
             title: sequence.title,
             description: sequence.description,
-            category_id: sequence.category?.id || null
+            category_id: sequence.category?.id || null,
+            frontPage: sequence.frontPage || null
           });
 
           this.steps.clear();
@@ -81,6 +92,10 @@ export class SequenceFormComponent implements OnInit {
             });
           }
         }
+        console.log(
+          sequence
+        );
+        
         this.loading = false;
       },
       error: (err) => console.error('Error al cargar la secuencia:', err)
@@ -95,9 +110,25 @@ export class SequenceFormComponent implements OnInit {
     this.steps.push(newStep);
   }
 
-  //Steps logic
   get steps(): FormArray {
     return this.sequenceForm.get('steps') as FormArray;
+  }
+
+  openCoverModal(): void {
+    this.showCoverModal = true;
+  }
+
+  closeCoverModal(): void {
+    this.showCoverModal = false;
+  }
+
+  handleSaveCover(frontPageId: number): void {
+    this.sequenceForm.patchValue({ frontPage: frontPageId });
+    this.closeCoverModal();
+  }
+
+  clearFrontPage(): void {
+    this.sequenceForm.patchValue({ frontPage: null });
   }
 
   openModal(): void {
@@ -184,11 +215,9 @@ export class SequenceFormComponent implements OnInit {
           sequenceId: this.isEditMode ? (this.sequenceId ?? 0) : 0,
         })),
         estimatedDuration: null,
-        allowGoBack: false
+        allowGoBack: false,
+        frontPage: formValue.frontPage ?? this.steps.at(0).get('arasaacPictogramId')?.value ?? null,
       };
-      
-      console.log(newSequence);
-      
 
       const request$ = this.isEditMode 
         ? this.sequenceService.modifySequence(this.sequenceId!, newSequence) 
