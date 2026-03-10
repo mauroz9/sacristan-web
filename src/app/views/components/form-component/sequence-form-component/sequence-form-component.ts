@@ -210,8 +210,11 @@ export class SequenceFormComponent implements OnInit {
         })),
         estimatedDuration: null,
         allowGoBack: false,
-        frontPage: formValue.frontPage ?? this.steps.length > 0 ? this.steps.at(0).get('arasaacPictogramId')?.value : null,
+        frontPage: formValue.frontPage != null ? formValue.frontPage : this.steps.length > 0 ? this.steps.at(0).get('arasaacPictogramId')?.value : null,
       };
+
+      console.log(newSequence);
+      
 
       const request$ = this.isEditMode 
         ? this.sequenceService.modifySequence(this.sequenceId!, newSequence) 
