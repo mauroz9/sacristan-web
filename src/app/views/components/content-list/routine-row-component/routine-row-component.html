@@ -2,17 +2,17 @@
     <div class="row align-items-center g-0 h-100">
 
         <div class="col-md-3 ps-4">
-            <span class="fw-medium text-dark-blue fs-5">{{ routine()?.name }}</span>
+            <span class="fw-medium text-dark-blue fs-5 text-limit">{{ routine()?.name }}</span>
         </div>
 
         <div class="col-md-3">
             <span class="text-muted d-inline-block text-truncate w-100" [title]="formatDays(routine()?.daysOfTheWeek)">
-                <i class="bi bi-calendar-event me-1"></i> {{ formatDays(routine()?.daysOfTheWeek) }}
+                <i class="bi bi-calendar-event me-1 text-limit"></i> {{ formatDays(routine()?.daysOfTheWeek) }}
             </span>
         </div>
 
         <div class="col-md-2">
-            <span class="text-muted">{{ routine()?.category?.name || 'Sin categoría' }}</span>
+            <span class="text-muted text-limit">{{ routine()?.category?.name || 'Sin categoría' }}</span>
         </div>
 
         <div class="col-md-2 text-center">

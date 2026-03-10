@@ -2,14 +2,14 @@
     <div class="row align-items-center g-0 h-100">
 
         <div class="col-md-3 ps-4">
-            <span class="fw-medium text-dark-blue fs-5">{{ sequence()?.title }}</span>
+            <span class="fw-medium text-dark-blue fs-5 text-limit">{{ sequence()?.title }}</span>
         </div>
 
         <div class="col-md-3">
-            <span class="text-muted">{{ sequence()?.description }}</span>
+            <span class="text-muted text-limit">{{ sequence()?.description }}</span>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-2 text-center">
             <span class="text-muted">{{ sequence()?.category?.name }}</span>
         </div>
 
