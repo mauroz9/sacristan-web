@@ -10,6 +10,7 @@ export interface Sequence {
   allowGoBack: boolean;
   category: Category;
   steps: Step[];
+  frontPage: number | null;
 }
 
 export interface SequenceRequest {
@@ -20,4 +21,5 @@ export interface SequenceRequest {
   allowGoBack: boolean;
   categoryId: number;
   steps: StepRequest[];
+  frontPage: number | null;
 }

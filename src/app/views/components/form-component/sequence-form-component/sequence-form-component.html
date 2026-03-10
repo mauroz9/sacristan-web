@@ -18,36 +18,59 @@
         } @else {
             <form [formGroup]="sequenceForm" (ngSubmit)="onSubmit()">
                 
-                <div class="row mb-3 g-3">
-                    <div class="col-md-7">
-                        <label class="form-label text-primary-blue fw-semibold">Título de la secuencia</label>
-                        <input type="text" class="form-control custom-input" formControlName="title" placeholder="Ej. Lavarse las manos">
-                        @if(sequenceForm.get('title')?.touched && sequenceForm.get('title')?.invalid){
-                            <small class="text-danger mt-1 d-block fw-medium">Debes indicar un Título</small>
-                        }
+                <div class="row mb-5 g-4 align-items-stretch sequence-top-row">
+                    <div class="col-lg-8">
+                        <div class="p-4 w-100 h-100 d-flex flex-column">
+                            <div class="row g-3">
+                                <div class="col-md-7">
+                                    <label class="form-label text-primary-blue fw-semibold">Título de la secuencia</label>
+                                    <input type="text" class="form-control custom-input" formControlName="title" placeholder="Ej. Lavarse las manos">
+                                    @if(sequenceForm.get('title')?.touched && sequenceForm.get('title')?.invalid){
+                                        <small class="text-danger mt-1 d-block fw-medium">Debes indicar un Título</small>
+                                    }
+                                </div>
+
+                                <div class="col-md-5">
+                                    <label class="form-label text-primary-blue fw-semibold">Categoría</label>
+                                    <select class="form-select custom-input" formControlName="category_id">
+                                        <option [value]="null" disabled selected>Selecciona una categoría</option>
+                                        @for (category of categories; track category.id) {
+                                            <option [value]="category.id">{{ category.name }}</option>
+                                        }
+                                    </select>
+                                    @if(sequenceForm.get('category_id')?.touched && sequenceForm.get('category_id')?.invalid){
+                                        <small class="text-danger mt-1 d-block fw-medium">Debes escoger una Categoría</small>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="mt-auto pt-3">
+                                <label class="form-label text-primary-blue fw-semibold">Descripción</label>
+                                <input type="text" class="form-control custom-input" formControlName="description" placeholder="Añade una descripción detallada...">
+                                @if(sequenceForm.get('description')?.touched && sequenceForm.get('description')?.invalid){
+                                    <small class="text-danger mt-1 d-block fw-medium">Debes indicar una Descripción</small>
+                                }
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="col-md-5">
-                        <label class="form-label text-primary-blue fw-semibold">Categoría</label>
-                        <select class="form-select custom-input" formControlName="category_id">
-                            <option [value]="null" disabled selected>Selecciona una categoría</option>
-                            @for (category of categories; track category.id) {
-                                <option [value]="category.id">{{ category.name }}</option>
-                            }
-                        </select>
-                        @if(sequenceForm.get('category_id')?.touched && sequenceForm.get('category_id')?.invalid){
-                            <small class="text-danger mt-1 d-block fw-medium">Debes escoger una Categoría</small>
-                        }
-                    </div>
-                </div>
+                    <div class="col-lg-4">
+                        <div class="bg-light rounded-4 p-4 w-100 h-100 d-flex flex-column justify-content-between">
+                            <h6 class="text-primary-blue fw-bold mb-3">Portada de la secuencia</h6>
 
-                <div class="row mb-5 g-3">
-                    <div class="col-12">
-                        <label class="form-label text-primary-blue fw-semibold">Descripción</label>
-                        <input type="text" class="form-control custom-input" formControlName="description" placeholder="Añade una descripción detallada...">
-                        @if(sequenceForm.get('description')?.touched && sequenceForm.get('description')?.invalid){
-                            <small class="text-danger mt-1 d-block fw-medium">Debes indicar una Descripción</small>
-                        }
+                            <div class="cover-static-picto shadow-sm mb-3">
+                                @if (sequenceForm.get('frontPage')?.value) {
+                                    <button type="button" class="cover-remove-btn" aria-label="Quitar portada" (click)="clearFrontPage()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                    <img [src]="'https://api.arasaac.org/api/pictograms/' + sequenceForm.get('frontPage')?.value!" alt="Portada" class="img-fluid rounded-circle bg-white">
+                                } @else {
+                                    <i class="bi bi-image text-muted fs-2"></i>
+                                }
+                            </div>
+
+                            <button type="button" class="btn btn-dark-blue w-100 mt-3" (click)="openCoverModal()">Añadir portada</button>
+                        </div>
                     </div>
                 </div>
 
@@ -123,4 +146,13 @@
     <app-step-modal-component [isVisible]="showModal" (close)="closeModal()" (save)="handleSaveStep($event)"
         [stepData]="stepToEdit">
     </app-step-modal-component>
+}
+
+@if(showCoverModal){
+    <app-cover-modal-component
+        [isVisible]="showCoverModal"
+        [frontPage]="sequenceForm.get('frontPage')?.value ?? null"
+        (close)="closeCoverModal()"
+        (save)="handleSaveCover($event)">
+    </app-cover-modal-component>
 }
