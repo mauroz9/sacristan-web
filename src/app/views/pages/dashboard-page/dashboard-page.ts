@@ -105,7 +105,8 @@ export class DashboardPage implements OnInit {
         completed: d.completed,
         expected: d.expected,
       }));
-      this.chartMax = Math.max(...data.flatMap(d => [d.expected, d.completed]), 1);
+      const dataMax = Math.max(...data.flatMap(d => [d.expected, d.completed]), 1);
+      this.chartMax = Math.ceil(dataMax / 10) * 10;
     });
   }
 }

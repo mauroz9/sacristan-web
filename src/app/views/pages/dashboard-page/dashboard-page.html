@@ -52,7 +52,7 @@
                 <div class="stat-icon">
                     <i class="bi bi-graph-up-arrow"></i>
                 </div>
-                <div class="stat-value">{{ stats.avgPerStudent?.toPrecision(1) }}</div>
+                <div class="stat-value">{{ stats.avgPerStudent | number:'1.1-1' }}</div>
                 <div class="stat-label">Promedio / Alumno</div>
             </div>
         </div>
@@ -66,10 +66,10 @@
 
                 <div class="chart-wrapper">
                     <div class="chart-y-axis">
-                        <span>100</span>
-                        <span>75</span>
-                        <span>50</span>
-                        <span>25</span>
+                        <span>{{ chartMax | number:'1.0-0' }}</span>
+                        <span>{{ (chartMax * 0.75) | number:'1.0-0' }}</span>
+                        <span>{{ (chartMax * 0.5) | number:'1.0-0' }}</span>
+                        <span>{{ (chartMax * 0.25) | number:'1.0-0' }}</span>
                         <span>0</span>
                     </div>
                     <div class="chart-area">
@@ -81,13 +81,15 @@
                             <div class="grid-line"></div>
                         </div>
                         @for (item of weeklyActivity; track item.date) {
-                            <div class="chart-group">
-                                <div class="bar-pair">
-                                    <div class="bar bar-completed" [style.height]="barHeight(item.completed)" [title]="'Completadas: ' + item.completed"></div>
-                                    <div class="bar bar-started"   [style.height]="barHeight(item.expected)"   [title]="'Programadas: ' + item.expected"></div>
-                                </div>
-                                <span class="bar-label">{{ item.date }}</span>
+                        <div class="chart-group">
+                            <div class="bar-pair">
+                                <div class="bar bar-completed" [style.height]="barHeight(item.completed)"
+                                    [title]="'Completadas: ' + item.completed"></div>
+                                <div class="bar bar-started" [style.height]="barHeight(item.expected)"
+                                    [title]="'Programadas: ' + item.expected"></div>
                             </div>
+                            <span class="bar-label">{{ item.date }}</span>
+                        </div>
                         }
                     </div>
                 </div>
@@ -111,13 +113,13 @@
 
                 <div class="sequence-list">
                     @for (seq of topSequences; track seq.id) {
-                        <div class="sequence-row">
-                            <div class="rank-badge">{{topSequences.indexOf(seq) + 1}}</div>
-                            <div class="sequence-info">
-                                <span class="sequence-name">{{ seq.title }}</span>
-                                <span class="sequence-uses">{{ seq.reproductions }} usos totales</span>
-                            </div>
+                    <div class="sequence-row">
+                        <div class="rank-badge">{{topSequences.indexOf(seq) + 1}}</div>
+                        <div class="sequence-info">
+                            <span class="sequence-name">{{ seq.title }}</span>
+                            <span class="sequence-uses">{{ seq.reproductions }} usos totales</span>
                         </div>
+                    </div>
                     }
                 </div>
             </div>
@@ -132,17 +134,17 @@
 
                 <div class="activity-list">
                     @for (act of recentActivity; track act.studentName) {
-                        <div class="activity-row">
-                            <div class="avatar">{{ getInitials(act.studentName) }}</div>
-                            <div class="activity-info">
-                                <span class="activity-name">{{ act.studentName }}</span>
-                                <span class="activity-sequence">{{ act.sequenceTitle }}</span>
-                                <span class="activity-time">{{ act.endedAt }}</span>
-                            </div>
-                            <span class="status-badge badge-completed">
-                                Completada
-                            </span>
+                    <div class="activity-row">
+                        <div class="avatar">{{ getInitials(act.studentName) }}</div>
+                        <div class="activity-info">
+                            <span class="activity-name">{{ act.studentName }}</span>
+                            <span class="activity-sequence">{{ act.sequenceTitle }}</span>
+                            <span class="activity-time">{{ act.endedAt }}</span>
                         </div>
+                        <span class="status-badge badge-completed">
+                            Completada
+                        </span>
+                    </div>
                     }
                 </div>
             </div>
