@@ -62,7 +62,7 @@ export class LoginPage implements OnInit {
           if (res.roles.includes('ADMIN')) {
             this.authService.saveLogInData(res);
 
-            this.router.navigate(['/sequences']);
+            this.router.navigate(['/dashboard']);
           } else {
             this.handleAuthError({status: 403, message: 'No tienes permisos'});
           }

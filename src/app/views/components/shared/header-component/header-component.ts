@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../logic/services/auth-service';
-import { Subscription } from 'rxjs';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-header-component',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './header-component.html',
   styleUrl: './header-component.css',
 })
