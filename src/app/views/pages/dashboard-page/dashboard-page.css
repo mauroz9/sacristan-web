@@ -89,7 +89,6 @@
     color: #1d4ed8;
 }
 
-/* ─── Bar chart ──────────────────────────────────────── */
 .chart-wrapper {
     display: flex;
     gap: 0.5rem;
@@ -194,10 +193,14 @@
     border-radius: 3px;
 }
 
-.dot-completed { background-color: var(--primary-blue); }
-.dot-started   { background-color: var(--secondary-yellow); }
+.dot-completed {
+    background-color: var(--primary-blue);
+}
 
-/* ─── Top sequences list ─────────────────────────────── */
+.dot-started {
+    background-color: var(--secondary-yellow);
+}
+
 .sequence-list {
     display: flex;
     flex-direction: column;
@@ -212,6 +215,7 @@
     border-radius: 10px;
     background: #f8fafc;
     transition: background 0.2s;
+    min-height: 80px;
 }
 
 .sequence-row:hover {
@@ -260,7 +264,6 @@
     flex-shrink: 0;
 }
 
-/* ─── Recent activity list ───────────────────────────── */
 .activity-list {
     display: flex;
     flex-direction: column;
@@ -275,6 +278,7 @@
     border-radius: 10px;
     background: #f8fafc;
     transition: background 0.2s;
+    min-height: 80px;
 }
 
 .activity-row:hover {
