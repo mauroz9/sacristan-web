@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EmailValidator, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../logic/services/auth-service';
+import { AuthService } from '../../../logic/services/extras/auth-service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'; // Importante para *ngIf
 

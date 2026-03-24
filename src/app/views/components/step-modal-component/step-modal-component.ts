@@ -2,7 +2,7 @@ import { Component, input, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ArasaacPictogram } from '../../../logic/interfaces/arasaac-interface';
 import { catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
-import { ArasaacService } from '../../../logic/services/arasaac-service';
+import { ArasaacService } from '../../../logic/services/extras/arasaac-service';
 import { LoadingComponent } from "../shared/loading-component/loading-component";
 
 @Component({

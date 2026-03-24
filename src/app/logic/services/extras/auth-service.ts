@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject,  Observable} from 'rxjs';
-import { API_URL } from './env';
-import { JwtUserResponse } from '../interfaces/auth/jwt-user-response';
+import { API_URL } from '../../env';
+import { JwtUserResponse } from '../../interfaces/extras/auth/jwt-user-response';
 
 @Injectable({
   providedIn: 'root',

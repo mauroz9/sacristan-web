@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../../../../logic/services/user-service';
+import { UserService } from '../../../../logic/services/extras/user-service';
 import { firstValueFrom } from 'rxjs';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
 

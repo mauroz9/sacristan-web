@@ -1,48 +1,59 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { DailyExpectedCompletedSequence } from '../interfaces/dashboard/daily-expected-completed-sequences-interface';
-import { MostUsedSequencesResponse } from '../interfaces/dashboard/most-used-sequences-interface';
-import { LastestReproduction, LastestReproductionsResponse } from '../interfaces/dashboard/lastest-reproductions-interface';
-import { API_URL } from './env';
+import { Injectable } from "@angular/core";
+import { API_URL } from "../env";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import {
+    DailyExpectedSequencesDto,
+    MostUsedSequencesDto,
+    LatestReproductionsDto
+} from "../interfaces/dashboard-interface";
+import { Page } from "../interfaces/extras/utils/page-interface";
+
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class DashboardService {
 
-    constructor(private http: HttpClient) { }
+    private API_URL = API_URL + "/api/v1/admin/statistics";
 
-    getTotalSequences(): Observable<number> {
-        return this.http.get<number>(API_URL + '/api/v1/admin/statistics/total-sequences');
+    constructor(private http: HttpClient) {}
+
+    // * TOTAL COUNTS
+    countTotalSequences(): Observable<number> {
+        return this.http.get<number>(`${this.API_URL}/total-sequences`);
     }
 
-    getTotalStudents(): Observable<number> {
-        return this.http.get<number>(API_URL + '/api/v1/admin/statistics/total-students');
+    countTotalStudents(): Observable<number> {
+        return this.http.get<number>(`${this.API_URL}/total-students`);
     }
 
-    getTotalTeachers(): Observable<number> {
-        return this.http.get<number>(API_URL + '/api/v1/admin/statistics/total-teachers');
+    countTotalTeachers(): Observable<number> {
+        return this.http.get<number>(`${this.API_URL}/total-teachers`);
     }
 
-    getCompletedSequencesToday(): Observable<number> {
-        return this.http.get<number>(API_URL + '/api/v1/admin/statistics/completed-sequences');
+    // * TODAY STATS
+    countCompletedSequencesToday(): Observable<number> {
+        return this.http.get<number>(`${this.API_URL}/completed-sequences`);
     }
 
-    getAverageCompletedSequences(): Observable<number> {
-        return this.http.get<number>(API_URL + '/api/v1/admin/statistics/average-completed-sequences');
+    averageCompletedSequencesPerStudentToday(): Observable<number> {
+        return this.http.get<number>(`${this.API_URL}/average-completed-sequences`);
     }
 
-    getDailyExpectedAndCompletedSequences(from: string, to: string): Observable<DailyExpectedCompletedSequence[]> {
-        return this.http.get<DailyExpectedCompletedSequence[]>(API_URL + `/api/v1/admin/statistics/daily-sequences?from=${from}&to=${to}`);
+    // * DAILY STATS
+    getDailyExpectedAndCompleted(from: string, to: string): Observable<DailyExpectedSequencesDto[]> {
+        return this.http.get<DailyExpectedSequencesDto[]>(`${this.API_URL}/daily-sequences?from=${from}&to=${to}`);
     }
 
-    getMostUsedSequences(): Observable<MostUsedSequencesResponse>{
-        return this.http.get<MostUsedSequencesResponse>(API_URL + '/api/v1/admin/statistics/most-used-sequences');
+    // * MOST USED SEQUENCES
+    getMostUsedSequences(page: number = 0, size: number = 5): Observable<Page<MostUsedSequencesDto>> {
+        return this.http.get<Page<MostUsedSequencesDto>>(`${this.API_URL}/most-used-sequences?page=${page}&size=${size}`);
     }
 
-    getLastestReproductions(): Observable<LastestReproductionsResponse> {
-        return this.http.get<LastestReproductionsResponse>(API_URL + '/api/v1/admin/statistics/lastest-reproductions');
+    // * LATEST REPRODUCTIONS
+    getLatestReproductions(page: number = 0, size: number = 5): Observable<Page<LatestReproductionsDto>> {
+        return this.http.get<Page<LatestReproductionsDto>>(`${this.API_URL}/latest-reproductions?page=${page}&size=${size}`);
     }
 
 }

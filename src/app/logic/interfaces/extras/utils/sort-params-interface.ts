@@ -1,4 +1,4 @@
-interface GetParams {
+interface QuerySortParameters {
     query?: string;
     sortBy?: string;
     sortDir?: string;
