@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from
 import { inject } from '@angular/core';
 import { AuthService } from '../services/extras/auth-service';
 import { BehaviorSubject, catchError, filter, switchMap, take, throwError } from 'rxjs';
-import { JwtUserResponse } from '../interfaces/auth/jwt-user-response';
+import { JwtUserResponse } from '../interfaces/extras/auth/jwt-user-response';
 
 let isRefreshing = false;
 const refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);

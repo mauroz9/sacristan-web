@@ -11,3 +11,11 @@ export interface UpdateUserRequest {
     email: String,
     username: String
 }
+
+export interface ReadUserResponse {
+    id: number;
+    name: string;
+    lastName: string;
+    email: string;
+    username: string;
+}

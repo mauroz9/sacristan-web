@@ -49,7 +49,7 @@
                                             <div class="card-body p-2 d-flex align-items-center">
                                                 <div class="flex-grow-1">
                                                     <div class="fw-bold fs-6">{{ routine.name }}</div>
-                                                    <div class="text-muted small">{{ routine.category.name }}</div>
+                                                    <div class="text-muted small">{{ routine.category }}</div>
                                                 </div>
                                                 <button class="btn btn-outline-primary btn-sm" (click)="assignRoutine(routine)">Asignar</button>
                                             </div>
@@ -109,7 +109,7 @@
                                             <div class="card-body p-2 d-flex align-items-center">
                                                 <div class="flex-grow-1">
                                                     <div class="fw-bold fs-6">{{ sequence.title }}</div>
-                                                    <div class="text-muted small">{{ sequence.category.name }}</div>
+                                                    <div class="text-muted small">{{ sequence.category }}</div>
                                                 </div>
                                                 <button class="btn btn-outline-primary btn-sm" (click)="assignSequence(sequence)">Asignar</button>
                                             </div>

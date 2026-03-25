@@ -3,11 +3,12 @@ import { Page } from "../interfaces/extras/utils/page-interface";
 import { API_URL } from "../env";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { CreateUserRequest, UpdateUserRequest } from "../interfaces/extras/users-interface";
-import { ReadStudentResponse, StudentListResponse, SequenceResponse, RoutineResponse } from "../interfaces/alumnos-interface";
+import { CreateUserRequest, ReadUserResponse, UpdateUserRequest } from "../interfaces/extras/users-interface";
+import { StudentListResponse, SequenceResponse, RoutineResponse } from "../interfaces/alumnos-interface";
 import { UserService } from "./extras/user-service";
 import { FormGroup } from "@angular/forms";
 import { SortParam } from "../interfaces/extras/content/content-interface";
+import { QuerySortParameters } from "../interfaces/extras/utils/sort-params-interface";
 
 @Injectable({
     providedIn: 'root',
@@ -22,8 +23,8 @@ export class AlumnosService{
         return this.http.post<void>(this.API_URL, createUser);
     }
 
-    read(id: number): Observable<ReadStudentResponse> {
-        return this.http.get<ReadStudentResponse>(`${this.API_URL}/${id}`);
+    read(id: number): Observable<ReadUserResponse> {
+        return this.http.get<ReadUserResponse>(`${this.API_URL}/${id}`);
     }
 
     update(id: number, updateUser: UpdateUserRequest): Observable<void> {

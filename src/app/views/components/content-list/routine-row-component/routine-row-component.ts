@@ -1,8 +1,8 @@
 import { Component, input, output } from '@angular/core';
-import { Routine } from '../../../../logic/interfaces/routine-interface';
-import { RoutineService } from '../../../../logic/services/routine-service';
 import { Router } from '@angular/router';
 import { ActionButtonsComponent } from "../../shared/action-buttons-component/action-buttons-component";
+import { RutinasService } from '../../../../logic/services/rutinas-service';
+import { RoutineListResponse } from '../../../../logic/interfaces/rutinas-interface';
 
 @Component({
   selector: 'app-routine-row-component',
@@ -11,16 +11,16 @@ import { ActionButtonsComponent } from "../../shared/action-buttons-component/ac
   styleUrl: './routine-row-component.css',
 })
 export class RoutineRowComponent {
-  routine = input<Routine>();
+  routine = input<RoutineListResponse>();
   onDelete = output<void>();
 
-  constructor(private routineService: RoutineService, private router: Router) {}
+  constructor(private rutinasService: RutinasService, private router: Router) {}
 
   deleteRoutine(): void {
     const id = this.routine()?.id;
 
     if(id && confirm('¿Seguro que quieres borrar esta rutina?')){
-      this.routineService.deleteRoutine(id).subscribe({
+      this.rutinasService.delete(id).subscribe({
         next: () => {
           localStorage.setItem('infoMessage', 'Rutina eliminada correctamente');
           this.onDelete.emit();

@@ -2,17 +2,23 @@
 export interface RoutineDetailResponse {
     id: number;
     name: string;
-    category: string | null;
-    daysOfTheWeek: Set<string>;
+    category: CategoryDetailResponse
+    daysOfTheWeek: string[];
     sequences: RoutineSegmentResponse[];
 }
 
 export interface RoutineListResponse {
     id: number;
     name: string;
-    category: string | null;
-    daysOfTheWeek: Set<string>;
+    category: CategoryDetailResponse;
+    daysOfTheWeek: string[];
     sequenceCount: number;
+    kind: 'routine';
+}
+
+export interface CategoryDetailResponse {
+    id: number;
+    name: string;
 }
 
 export interface RoutineSegmentResponse {
@@ -33,7 +39,7 @@ export interface CreateRoutineSegmentRequest {
 export interface CreateRoutineRequest {
     name: string;
     categoryId: number;
-    daysOfTheWeek: Set<string>;
+    daysOfTheWeek: string[];
     sequences: CreateRoutineSegmentRequest[];
 }
 
@@ -47,6 +53,6 @@ export interface UpdateRoutineSegmentRequest {
 export interface UpdateRoutineRequest {
     name: string;
     categoryId: number;
-    daysOfTheWeek: Set<string>;
+    daysOfTheWeek: string[];
     sequences: UpdateRoutineSegmentRequest[];
 }

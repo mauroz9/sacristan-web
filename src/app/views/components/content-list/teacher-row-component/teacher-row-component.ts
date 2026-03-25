@@ -1,10 +1,9 @@
-import { Component, input, OnInit, output } from '@angular/core';
-import { Teacher } from '../../../../logic/interfaces/teacher-interface';
+import { Component, input, output } from '@angular/core';
 import { ActionButtonsComponent } from "../../shared/action-buttons-component/action-buttons-component";
-import { TeacherService } from '../../../../logic/services/teacher-service';
 import { Router } from '@angular/router';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
-import { TeacherResponse } from '../../../../logic/interfaces/user/teacher/teacher-interface';
+import { ProfesoresService } from '../../../../logic/services/profesores-service';
+import { TeacherListResponse } from '../../../../logic/interfaces/profesores-interface';
 
 @Component({
   selector: 'app-teacher-row-component',
@@ -12,31 +11,14 @@ import { TeacherResponse } from '../../../../logic/interfaces/user/teacher/teach
   templateUrl: './teacher-row-component.html',
   styleUrl: './teacher-row-component.css',
 })
-export class TeacherRowComponent implements OnInit {
+export class TeacherRowComponent {
 
-  constructor(private teacherService: TeacherService, private router: Router) {}
+  constructor(private profesoresService: ProfesoresService, private router: Router) {}
   
-  teacher = input<TeacherResponse>();
+  teacher = input<TeacherListResponse>();
   onDelete = output<void>();
-  assignatedStudents: number = 0;
-  loading: boolean = false;
 
-  ngOnInit(): void {
-    this.loading = true;
-    let id = this.teacher()?.id;
-    if(id){
-      this.teacherService.getStudentCountByTeacher(id).subscribe({
-        next: (count) => {          
-          this.assignatedStudents = count;
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Error al obtener el número de estudiantes asignados: ' + err.message);
-          this.loading = false;
-        }
-      });
-    }
-  }
+  loading: boolean = false;
 
   editTeacher() {
       let id = this.teacher()?.id;
@@ -52,7 +34,7 @@ export class TeacherRowComponent implements OnInit {
       let id = this.teacher()?.id;
       
       if(id && confirm('¿Seguro que quieres borrar este profesor?')){
-        this.teacherService.deleteTeacher(id).subscribe({
+        this.profesoresService.delete(id).subscribe({
           next: () => {
             localStorage.setItem('infoMessage', 'Profesor borrado correctamente.');
             this.onDelete.emit();

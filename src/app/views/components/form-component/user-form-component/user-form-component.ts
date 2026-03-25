@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../logic/services/extras/user-service';
 import { firstValueFrom } from 'rxjs';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
+import { ExtraService } from '../../../../logic/services/extras-service';
 
 @Component({
   selector: 'app-user-form-component',
@@ -17,7 +18,7 @@ export class UserFormComponent implements OnInit {
   userId: number | null = null;
   loading: boolean = false;
 
-  constructor(private router: Router, private userService:UserService, private route: ActivatedRoute, private cdr: ChangeDetectorRef) {}
+  constructor(private router: Router, private route: ActivatedRoute, private cdr: ChangeDetectorRef, private extraService: ExtraService) {}
 
   userFormGroup: FormGroup = new FormGroup({
     nameFormControl: new FormControl('',[Validators.required, Validators.minLength(1)]),
@@ -35,7 +36,7 @@ export class UserFormComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if(id){
       this.userId = Number(id);
-      let baseUser = await firstValueFrom(this.userService.getUserById(this.userId));
+      let baseUser = await firstValueFrom(this.extraService.getUserById(this.userId));
       
       this.userFormGroup.get('passwordFormControl')?.setValidators([]);
       this.userFormGroup.get('passwordFormControl')?.updateValueAndValidity();

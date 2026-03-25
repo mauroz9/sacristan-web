@@ -1,4 +1,9 @@
 import { StudentListResponse } from "../../alumnos-interface"
+import { TeacherListResponse } from "../../profesores-interface"
+import { SequenceListResponse } from "../../secuencias-interface"
+import { RoutineListResponse } from "../../rutinas-interface"
+
+export type ContentItem = StudentListResponse | TeacherListResponse | SequenceListResponse | RoutineListResponse
 
 export interface Content {
     kind:string,
@@ -9,7 +14,7 @@ export interface Content {
     plural?: number,
     searchparams?: string,
     sortparams? : SortParam[],
-    contentList: (StudentListResponse)[]
+    contentList: ContentItem[]
 }
 
 export interface SortParam {

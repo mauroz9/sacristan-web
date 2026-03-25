@@ -1,17 +1,10 @@
 // Response DTOs
-export interface ReadTeacherResponse {
-    id: number;
-    name: string;
-    lastName: string;
-    email: string;
-    username: string;
-}
-
 export interface TeacherListResponse {
     id: number;
     name: string;
     lastName: string;
     studentCount: number;
+    kind: 'teacher';
 }
 
 export interface AssignedStudentResponse {
@@ -19,6 +12,7 @@ export interface AssignedStudentResponse {
     name: string;
     lastName: string;
     email: string;
+    teacherId: number;
 }
 
 export interface UnAssignedStudentResponse {

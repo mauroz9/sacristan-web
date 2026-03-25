@@ -10,6 +10,7 @@ import {
 } from "../interfaces/rutinas-interface";
 import { Page } from "../interfaces/extras/utils/page-interface";
 import { SortParam } from "../interfaces/extras/content/content-interface";
+import { QuerySortParameters } from "../interfaces/extras/utils/sort-params-interface";
 
 @Injectable({
     providedIn: 'root',

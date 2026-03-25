@@ -1,8 +1,8 @@
 import { Component, input, output } from '@angular/core';
 import { ActionButtonsComponent } from '../../shared/action-buttons-component/action-buttons-component';
-import { Sequence } from '../../../../logic/interfaces/sequence-interface';
-import { SequenceService } from '../../../../logic/services/sequence-service';
 import { Router } from '@angular/router';
+import { SecuenciasService } from '../../../../logic/services/secuencias-service';
+import { SequenceListResponse } from '../../../../logic/interfaces/secuencias-interface';
 
 @Component({
   selector: 'app-sequence-row-component',
@@ -12,16 +12,16 @@ import { Router } from '@angular/router';
 })
 export class SequenceRowComponent {
 
-  sequence = input<Sequence>();
+  sequence = input<SequenceListResponse>();
   onDelete = output<void>();
 
-  constructor(private sequenceService: SequenceService, private router: Router) {}
+  constructor(private secuenciaServicio: SecuenciasService, private router: Router) {}
 
   deleteSequence(): void{
     const id = this.sequence()?.id;
     
     if(id && confirm('¿Seguro que quieres borrar esta secuencia?')){
-      this.sequenceService.deleteSequence(id).subscribe({
+      this.secuenciaServicio.delete(id).subscribe({
         next: () => {
           localStorage.setItem('infoMessage', 'Secuencia eliminada correctamente');
           this.onDelete.emit();
@@ -49,12 +49,12 @@ export class SequenceRowComponent {
     }
   }
 
-  duplicateSequence(sequence: Sequence): void {
+  duplicateSequence(sequence: SequenceListResponse): void {
     if (!confirm(`¿Quieres duplicar la secuencia "${sequence.title}"?`)) {
       return;
     }
 
-    this.sequenceService.duplicateSequence(sequence.id).subscribe({
+    this.secuenciaServicio.duplicate(sequence.id).subscribe({
       next: (duplicatedSequenceResponse) => {
         const newSequenceId = duplicatedSequenceResponse.id;
         

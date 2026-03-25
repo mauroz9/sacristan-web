@@ -1,6 +1,5 @@
-import { UserResponse } from "../user/user-interface";
-
-export interface JwtUserResponse extends UserResponse {
+export interface JwtUserResponse {
+    email: string,
     token: string,
     refreshToken: string,
     roles: string[]

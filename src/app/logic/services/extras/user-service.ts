@@ -1,12 +1,14 @@
 import { Injectable } from "@angular/core";
 import { CreateUserRequest, UpdateUserRequest } from "../../interfaces/extras/users-interface";
 import { FormGroup } from "@angular/forms";
+import { HttpClient } from "@angular/common/http";
+import { API_URL } from "../../env";
 
 @Injectable({
     providedIn: 'root',
 })
 export class UserService{
-
+    
     convertToCreateUser(formData: any): CreateUserRequest {
         return { 
             name: formData.nameFormControl,

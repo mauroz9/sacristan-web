@@ -2,7 +2,7 @@ import { Component, input, TemplateRef, ViewChild } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
 import { UserFormComponent } from "../../form-component/user-form-component/user-form-component";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TeacherService } from '../../../../logic/services/teacher-service';
+import { ProfesoresService } from '../../../../logic/services/profesores-service';
 
 @Component({
   selector: 'app-teacher-form-modal-component',
@@ -14,7 +14,7 @@ export class TeacherFormModalComponent {
   @ViewChild('modal') modal!: TemplateRef<any>;
   @ViewChild(UserFormComponent) userFormComponent!: UserFormComponent;
 
-  constructor (private modalService: NgbModal, private teacherService: TeacherService, private router: Router) {}
+  constructor (private modalService: NgbModal, private profesoresService: ProfesoresService, private router: Router) {}
 
   functionality = input<string>();
 
@@ -35,7 +35,7 @@ export class TeacherFormModalComponent {
         formData.id = this.userFormComponent.userId;
       }
       
-      this.teacherService.sendTeacher(formData).subscribe({
+      this.profesoresService.sendTeacher(formData).subscribe({
         next: (data) => {
           console.log("Teacher data sent successfully", data);
           this.modalService.dismissAll();
@@ -45,7 +45,7 @@ export class TeacherFormModalComponent {
           console.error("Error sending teacher data: ");
           console.log(error); 
           if (error.status == 400) {
-            this.teacherService.handleFormErrors(error.error["invalid-params"], this.userFormComponent.userFormGroup);
+            this.profesoresService.handleFormErrors(error.error["invalid-params"], this.userFormComponent.userFormGroup);
           } else {
             alert("Ha sucedido un error inesperado, pongase en contacto con el soporte.");
             console.error(error);

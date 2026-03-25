@@ -1,17 +1,10 @@
-export interface ReadStudentResponse {
-    id: number;
-    name: string;
-    lastName: string;
-    email: string;
-    username: string;
-}
-
 export interface StudentListResponse {
     id: number;
     name: string;
     lastName: string;
     sequencesCount: number;
     routinesCount: number;
+    kind: 'student';
 }
 
 export interface SequenceResponse {

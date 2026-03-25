@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { RoutineService } from '../../../../logic/services/routine-service';
-import { CategorySequenceService } from '../../../../logic/services/category-sequence-service';
-import { SequenceService } from '../../../../logic/services/sequence-service';
-import { Category } from '../../../../logic/interfaces/category-sequence-interface';
-import { Sequence } from '../../../../logic/interfaces/sequence-interface';
 import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
-import { RoutineRequest } from '../../../../logic/interfaces/routine-interface';
+import { RutinasService } from '../../../../logic/services/rutinas-service';
+import { ExtraService } from '../../../../logic/services/extras-service';
+import { SecuenciasService } from '../../../../logic/services/secuencias-service';
+import { ListCategoryResponse } from '../../../../logic/interfaces/extras-interface';
+import { CreateRoutineRequest, UpdateRoutineRequest } from '../../../../logic/interfaces/rutinas-interface';
+import { SequenceListResponse } from '../../../../logic/interfaces/secuencias-interface';
 
 @Component({
   selector: 'app-routine-form-component',
@@ -29,8 +29,8 @@ export class RoutineFormComponent implements OnInit {
 
   isEditMode = false;
   routineId: number | null = null;
-  categories: Category[] = [];
-  availableSequences: Sequence[] = [];
+  categories: ListCategoryResponse[] = [];
+  availableSequences: SequenceListResponse[] = [];
   loading = false;
   errorMessage: string | null = null;
 
@@ -47,9 +47,9 @@ export class RoutineFormComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private routineService: RoutineService,
-    private categoryService: CategorySequenceService,
-    private sequenceService: SequenceService
+    private rutinasService: RutinasService,
+    private extraService: ExtraService,
+    private secuenciasService: SecuenciasService
   ) {
     this.daysList.forEach(() => this.daysFormArray.push(new FormControl(false)));
   }
@@ -61,10 +61,10 @@ export class RoutineFormComponent implements OnInit {
   async loadInitialData() {
     this.loading = true;
     try {
-      const cats = await firstValueFrom(this.categoryService.getCategories());
+      const cats = await firstValueFrom(this.extraService.getCategories());
       this.categories = cats.content;
 
-      const seqs = await firstValueFrom(this.sequenceService.getSequences());
+      const seqs = await firstValueFrom(this.secuenciasService.list());
       this.availableSequences = seqs.content;
 
       const id = this.route.snapshot.paramMap.get('id');
@@ -81,7 +81,7 @@ export class RoutineFormComponent implements OnInit {
   }
 
   loadRoutineData(id: number) {
-    this.routineService.getRoutineById(id).subscribe(routine => {
+    this.rutinasService.read(id).subscribe(routine => {
       this.routineForm.patchValue({
         name: routine.name,
         categoryId: routine.category?.id
@@ -121,7 +121,7 @@ export class RoutineFormComponent implements OnInit {
         ?.map((checked, i) => checked ? this.daysList[i].value : null)
         .filter(v => v !== null);
 
-      const routine: RoutineRequest = {
+      const routine: CreateRoutineRequest | UpdateRoutineRequest = {
         name: this.routineForm.value.name!,
         categoryId: this.routineForm.value.categoryId!,
         daysOfTheWeek: selectedDays!,
@@ -129,8 +129,8 @@ export class RoutineFormComponent implements OnInit {
       };
 
       const request = this.isEditMode
-        ? this.routineService.modifyRoutine(this.routineId!, routine)
-        : this.routineService.addRoutine(routine);
+        ? this.rutinasService.update(this.routineId!, routine as UpdateRoutineRequest)
+        : this.rutinasService.create(routine);
 
       request.subscribe({
         next: () => {

@@ -11,6 +11,7 @@ import {
 import { Page } from "../interfaces/extras/utils/page-interface";
 import { UserService } from "./extras/user-service";
 import { SortParam } from "../interfaces/extras/content/content-interface";
+import { QuerySortParameters } from "../interfaces/extras/utils/sort-params-interface";
 
 
 @Injectable({

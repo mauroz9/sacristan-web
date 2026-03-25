@@ -3,16 +3,16 @@ import { API_URL } from "../env";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import {
-    ReadTeacherResponse,
     TeacherListResponse,
     AssignedStudentResponse,
     UnAssignedStudentResponse
 } from "../interfaces/profesores-interface";
-import { CreateUserRequest, UpdateUserRequest } from "../interfaces/extras/users-interface";
+import { CreateUserRequest, ReadUserResponse, UpdateUserRequest } from "../interfaces/extras/users-interface";
 import { SortParam } from "../interfaces/extras/content/content-interface";
 import { Page } from "../interfaces/extras/utils/page-interface";
 import { FormGroup } from "@angular/forms";
 import { UserService } from "./extras/user-service";
+import { QuerySortParameters } from "../interfaces/extras/utils/sort-params-interface";
 
 @Injectable({
     providedIn: 'root',
@@ -27,8 +27,8 @@ export class ProfesoresService {
         return this.http.post<void>(this.API_URL, createUser);
     }
 
-    read(id: number): Observable<ReadTeacherResponse> {
-        return this.http.get<ReadTeacherResponse>(`${this.API_URL}/${id}`);
+    read(id: number): Observable<ReadUserResponse> {
+        return this.http.get<ReadUserResponse>(`${this.API_URL}/${id}`);
     }
 
     update(id: number, updateUser: UpdateUserRequest): Observable<void> {
