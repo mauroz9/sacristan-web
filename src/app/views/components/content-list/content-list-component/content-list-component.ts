@@ -1,31 +1,34 @@
 import { Component, input, output, signal } from '@angular/core';
-import { SequenceRowComponent } from '../sequence-row-component/sequence-row-component';
-import { Content } from '../../../../logic/interfaces/content-interface';
 import { StudentRowComponent } from "../student-row-component/student-row-component";
 import { Router, RouterLink } from '@angular/router';
 import { StudentFormModalComponent } from "../../form-modals/student-form-modal-component/student-form-modal-component";
 import { TeacherRowComponent } from "../teacher-row-component/teacher-row-component";
 import { TeacherFormModalComponent } from "../../form-modals/teacher-form-modal-component/teacher-form-modal-component";
-import { AsignStudentComponent } from "../../asign-student-component/asign-student-component";
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
-import { StudentService } from '../../../../logic/services/student-service';
+import { AlumnosService } from '../../../../logic/services/alumnos-service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SequenceService } from '../../../../logic/services/sequence-service';
-import { TeacherService } from '../../../../logic/services/teacher-service';
+import { SecuenciasService } from '../../../../logic/services/secuencias-service';
+import { ProfesoresService } from '../../../../logic/services/profesores-service';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
-import { RoutineService } from '../../../../logic/services/routine-service';
-import { AsignSequencesComponent } from "../../asign-valuable-component/asign-valuable-component";
+import { RutinasService } from '../../../../logic/services/rutinas-service';
 import { RoutineRowComponent } from "../routine-row-component/routine-row-component";
+import { Content } from '../../../../logic/interfaces/extras/content/content-interface';
+import { SequenceRowComponent } from '../sequence-row-component/sequence-row-component';
+import { AsignSequencesComponent } from "../../asign-valuable-component/asign-valuable-component";
+import { AsignStudentComponent } from "../../asign-student-component/asign-student-component";
 
 @Component({
   selector: 'app-content-list-component',
-  imports: [SequenceRowComponent,
+  standalone: true,
+  imports: [
     StudentRowComponent, RouterLink, StudentFormModalComponent,
-    TeacherRowComponent, TeacherFormModalComponent,
-    AsignStudentComponent, LoadingComponent,
-    ReactiveFormsModule, FormsModule, NgClass, AsignSequencesComponent, RoutineRowComponent],
+    TeacherRowComponent, TeacherFormModalComponent, LoadingComponent,
+    ReactiveFormsModule, FormsModule, NgClass, RoutineRowComponent, SequenceRowComponent,
+    AsignSequencesComponent,
+    AsignStudentComponent
+],
   templateUrl: './content-list-component.html',
   styleUrl: './content-list-component.css',
 })
@@ -43,7 +46,7 @@ export class ContentListComponent {
   sortTooltip: string = 'Orden ascendente';
   direction: string = 'asc';
 
-  constructor(private router: Router, private studentService: StudentService, private sequenceService: SequenceService, private teacherService: TeacherService, private routineService: RoutineService) {
+  constructor(private router: Router, private alumnosService: AlumnosService, private secuenciasService: SecuenciasService, private profesoresService: ProfesoresService, private rutinasService: RutinasService) {
     if (this.router.url.includes('students/new')) {
       this.functionality = "newStudent";
     } else if (this.router.url.includes('students/modify')) {
@@ -68,50 +71,50 @@ export class ContentListComponent {
     let r;
 
     if (this.content()?.kind == "alumno") {
-      r = await firstValueFrom(this.studentService.getStudents({
+      r = await firstValueFrom(this.alumnosService.list({
         query: this.searchTerm,
         sortBy: this.sortBy,
         sortDir: this.direction
       }));
 
       for (let student of r.content) {
-        student.kind = "alumno";
+        student.kind = "student";
       }
 
       this.content()!.contentList = r.content
 
-    } else if (this.content()?.kind == "secuencia") {
-      r = await firstValueFrom(this.sequenceService.getSequences({
+    } else if (this.content()?.kind == "sequence") {
+      r = await firstValueFrom(this.secuenciasService.list({
         query: this.searchTerm,
         sortBy: this.sortBy,
         sortDir: this.direction
       }));
 
       for (let sequence of r.content) {
-        sequence.kind = "secuencia";
+        sequence.kind = "sequence";
       }
 
       this.content()!.contentList = r.content
 
     } else if (this.content()?.kind == "profesor") {
-      r = await firstValueFrom(this.teacherService.getTeachers({
+      r = await firstValueFrom(this.profesoresService.list({
         query: this.searchTerm,
         sortBy: this.sortBy,
         sortDir: this.direction
-      }));
+    }));
       for (let teacher of r.content) {
-        teacher.kind = "profesor";
+        teacher.kind = "teacher";
       }
 
       this.content()!.contentList = r.content
     } else if (this.content()?.kind == "rutina") {
-      r = await firstValueFrom(this.routineService.getRoutines({
+      r = await firstValueFrom(this.rutinasService.list({
         query: this.searchTerm,
         sortBy: this.sortBy,
         sortDir: this.direction
       }));
       for (let routine of r.content) {
-        routine.kind = "rutina";
+        routine.kind = "routine";
       }
       this.content()!.contentList = r.content;
     }

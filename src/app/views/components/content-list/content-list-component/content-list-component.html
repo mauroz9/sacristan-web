@@ -70,13 +70,13 @@
                 <app-loading-component></app-loading-component>
             } @else {
                 @for (item of content()?.contentList; track item.id) {
-                    @if (item.kind == 'secuencia') {
+                    @if (item.kind == 'sequence') {
                         <app-sequence-row-component [sequence]="item" (onDelete)="reloadContent()"></app-sequence-row-component>
-                        } @else if (item.kind == 'alumno') {
+                        } @else if (item.kind == 'student') {
                             <app-student-row-component [student]="item" (onDelete)="reloadContent()"></app-student-row-component>
-                        } @else if (item.kind == 'profesor') {
+                        } @else if (item.kind == 'teacher') {
                             <app-teacher-row-component [teacher]="item" (onDelete)="reloadContent()"></app-teacher-row-component>
-                        } @else if(item.kind == "rutina"){
+                        } @else if(item.kind == "routine"){
                             <app-routine-row-component [routine]="item" (onDelete)="reloadContent()"></app-routine-row-component>
                         }@else {
                             <div class="text-center py-5 text-muted">
@@ -90,14 +90,14 @@
     </div>
 
     @if (functionality != "") {
-    @if (functionality == "newStudent" || functionality == "modifyStudent") {
-    <app-student-form-modal-component [functionality]="functionality"></app-student-form-modal-component>
-    } @else if (functionality == "newTeacher" || functionality == "modifyTeacher") {
-    <app-teacher-form-modal-component [functionality]="functionality"></app-teacher-form-modal-component>
-    } @else if (functionality == "assignValuable") {
-    <app-asign-valuable-component></app-asign-valuable-component>
-    } @else if (functionality == "assignStudent") {
-    <app-asign-student-component></app-asign-student-component>
-    }
+        @if (functionality == "newStudent" || functionality == "modifyStudent") {
+            <app-student-form-modal-component [functionality]="functionality"></app-student-form-modal-component>
+        } @else if (functionality == "newTeacher" || functionality == "modifyTeacher") {
+            <app-teacher-form-modal-component [functionality]="functionality"></app-teacher-form-modal-component>
+        } @else if (functionality == "assignValuable") {
+            <app-asign-valuable-component></app-asign-valuable-component>
+        } @else if (functionality == "assignStudent") {
+            <app-asign-student-component></app-asign-student-component>
+        }
     }
 }

@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from '../../../logic/services/dashboard-service';
-import { MostUsedSequence, MostUsedSequencesResponse } from '../../../logic/interfaces/dashboard/most-used-sequences-interface';
-import { LastestReproduction, LastestReproductionsResponse } from '../../../logic/interfaces/dashboard/lastest-reproductions-interface';
-import { DailyExpectedCompletedSequence } from '../../../logic/interfaces/dashboard/daily-expected-completed-sequences-interface';
-
+import { DailyExpectedSequencesDto, LatestReproductionsDto, MostUsedSequencesDto } from '../../../logic/interfaces/dashboard-interface';
 @Component({
   selector: 'app-dashboard-page',
   imports: [CommonModule],
@@ -23,9 +20,9 @@ export class DashboardPage implements OnInit {
     avgPerStudent: null as number | null,
   };
 
-  topSequences: MostUsedSequence[] = [];
-  recentActivity: LastestReproduction[] = [];
-  weeklyActivity: DailyExpectedCompletedSequence[] = [];
+  topSequences: MostUsedSequencesDto[] = [];
+  recentActivity: LatestReproductionsDto[] = [];
+  weeklyActivity: DailyExpectedSequencesDto[] = [];
 
   chartMax = 1;
 
@@ -68,19 +65,19 @@ export class DashboardPage implements OnInit {
     const toStr = today.toISOString().split('T')[0];
     const fromStr = weekAgo.toISOString().split('T')[0];
 
-    this.dashboardService.getTotalSequences()
+    this.dashboardService.countTotalSequences()
       .subscribe(total => this.stats.totalSequences = total);
 
-    this.dashboardService.getTotalStudents()
+    this.dashboardService.countTotalStudents()
       .subscribe(total => this.stats.activeStudents = total);
 
-    this.dashboardService.getTotalTeachers()
+    this.dashboardService.countTotalTeachers()
       .subscribe(total => this.stats.teachers = total);
 
-    this.dashboardService.getCompletedSequencesToday()
+    this.dashboardService.countCompletedSequencesToday()
       .subscribe(total => this.stats.completedSequences = total);
 
-    this.dashboardService.getAverageCompletedSequences()
+    this.dashboardService.averageCompletedSequencesPerStudentToday()
       .subscribe(total => this.stats.avgPerStudent = total);
 
     this.dashboardService.getMostUsedSequences().subscribe(res => {
@@ -91,7 +88,7 @@ export class DashboardPage implements OnInit {
       }));
     });
 
-    this.dashboardService.getLastestReproductions().subscribe(res => {
+    this.dashboardService.getLatestReproductions().subscribe(res => {
       this.recentActivity = res.content.map(rep => ({
         studentName: rep.studentName,
         sequenceTitle: rep.sequenceTitle,
@@ -99,7 +96,7 @@ export class DashboardPage implements OnInit {
       }));
     });
 
-    this.dashboardService.getDailyExpectedAndCompletedSequences(fromStr, toStr).subscribe(data => {
+    this.dashboardService.getDailyExpectedAndCompleted(fromStr, toStr).subscribe(data => {
       this.weeklyActivity = data.map(d => ({
         date: this.dayLabel(d.date),
         completed: d.completed,

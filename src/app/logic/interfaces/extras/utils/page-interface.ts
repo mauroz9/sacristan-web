@@ -1,9 +1,9 @@
-export interface PageResponse<T> {
+export interface Page<T> {
     content: T[],
-    page: Page
+    page: PageParams
 }
 
-export interface Page {
+export interface PageParams {
     number: number,
     size: number,
     totalElements: number,

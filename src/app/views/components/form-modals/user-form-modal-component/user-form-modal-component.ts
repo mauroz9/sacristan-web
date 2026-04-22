@@ -2,7 +2,7 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { UserFormComponent } from '../../form-component/user-form-component/user-form-component';
 import { RouterLink } from "@angular/router";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserService } from '../../../../logic/services/user-service';
+import { UserService } from '../../../../logic/services/extras/user-service';
 
 @Component({
   selector: 'app-user-form-modal-component',

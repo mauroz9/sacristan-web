@@ -3,13 +3,12 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { StepModalComponent } from '../../step-modal-component/step-modal-component';
 import { CoverModalComponent } from '../../cover-modal-component/cover-modal-component';
-import { SequenceService } from '../../../../logic/services/sequence-service';
-import { SequenceRequest } from '../../../../logic/interfaces/sequence-interface';
-import { CategorySequenceService } from '../../../../logic/services/category-sequence-service';
-import { Category } from '../../../../logic/interfaces/category-sequence-interface';
 import { firstValueFrom } from 'rxjs';
-import { Step, StepRequest } from '../../../../logic/interfaces/sequence-step-interface';
 import { LoadingComponent } from "../../shared/loading-component/loading-component";
+import { SecuenciasService } from '../../../../logic/services/secuencias-service';
+import { ListCategoryResponse } from '../../../../logic/interfaces/extras-interface';
+import { ExtraService } from '../../../../logic/services/extras-service';
+import { CreateSequenceRequest, CreateStepRequest, SequenceDetailResponse, SequenceListResponse, StepResponse, UpdateSequenceRequest, UpdateStepRequest } from '../../../../logic/interfaces/secuencias-interface';
 
 @Component({
   selector: 'app-sequence-form-component',
@@ -34,19 +33,19 @@ export class SequenceFormComponent implements OnInit {
   sequenceId: number | null = null;
   editingStepIndex: number | null = null;
   stepToEdit: { title: string, arasaacPictogramId: number } | null = null;
-  categories: Category[] = [];
+  categories: ListCategoryResponse[] = [];
   loading: boolean = false;
 
   constructor(
     private router: Router,
-    private sequenceService: SequenceService,
     private route: ActivatedRoute,
-    private categorySequenceService: CategorySequenceService,
-  ) { }
+    private secuenciasService: SecuenciasService,
+    private extraService: ExtraService
+    ) { }
 
   ngOnInit(): void {
     this.loading = true;
-    this.categorySequenceService.getCategories().subscribe({
+    this.extraService.getCategories().subscribe({
       next: (req) => {
         this.categories = req.content;
       },
@@ -68,7 +67,7 @@ export class SequenceFormComponent implements OnInit {
   }
 
   loadSequenceData(id: number): void {
-    this.sequenceService.getSequenceById(id).subscribe({
+    this.secuenciasService.read(id).subscribe({
       next: (sequence: any) => {
         if (sequence) {
           this.sequenceForm.patchValue({
@@ -80,11 +79,11 @@ export class SequenceFormComponent implements OnInit {
 
           this.steps.clear();
           if (sequence.steps) {
-            const sortedSteps = sequence.steps.sort((a: Step, b: Step) => a.position - b.position);
+            const sortedSteps = sequence.steps.sort((a: StepResponse, b: StepResponse) => a.position - b.position);
 
-            sortedSteps.forEach((step: any) => {
+            sortedSteps.forEach((step: StepResponse) => {
               this.addStepToForm({
-                title: step.title, 
+                title: step.name, 
                 arasaacPictogramId: step.arasaacPictogramId 
               });
             });
@@ -193,16 +192,15 @@ export class SequenceFormComponent implements OnInit {
     const formValue = this.sequenceForm.value;
     
     try {
-      const sequenceCategory = await firstValueFrom(this.categorySequenceService.getCategoryById(formValue.category_id!));
+      const sequenceCategory = await firstValueFrom(this.extraService.getCategoryById(formValue.category_id!));
 
-      const newSequence: SequenceRequest = {
-        kind: 'secuencia',
+      const newSequence: CreateSequenceRequest | UpdateSequenceRequest = {
         title: formValue.title!,
         description: formValue.description!,
         categoryId: formValue.category_id!,
 
-        steps: (formValue.steps as StepRequest[]).map((step, index) => ({
-          title: step.title,
+        steps: (formValue.steps as (CreateStepRequest | UpdateStepRequest)[]).map((step, index) => ({
+          name: step.name,
           position: index + 1,
           estimatedDuration: null,
           arasaacPictogramId: step.arasaacPictogramId,
@@ -213,12 +211,9 @@ export class SequenceFormComponent implements OnInit {
         frontPage: formValue.frontPage != null ? formValue.frontPage : this.steps.length > 0 ? this.steps.at(0).get('arasaacPictogramId')?.value : null,
       };
 
-      console.log(newSequence);
-      
-
       const request$ = this.isEditMode 
-        ? this.sequenceService.modifySequence(this.sequenceId!, newSequence) 
-        : this.sequenceService.addSequence(newSequence);
+        ? this.secuenciasService.update(this.sequenceId!, newSequence) 
+        : this.secuenciasService.create(newSequence);
 
       request$.subscribe( (res) => {},
       (err) => {

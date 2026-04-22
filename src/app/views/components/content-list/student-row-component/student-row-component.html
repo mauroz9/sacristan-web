@@ -14,7 +14,7 @@
                 <app-loading-component></app-loading-component>
             } @else {
                 <span class="badge-steps">
-                    {{ sequenceCount }} Secuencia{{ sequenceCount !== 1 ? 's' : '' }} asignada{{ sequenceCount !== 1 ? 's' :
+                    {{ student()?.sequencesCount }} Secuencia{{ student()?.sequencesCount !== 1 ? 's' : '' }} asignada{{ student()?.sequencesCount !== 1 ? 's' :
                     '' }}
                 </span>
             }

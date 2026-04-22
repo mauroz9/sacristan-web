@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ArasaacPictogram } from '../interfaces/arasaac-interface';
 import { HttpClient } from '@angular/common/http';
+import { ArasaacPictogram } from '../../interfaces/extras/content/arasaac-interface';
 
 const baseAPIUrl: string = 'https://api.arasaac.org/v1';
 const language: string = 'es';

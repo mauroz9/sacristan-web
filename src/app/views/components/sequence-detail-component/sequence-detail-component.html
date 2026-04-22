@@ -3,7 +3,7 @@
     @if (sequence) {
     <div class="d-flex justify-content-between align-items-start mb-4">
         <div>
-            <span class="badge bg-secondary-yellow text-dark mb-2 px-3">{{ sequence.category.name }}</span>
+            <span class="badge bg-secondary-yellow text-dark mb-2 px-3">{{ sequence.category }}</span>
             <h2 class="text-primary-blue fw-bold mb-1">{{ sequence.title }}</h2>
             <p class="text-muted small mb-0">{{ sequence.description }}</p>
         </div>
@@ -31,12 +31,12 @@
 
             <div class="step-image-container">
                 <img [src]="'https://api.arasaac.org/api/pictograms/' + sequence.steps[currentIndex].arasaacPictogramId"
-                    class="img-fluid" [alt]="sequence.steps[currentIndex].title">
+                    class="img-fluid" [alt]="sequence.steps[currentIndex].name">
             </div>
 
             <div class="step-footer">
                 <h3 class="text-primary-blue fw-bold mb-0 text-center">
-                    {{ sequence.steps[currentIndex].title }}
+                    {{ sequence.steps[currentIndex].name }}
                 </h3>
             </div>
         </div>
@@ -69,10 +69,10 @@
                 <div class="step-badge">Paso {{$index + 1}}</div>
 
                 <div class="step-image-wrapper">
-                    <img [src]="'https://api.arasaac.org/api/pictograms/' + step.arasaacPictogramId" [alt]="step.title">
+                    <img [src]="'https://api.arasaac.org/api/pictograms/' + step.arasaacPictogramId" [alt]="step.name">
                 </div>
 
-                <span class="step-title-text">{{ step.title }}</span>
+                <span class="step-title-text">{{ step.name }}</span>
             </div>
             }
         </div>

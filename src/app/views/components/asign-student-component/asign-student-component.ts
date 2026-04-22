@@ -1,13 +1,13 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { TeacherService } from '../../../logic/services/teacher-service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Teacher } from '../../../logic/interfaces/teacher-interface';
-import { StudentService } from '../../../logic/services/student-service';
 import { firstValueFrom } from 'rxjs';
 import { LoadingComponent } from "../shared/loading-component/loading-component";
-import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
-import { TeacherResponse } from '../../../logic/interfaces/user/teacher/teacher-interface';
+import { ProfesoresService } from '../../../logic/services/profesores-service';
+import { AlumnosService } from '../../../logic/services/alumnos-service';
+import { AssignedStudentResponse, UnAssignedStudentResponse } from '../../../logic/interfaces/profesores-interface';
+import { ReadUserResponse } from '../../../logic/interfaces/extras/users-interface';
+
 
 @Component({
   selector: 'app-asign-student-component',
@@ -19,13 +19,15 @@ export class AsignStudentComponent implements OnInit {
 
     @ViewChild('modal') modal!: TemplateRef<any>;
 
-  teacher: TeacherResponse | null = null;
-  selectedStudent: StudentResponse | null = null; // Use your Student type here
-  nonAssignedStudents: StudentResponse[] = [];
-  assignedStudents: StudentResponse[] = [];
+  teacher: ReadUserResponse | null = null;
+  selectedStudent: UnAssignedStudentResponse | null = null; // Use your Student type here
+  nonAssignedStudents: UnAssignedStudentResponse[] = [];
+  assignedStudents: AssignedStudentResponse[] = [];
   loading: boolean = false;
 
-  constructor (private modalService: NgbModal, private router: Router, private teacherService:TeacherService, private studentService: StudentService, private route: ActivatedRoute) {}
+  constructor (private modalService: NgbModal, private router: Router,
+    private profesoresService:ProfesoresService, private alumnosService: AlumnosService
+    , private route: ActivatedRoute) {}
 
   openModal(modalContent: TemplateRef<any>) {
     this.modalService.open(modalContent, { centered: true, backdrop: 'static', keyboard: false });
@@ -40,29 +42,29 @@ export class AsignStudentComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if(id){
       const teacherId = Number(id);
-      this.teacher = await firstValueFrom(this.teacherService.getTeacherById(teacherId));
+      this.teacher = await firstValueFrom(this.profesoresService.read(teacherId));
 
-      this.nonAssignedStudents = await firstValueFrom(this.studentService.getStudentsWithoutTeacher());
-      this.assignedStudents = await firstValueFrom(this.studentService.getStudentsWithTeacher(teacherId));
+      this.nonAssignedStudents = await firstValueFrom(this.profesoresService.getStudentsWithoutTeacher());
+      this.assignedStudents = await firstValueFrom(this.profesoresService.getStudentsByTeacher(teacherId));
     }
     this.loading = false;
   }
 
-  selectStudent(student: StudentResponse) {
+  selectStudent(student: UnAssignedStudentResponse) {
     this.selectedStudent = student; 
   }
 
   assignStudent() {
     if (this.selectedStudent) {
-      this.studentService.assignTeacherToStudent(this.selectedStudent!.id!, this.teacher!.id!);
+      this.profesoresService.assignStudentToTeacher(this.selectedStudent!.id!, this.teacher!.id!);
       localStorage.setItem('infoMessage', `Estudiante ${this.selectedStudent.name} ${this.selectedStudent.lastName} asignado al profesor ${this.teacher!.name} ${this.teacher!.lastName} correctamente.`);
       this.modalService.dismissAll();
       this.router.navigate(['/teachers']);
     }
   }
 
-  unassignStudent(student: StudentResponse) { 
-    this.studentService.unassignTeacherFromStudent(student.id!);
+  unassignStudent(student: AssignedStudentResponse) { 
+    this.profesoresService.unassignStudentFromTeacher(student.id!, student.teacherId);
     localStorage.setItem('infoMessage', `Estudiante ${student.name} ${student.lastName} desvinculado del profesor ${this.teacher!.name} ${this.teacher!.lastName} correctamente.`);
     this.modalService.dismissAll();
     this.router.navigate(['/teachers']);

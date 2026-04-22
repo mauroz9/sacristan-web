@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Sequence } from '../../../logic/interfaces/sequence-interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SequenceService } from '../../../logic/services/sequence-service';
 import { CommonModule } from '@angular/common';
+import { SecuenciasService } from '../../../logic/services/secuencias-service';
+import { SequenceDetailResponse } from '../../../logic/interfaces/secuencias-interface';
 
 @Component({
   selector: 'app-sequence-detail-component',
@@ -12,15 +12,15 @@ import { CommonModule } from '@angular/common';
 })
 
 export class SequenceDetailComponent implements OnInit {
-  sequence: Sequence | undefined;
+  sequence: SequenceDetailResponse | undefined;
   currentIndex: number = 0;
 
-  constructor(private route: ActivatedRoute, private router: Router, private sequenceService: SequenceService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private secuenciasService: SecuenciasService) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.sequenceService.getSequenceById(+id).subscribe(req => {
+      this.secuenciasService.read(+id).subscribe(req => {
         this.sequence = req;
       });
     }

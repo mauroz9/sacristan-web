@@ -1,41 +1,42 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Content, SortParam } from '../../../logic/interfaces/content-interface';
-import { Sequence } from '../../../logic/interfaces/sequence-interface';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ContentListComponent } from '../../components/content-list/content-list-component/content-list-component';
 import { Router } from '@angular/router';
-import { StudentService } from '../../../logic/services/student-service';
-import { SequenceService } from '../../../logic/services/sequence-service';
 import { firstValueFrom } from 'rxjs';
-import { Teacher } from '../../../logic/interfaces/teacher-interface';
-import { TeacherService } from '../../../logic/services/teacher-service';
-import { StudentResponse } from '../../../logic/interfaces/user/student/student-interface';
-import { TeacherResponse } from '../../../logic/interfaces/user/teacher/teacher-interface';
-import { RoutineService } from '../../../logic/services/routine-service';
-import { Routine } from '../../../logic/interfaces/routine-interface';
 import { LoadingComponent } from '../../components/shared/loading-component/loading-component';
+import { SequenceListResponse } from '../../../logic/interfaces/secuencias-interface';
+import { StudentListResponse } from '../../../logic/interfaces/alumnos-interface';
+import { TeacherListResponse } from '../../../logic/interfaces/profesores-interface';
+import { RoutineListResponse } from '../../../logic/interfaces/rutinas-interface';
+import { Content, SortParam } from '../../../logic/interfaces/extras/content/content-interface';
+import { AlumnosService } from '../../../logic/services/alumnos-service';
+import { ProfesoresService } from '../../../logic/services/profesores-service';
+import { SecuenciasService } from '../../../logic/services/secuencias-service';
+import { RutinasService } from '../../../logic/services/rutinas-service';
+import { QuerySortParameters } from '../../../logic/interfaces/extras/utils/sort-params-interface';
 
 @Component({
   selector: 'app-content-list-page',
+  standalone: true,
   imports: [ContentListComponent, LoadingComponent],
   templateUrl: './content-list-page.html',
   styleUrl: './content-list-page.css',
 })
-export class ContentListPage implements OnInit {
+export class ContentListPage implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-    private studentService: StudentService,
-    private sequenceService: SequenceService,
-    private teacherService: TeacherService,
-    private routineService: RoutineService
+    private alumnosService: AlumnosService,
+    private profesoresService: ProfesoresService,
+    private secuenciasService: SecuenciasService,
+    private rutinasService: RutinasService
   ) { }
 
   url = "";
 
-  sequenceList: Sequence[] = [];
-  studentList: StudentResponse[] = []
-  teacherList: TeacherResponse[] = [];
-  routineList: Routine[] = [];
+  sequenceList: SequenceListResponse[] = [];
+  studentList: StudentListResponse[] = []
+  teacherList: TeacherListResponse[] = [];
+  routineList: RoutineListResponse[] = [];
   sortParams: SortParam[] = [];
   infoMessage: string | null = null;
   errorMessage: string | null = null;
@@ -46,7 +47,7 @@ export class ContentListPage implements OnInit {
   currentSortBy = '';
   currentSortDir = 'asc';
 
-  contentSequence: Content = {
+  content: Content = {
     kind: "secuencia",
     url: "/sequences",
     title: "Secuencia de pasos",
@@ -54,9 +55,7 @@ export class ContentListPage implements OnInit {
     searchparams: "Buscar por título o descripción",
     gender: 0,
     contentList: []
-  }
-
-  content: Content = this.contentSequence;
+  };
   loading: boolean = true;
 
   reloadContent() {
@@ -83,20 +82,20 @@ export class ContentListPage implements OnInit {
     try {
       this.url = this.router.url;
       if (this.url.includes('/students')) {
-        this.studentList = (await firstValueFrom(this.studentService.getStudents())).content;
+        this.studentList = (await firstValueFrom(this.alumnosService.list())).content;
         console.log(this.studentList);
         
-        this.sortParams = await firstValueFrom(this.studentService.getSortParams());
+        this.sortParams = await firstValueFrom(this.alumnosService.getSortParams());
         
       } else if (this.url.includes('/teachers')) {
-        this.teacherList = (await firstValueFrom(this.teacherService.getTeachers())).content;
-        this.sortParams = await firstValueFrom(this.teacherService.getSortParams());
+        this.teacherList = (await firstValueFrom(this.profesoresService.list())).content;
+        this.sortParams = await firstValueFrom(this.profesoresService.getSortParams());
       } else if (this.url.includes('/sequences')) {
-        this.sequenceList = (await firstValueFrom(this.sequenceService.getSequences())).content;
-        this.sortParams = await firstValueFrom(this.sequenceService.getSortParams());
+        this.sequenceList = (await firstValueFrom(this.secuenciasService.list())).content;
+        this.sortParams = await firstValueFrom(this.secuenciasService.getSortParams());
       } else if(this.url.includes('/routines')){
-        this.routineList = (await firstValueFrom(this.routineService.getRoutines())).content;
-        this.sortParams = await firstValueFrom(this.routineService.getSortParams());
+        this.routineList = (await firstValueFrom(this.rutinasService.list())).content;
+        this.sortParams = await firstValueFrom(this.rutinasService.getSortParams());
       }
       this.loadData();
     } catch (error: any) {
@@ -114,14 +113,14 @@ export class ContentListPage implements OnInit {
   }
 
   async callPage() {
-    var res: StudentResponse[] | TeacherResponse[] | Sequence[] | Routine[] = [];
+    var res: StudentListResponse[] | TeacherListResponse[] | SequenceListResponse[] | RoutineListResponse[] = [];
     if (this.isLoading || this.allLoaded) return;
     this.isLoading = true;
     
     this.page++;  
     this.url = this.router.url;
 
-      const params: GetParams = {
+      const params: QuerySortParameters = {
         page: this.page,
         query: this.currentQuery,
         sortBy: this.currentSortBy || undefined,
@@ -130,42 +129,42 @@ export class ContentListPage implements OnInit {
 
       if (this.url.includes('/students')) {
 
-        res = (await firstValueFrom(this.studentService.getStudents(params))).content;
+        res = (await firstValueFrom(this.alumnosService.list(params))).content;
 
         if(res.length == 0){
           this.allLoaded = true;
         } else {
           console.log(res);
-          this.studentList.push(...res);
+          this.studentList.push(...(res as StudentListResponse[]));
         }
 
       } else if (this.url.includes('/teachers')) {
 
-        res = (await firstValueFrom(this.teacherService.getTeachers(params))).content;
+        res = (await firstValueFrom(this.profesoresService.list(params))).content;
 
         if(res.length == 0){
           this.allLoaded = true;
         } else {
           console.log(res);
-          this.teacherList.push(...res);
+          this.teacherList.push(...(res as TeacherListResponse[]));
         }
 
       } else if (this.url.includes('/sequences')) {
-        res = (await firstValueFrom(this.sequenceService.getSequences(params))).content;
+        res = (await firstValueFrom(this.secuenciasService.list(params))).content;
 
         if(res.length == 0){
           this.allLoaded = true;
         } else {
           console.log(res);
-          this.sequenceList.push(...res);
+          this.sequenceList.push(...(res as SequenceListResponse[]));
         }
       } else if(this.url.includes('/routines')){
-        res = (await firstValueFrom(this.routineService.getRoutines(params))).content
+        res = (await firstValueFrom(this.rutinasService.list(params))).content
         if(res.length == 0){
           this.allLoaded = true;
         } else {
           console.log(res);
-          this.routineList.push(...res);
+          this.routineList.push(...(res as RoutineListResponse[]));
         }
       }
 
@@ -179,16 +178,7 @@ export class ContentListPage implements OnInit {
     this.currentSortDir = params.sortDir;
     this.page = 0;
     this.allLoaded = false;
-
-    if (this.url.includes('/students')) {
-      this.studentList = [...this.content.contentList] as StudentResponse[];
-    } else if (this.url.includes('/teachers')) {
-      this.teacherList = [...this.content.contentList] as TeacherResponse[];
-    } else if (this.url.includes('/sequences')) {
-      this.sequenceList = [...this.content.contentList] as Sequence[];
-    } else if (this.url.includes('/routines')) {
-      this.routineList = [...this.content.contentList] as Routine[];
-    }
+    this.loadData();
   }
 
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
@@ -204,108 +194,71 @@ export class ContentListPage implements OnInit {
 
   loadData() {
     if (this.url.includes('/sequences')) {
-      for (let sequence of this.sequenceList) {
-        sequence.kind = "secuencia";
-      }
-
-      this.contentSequence.contentList = this.sequenceList;
-      
-      this.content = this.contentSequence;
-
-      let searchParams = ""
-
-      for (let i = 0; i < this.sortParams.length; i++) {
-        if (i == this.sortParams.length - 1) {
-          searchParams += this.sortParams[i].key.toLowerCase();
-        } else {
-          searchParams += this.sortParams[i].key.toLowerCase() + ", ";
-        }
-      }
-
-      this.content.searchparams = "Buscar por " + searchParams;
-      this.content.sortparams= this.sortParams
-
-    } else if (this.url.includes('/students')) {
-      
-      for (let student of this.studentList) {
-        student.kind = "alumno";
-      }      
-
-      let searchParams = ""
-
-      for (let i = 0; i < this.sortParams.length; i++) {
-        if (i == this.sortParams.length - 1) {
-          searchParams += this.sortParams[i].key.toLowerCase();
-        } else {
-          searchParams += this.sortParams[i].key.toLowerCase() + ", ";
-        }
-      }
+      const sequencesWithKind = this.sequenceList.map(seq => ({ ...seq, kind: "sequence" as SequenceListResponse["kind"] }));
 
       this.content = {
-        kind: "alumno",
+        kind: "sequence",
+        url: "/sequences",
+        title: "Secuencia de pasos",
+        subTitle: "Gestiona las secuencias de pictogramas para los estudiantes",
+        gender: 0,
+        searchparams: "Buscar por título o descripción",
+        sortparams: this.sortParams,
+        contentList: sequencesWithKind as SequenceListResponse[]
+      };
+
+    } else if (this.url.includes('/students')) {
+      const studentsWithKind = this.studentList.map(student => ({ ...student, kind: "student" as StudentListResponse["kind"] }));
+
+      this.content = {
+        kind: "student",
         url: "/students",
         title: "Listado de alumnos",
         subTitle: "Gestiona los alumnos del centro",
         gender: 1,
-        searchparams: "Buscar por " + searchParams,
+        searchparams: "Buscar por nombre, apellido",
         sortparams: this.sortParams,
-        contentList: this.studentList
-      }
+        contentList: studentsWithKind as StudentListResponse[]
+      };
+
     } else if (this.url.includes('/teachers')) {
-      for (let teacher of this.teacherList) {
-        teacher.kind = "profesor";
-      }
-
-      let searchParams = ""
-
-      for (let i = 0; i < this.sortParams.length; i++) {
-        if (i == this.sortParams.length - 1) {
-          searchParams += this.sortParams[i].key.toLowerCase();
-        } else {
-          searchParams += this.sortParams[i].key.toLowerCase() + ", ";
-        }
-      }
+      const teachersWithKind = this.teacherList.map(teacher => ({ ...teacher, kind: "teacher" as TeacherListResponse["kind"] }));
 
       this.content = {
-        kind: "profesor",
+        kind: "teacher",
         url: "/teachers",
         title: "Listado de profesores",
         subTitle: "Gestiona los profesores del centro",
         gender: 1,
         plural: 1,
-        searchparams: "Buscar por " + searchParams,
+        searchparams: "Buscar por nombre, apellido",
         sortparams: this.sortParams,
-        contentList: this.teacherList
-      }
-    } else if(this.url.includes("/routines")){
-      for (let routine of this.routineList) {
-        routine.kind = "rutina";
-      }
+        contentList: teachersWithKind as TeacherListResponse[]
+      };
 
-      let searchParams = ""
-
-      for (let i = 0; i < this.sortParams.length; i++) {
-        if (i == this.sortParams.length - 1) {
-          searchParams += this.sortParams[i].key.toLowerCase();
-        } else {
-          searchParams += this.sortParams[i].key.toLowerCase() + ", ";
-        }
-      }
+    } else if (this.url.includes("/routines")) {
+      const routinesWithKind = this.routineList.map(routine => ({ ...routine, kind: "routine" as any }));
 
       this.content = {
-        kind: "rutina",
+        kind: "routine",
         url: "/routines",
         title: "Listado de rutinas",
         subTitle: "Gestiona las rutinas de secuencias",
         gender: 0,
         plural: 1,
-        searchparams: "Buscar por " + searchParams,
+        searchparams: "Buscar por nombre",
         sortparams: this.sortParams,
-        contentList: this.routineList
-      }
+        contentList: routinesWithKind as any
+      };
+
     } else {
       console.log("Something went wrong loading content list page data");
     }
+
+    console.log("Contenido cargado:");
+    console.log(this.content);
+    
+
     this.loading = false;
   }
 
