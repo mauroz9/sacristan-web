@@ -50,6 +50,7 @@ export class AlumnosService{
         sortDir = "asc",
         page = 0
     }: QuerySortParameters = {}): Observable<Page<StudentListResponse>> {
+        console.log(this.API_URL + "?q="+query+"&sort="+sortBy+","+sortDir+"&page="+page)
         return this.http.get<Page<StudentListResponse>>(this.API_URL + "?q="+query+"&sort="+sortBy+","+sortDir+"&page="+page);
     }
 
