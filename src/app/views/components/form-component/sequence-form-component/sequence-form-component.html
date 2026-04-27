@@ -131,8 +131,8 @@
 
                 <div class="d-flex justify-content-end gap-3 pt-3 mt-4 border-top">
                     <button type="button" class="btn btn-outline-secondary px-4 fw-medium" routerLink="/sequences">Cancelar</button>
-                    <button type="submit" class="btn btn-dark-blue px-4 fw-medium shadow-sm">
-                        <i class="bi bi-floppy me-2"></i> Guardar Secuencia
+                    <button type="submit" class="btn btn-dark-blue px-4 fw-medium shadow-sm" [disabled]="isSaving">
+                        <i class="bi bi-floppy me-2"></i> {{ isSaving ? 'Guardando...' : 'Guardar Secuencia' }}
                     </button>
                 </div>
 

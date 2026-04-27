@@ -35,6 +35,7 @@ export class SequenceFormComponent implements OnInit {
   stepToEdit: UpdateStepRequest | null = null;
   categories: ListCategoryResponse[] = [];
   loading: boolean = false;
+  isSaving: boolean = false;
 
   constructor(
     private router: Router,
@@ -94,6 +95,10 @@ export class SequenceFormComponent implements OnInit {
 
         this.loading = false;
       },
+      error: () => {
+        this.loading = false;
+        alert('No se pudo cargar la secuencia. Intente nuevamente más tarde.');
+      }
     });
   }
 
@@ -196,51 +201,51 @@ export class SequenceFormComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.sequenceForm.valid) {
-      const formValue = this.sequenceForm.value;
+    if (!this.sequenceForm.valid) {
+      this.sequenceForm.markAllAsTouched();
+      return;
+    }
 
-      try {
-        const newSequence: CreateSequenceRequest | UpdateSequenceRequest = {
-          title: formValue.title!,
-          description: formValue.description!,
-          categoryId: formValue.category_id!,
+    if (this.isSaving) {
+      return;
+    }
 
-          steps: (formValue.steps as (CreateStepRequest | UpdateStepRequest)[]).map((step, index) => ({
-            name: step.name,
-            position: index + 1,
-            estimatedDuration: null,
-            arasaacPictogramId: step.arasaacPictogramId
-          })),
+    const formValue = this.sequenceForm.value;
+
+    try {
+      this.isSaving = true;
+
+      const newSequence: CreateSequenceRequest | UpdateSequenceRequest = {
+        title: formValue.title!,
+        description: formValue.description!,
+        categoryId: formValue.category_id!,
+        steps: (formValue.steps as (CreateStepRequest | UpdateStepRequest)[]).map((step, index) => ({
+          name: step.name,
+          position: index + 1,
           estimatedDuration: null,
-          allowGoBack: false,
-          frontPage: formValue.frontPage != null ? formValue.frontPage : this.steps.length > 0 ? this.steps.at(0).get('arasaacPictogramId')?.value : null,
-        };
+          arasaacPictogramId: step.arasaacPictogramId
+        })),
+        estimatedDuration: null,
+        allowGoBack: false,
+        frontPage: formValue.frontPage != null
+          ? formValue.frontPage
+          : this.steps.length > 0
+            ? this.steps.at(0).get('arasaacPictogramId')?.value
+            : null,
+      };
 
-        const request$ = this.isEditMode
-          ? this.secuenciasService.update(this.sequenceId!, newSequence)
-          : this.secuenciasService.create(newSequence);
-
-        request$.subscribe((res) => { },
-          (err) => {
-            console.error('Error al guardar la secuencia:', err);
-            alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
-          }
-        )
-
-
-        localStorage.setItem('infoMessage', this.isEditMode ? 'Secuencia modificada correctamente' : 'Secuencia creada correctamente');
-        this.router.navigate(["/sequences"]);
-
-      request$.subscribe( (res) => {},
-      (err) => {
-        alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
+      if (this.isEditMode) {
+        await firstValueFrom(this.secuenciasService.update(this.sequenceId!, newSequence as UpdateSequenceRequest));
+      } else {
+        await firstValueFrom(this.secuenciasService.create(newSequence as CreateSequenceRequest));
       }
 
       localStorage.setItem('infoMessage', this.isEditMode ? 'Secuencia modificada correctamente' : 'Secuencia creada correctamente');
       this.router.navigate(["/sequences"]);
-      
     } catch (error) {
       alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
+    } finally {
+      this.isSaving = false;
     }
   }
 }
