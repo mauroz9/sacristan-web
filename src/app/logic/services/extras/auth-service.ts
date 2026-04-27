@@ -27,6 +27,8 @@ export class AuthService {
   }
 
   removeStorage() {
+    console.log("Borrando almacenamiento");
+    
     this.loggedInSubject.next(false);
     localStorage.removeItem('auth_token');
     localStorage.removeItem('refresh_token');
@@ -34,22 +36,16 @@ export class AuthService {
 
   localLogout() {
     this.removeStorage();
+    localStorage.setItem('errorMessage', 'Se ha cerrado la sesión.');
     this.router.navigate(['/login']);
   }
-
+  
   logout() {
     this.removeStorage();
-
-    this.http.post(`${API_URL}/logout`, {}).subscribe({
-      next: () => {
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        console.error('Error during logout:', err);
-        this.router.navigate(['/login']);
-      }
-    });
-
+    
+    this.http.post(`${API_URL}/logout`, {}).subscribe();
+    localStorage.setItem('errorMessage', 'Se ha cerrado la sesión.');
+    this.router.navigate(['/login']);
   }
   
   getToken() {
@@ -68,6 +64,7 @@ export class AuthService {
       throw new Error('No refresh token available');
     }
 
+    console.log("TOKEN REFRESCADO");
     return this.http.post<JwtUserResponse>(`${API_URL}/refresh-token`, { refreshToken });
   }
 

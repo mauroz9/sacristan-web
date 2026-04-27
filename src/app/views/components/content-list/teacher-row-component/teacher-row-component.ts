@@ -40,9 +40,6 @@ export class TeacherRowComponent {
             this.onDelete.emit();
           },
           error: (err) => {
-            console.log('Error al borrar el profesor: ');
-            console.log(err);            
-
             if(err.error.es){              
               let errorMessage = 'Error al borrar el profesor: ' + err.error.es.message;
               localStorage.setItem('errorMessage', errorMessage);

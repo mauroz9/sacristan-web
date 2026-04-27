@@ -16,6 +16,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     authReq = addToken(req, token);
   }
   
+
   return next(authReq).pipe(
     // IF ERROR STATUS 0 SEND TO LOGIN AND SAY THAT THE SERVER IS DOWN, CONTACT WITH SYSTEM ADMIN
     catchError((error) => {
@@ -29,6 +30,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       if (error instanceof HttpErrorResponse && error.status === 0) {
+        
+        console.log(error);
+        console.log(error.status);
         localStorage.setItem('errorMessage', 'El servidor no responde. Contacta con el administrador del sistema.');
         authService.localLogout();
       }
@@ -38,8 +42,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   );
 };
 
-function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authService: AuthService) {
-  if (!isRefreshing) {
+function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authService: AuthService) {  
+  
+  console.log("Handling 401 error...");
+  console.log({isRefreshing});
+  
+  
+
+  if (!isRefreshing) {    
     isRefreshing = true;
     refreshTokenSubject.next(null);
 
@@ -54,7 +64,7 @@ function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authServ
       }),
       catchError((err) => {
         isRefreshing = false;
-        authService.logout();
+        authService.localLogout();
         return throwError(() => err);
       })
     );
@@ -68,6 +78,10 @@ function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authServ
 }
 
 function addToken(request: HttpRequest<any>, token: string) {
+  if (request.url.includes('/login') || request.url.includes('/refresh-token')) {
+    return request;
+  }
+  
   return request.clone({
     setHeaders: { Authorization: `Bearer ${token}` }
   });

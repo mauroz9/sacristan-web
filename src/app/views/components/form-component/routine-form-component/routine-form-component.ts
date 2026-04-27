@@ -74,7 +74,6 @@ export class RoutineFormComponent implements OnInit {
         this.loadRoutineData(this.routineId);
       }
     } catch (e) {
-      console.error(e);
     } finally {
       this.loading = false;
     }
@@ -138,8 +137,6 @@ export class RoutineFormComponent implements OnInit {
           this.router.navigate(['/routines']);
         },
         error: (err) => {
-          console.log(err.error);
-
           this.errorMessage = err.error.detail || 'Error al guardar la rutina';
 
         }

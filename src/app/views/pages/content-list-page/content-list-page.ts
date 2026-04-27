@@ -83,7 +83,6 @@ export class ContentListPage implements OnInit, AfterViewInit {
       this.url = this.router.url;
       if (this.url.includes('/students')) {
         this.studentList = (await firstValueFrom(this.alumnosService.list())).content;
-        console.log(this.studentList);
         
         this.sortParams = await firstValueFrom(this.alumnosService.getSortParams());
         
@@ -99,15 +98,6 @@ export class ContentListPage implements OnInit, AfterViewInit {
       }
       this.formatData();
     } catch (error: any) {
-      console.error("Error loading data for content list page:", error);      
-      
-      if (error.status === 401) {        
-        console.log("Volviendo al login debido a falta de acceso");
-        
-        localStorage.setItem('errorMessage', 'Sesión expirada. Por favor, inicia sesión de nuevo.');
-        localStorage.removeItem('auth_token');
-        this.router.navigate(['/login']);
-      }
     }
     
   }
@@ -134,7 +124,6 @@ export class ContentListPage implements OnInit, AfterViewInit {
         if(res.length == 0){
           this.allLoaded = true;
         } else {
-          console.log(res);
           this.studentList.push(...(res as StudentListResponse[]));
         }
 
@@ -145,7 +134,6 @@ export class ContentListPage implements OnInit, AfterViewInit {
         if(res.length == 0){
           this.allLoaded = true;
         } else {
-          console.log(res);
           this.teacherList.push(...(res as TeacherListResponse[]));
         }
 
@@ -155,7 +143,6 @@ export class ContentListPage implements OnInit, AfterViewInit {
         if(res.length == 0){
           this.allLoaded = true;
         } else {
-          console.log(res);
           this.sequenceList.push(...(res as SequenceListResponse[]));
         }
       } else if(this.url.includes('/routines')){
@@ -163,7 +150,6 @@ export class ContentListPage implements OnInit, AfterViewInit {
         if(res.length == 0){
           this.allLoaded = true;
         } else {
-          console.log(res);
           this.routineList.push(...(res as RoutineListResponse[]));
         }
       }
@@ -196,10 +182,10 @@ export class ContentListPage implements OnInit, AfterViewInit {
 
   formatData() {
     if (this.url.includes('/sequences')) {
-      const sequencesWithKind = this.sequenceList.map(seq => ({ ...seq, kind: "sequence" as SequenceListResponse["kind"] }));
+      const sequencesWithKind = this.sequenceList.map(seq => ({ ...seq, kind: "secuencia" as SequenceListResponse["kind"] }));
 
       this.content = {
-        kind: "sequence",
+        kind: "secuencia",
         url: "/sequences",
         title: "Secuencia de pasos",
         subTitle: "Gestiona las secuencias de pictogramas para los estudiantes",
@@ -210,10 +196,10 @@ export class ContentListPage implements OnInit, AfterViewInit {
       };
 
     } else if (this.url.includes('/students')) {
-      const studentsWithKind = this.studentList.map(student => ({ ...student, kind: "student" as StudentListResponse["kind"] }));
+      const studentsWithKind = this.studentList.map(student => ({ ...student, kind: "estudiante" as StudentListResponse["kind"] }));
 
       this.content = {
-        kind: "student",
+        kind: "estudiante",
         url: "/students",
         title: "Listado de alumnos",
         subTitle: "Gestiona los alumnos del centro",
@@ -224,10 +210,10 @@ export class ContentListPage implements OnInit, AfterViewInit {
       };
 
     } else if (this.url.includes('/teachers')) {
-      const teachersWithKind = this.teacherList.map(teacher => ({ ...teacher, kind: "teacher" as TeacherListResponse["kind"] }));
+      const teachersWithKind = this.teacherList.map(teacher => ({ ...teacher, kind: "profesor" as TeacherListResponse["kind"] }));
 
       this.content = {
-        kind: "teacher",
+        kind: "profesor",
         url: "/teachers",
         title: "Listado de profesores",
         subTitle: "Gestiona los profesores del centro",
@@ -239,10 +225,10 @@ export class ContentListPage implements OnInit, AfterViewInit {
       };
 
     } else if (this.url.includes("/routines")) {
-      const routinesWithKind = this.routineList.map(routine => ({ ...routine, kind: "routine" as any }));
+      const routinesWithKind = this.routineList.map(routine => ({ ...routine, kind: "rutina" as any }));
 
       this.content = {
-        kind: "routine",
+        kind: "rutina",
         url: "/routines",
         title: "Listado de rutinas",
         subTitle: "Gestiona las rutinas de secuencias",
@@ -253,14 +239,7 @@ export class ContentListPage implements OnInit, AfterViewInit {
         contentList: routinesWithKind as any
       };
 
-    } else {
-      console.log("Something went wrong loading content list page data");
     }
-
-    console.log("Contenido cargado:");
-    console.log(this.content);
-    
-
     this.loading = false;
   }
 

@@ -26,7 +26,6 @@ export class RoutineRowComponent {
           this.onDelete.emit();
         },
         error: (error) => {
-          console.error('Error al eliminar la rutina:', error);
           alert('Error al eliminar la rutina');
         }
       });
