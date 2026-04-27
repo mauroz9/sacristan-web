@@ -234,7 +234,7 @@ export class SequenceFormComponent implements OnInit {
       request$.subscribe( (res) => {},
       (err) => {
         alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
-      }
+      })
 
       localStorage.setItem('infoMessage', this.isEditMode ? 'Secuencia modificada correctamente' : 'Secuencia creada correctamente');
       this.router.navigate(["/sequences"]);
@@ -243,4 +243,4 @@ export class SequenceFormComponent implements OnInit {
       alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
     }
   }
-}
+}}
