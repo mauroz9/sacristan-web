@@ -8,7 +8,7 @@ import { LoadingComponent } from "../../shared/loading-component/loading-compone
 import { SecuenciasService } from '../../../../logic/services/secuencias-service';
 import { ListCategoryResponse } from '../../../../logic/interfaces/extras-interface';
 import { ExtraService } from '../../../../logic/services/extras-service';
-import { CreateSequenceRequest, CreateStepRequest, SequenceDetailResponse, SequenceListResponse, StepResponse, UpdateSequenceRequest, UpdateStepRequest } from '../../../../logic/interfaces/secuencias-interface';
+import { CreateSequenceRequest, CreateStepRequest, SequenceDetailResponse, StepResponse, UpdateSequenceRequest, UpdateStepRequest } from '../../../../logic/interfaces/secuencias-interface';
 
 @Component({
   selector: 'app-sequence-form-component',
@@ -32,7 +32,7 @@ export class SequenceFormComponent implements OnInit {
   isEditMode = false;
   sequenceId: number | null = null;
   editingStepIndex: number | null = null;
-  stepToEdit: { title: string, arasaacPictogramId: number } | null = null;
+  stepToEdit: UpdateStepRequest | null = null;
   categories: ListCategoryResponse[] = [];
   loading: boolean = false;
 
@@ -41,7 +41,7 @@ export class SequenceFormComponent implements OnInit {
     private route: ActivatedRoute,
     private secuenciasService: SecuenciasService,
     private extraService: ExtraService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.loading = true;
@@ -68,7 +68,7 @@ export class SequenceFormComponent implements OnInit {
 
   loadSequenceData(id: number): void {
     this.secuenciasService.read(id).subscribe({
-      next: (sequence: any) => {
+      next: (sequence: SequenceDetailResponse) => {
         if (sequence) {
           this.sequenceForm.patchValue({
             title: sequence.title,
@@ -83,22 +83,25 @@ export class SequenceFormComponent implements OnInit {
 
             sortedSteps.forEach((step: StepResponse) => {
               this.addStepToForm({
-                title: step.name, 
-                arasaacPictogramId: step.arasaacPictogramId 
+                name: step.name,
+                position: step.position,
+                estimatedDuration: null,
+                arasaacPictogramId: step.arasaacPictogramId,
+
               });
             });
           }
         }
-        
+
         this.loading = false;
       },
       error: (err) => console.error('Error al cargar la secuencia:', err)
     });
   }
 
-  addStepToForm(step: { title: string, arasaacPictogramId: number | null }): void {
+  addStepToForm(step: UpdateStepRequest | CreateStepRequest): void {
     const newStep = new FormGroup({
-      title: new FormControl(step.title),
+      name: new FormControl(step.name),
       arasaacPictogramId: new FormControl(step.arasaacPictogramId)
     });
     this.steps.push(newStep);
@@ -137,15 +140,20 @@ export class SequenceFormComponent implements OnInit {
     this.stepToEdit = null;
   }
 
-  handleSaveStep(step: { title: string, arasaacPictogramId: number }): void {
+  handleSaveStep(step: CreateStepRequest | UpdateStepRequest): void {
     if (this.editingStepIndex !== null) {
       const stepControl = this.steps.at(this.editingStepIndex) as FormGroup;
       stepControl.patchValue({
-        title: step.title,
+        name: step.name,
         arasaacPictogramId: step.arasaacPictogramId
       });
     } else {
-      this.addStepToForm({ title: step.title, arasaacPictogramId: step.arasaacPictogramId });
+      this.addStepToForm({
+        name: step.name,
+        position: this.steps.length + 1,
+        estimatedDuration: null,
+        arasaacPictogramId: step.arasaacPictogramId
+      });
     }
     this.showModal = false;
   }
@@ -158,9 +166,11 @@ export class SequenceFormComponent implements OnInit {
     const stepMod = this.steps.at(index) as FormGroup;
     this.editingStepIndex = index;
     this.stepToEdit = {
-      title: stepMod.get('title')?.value,
+      name: stepMod.get('name')?.value,
+      position: index + 1,
+      estimatedDuration: null,
       arasaacPictogramId: stepMod.get('arasaacPictogramId')?.value
-    }
+    };
 
     this.showModal = true;
   }
@@ -188,51 +198,48 @@ export class SequenceFormComponent implements OnInit {
   }
 
   async onSubmit() {
-  if (this.sequenceForm.valid) {
-    const formValue = this.sequenceForm.value;
-    
-    try {
-      const sequenceCategory = await firstValueFrom(this.extraService.getCategoryById(formValue.category_id!));
+    if (this.sequenceForm.valid) {
+      const formValue = this.sequenceForm.value;
 
-      const newSequence: CreateSequenceRequest | UpdateSequenceRequest = {
-        title: formValue.title!,
-        description: formValue.description!,
-        categoryId: formValue.category_id!,
+      try {
+        const newSequence: CreateSequenceRequest | UpdateSequenceRequest = {
+          title: formValue.title!,
+          description: formValue.description!,
+          categoryId: formValue.category_id!,
 
-        steps: (formValue.steps as (CreateStepRequest | UpdateStepRequest)[]).map((step, index) => ({
-          name: step.name,
-          position: index + 1,
+          steps: (formValue.steps as (CreateStepRequest | UpdateStepRequest)[]).map((step, index) => ({
+            name: step.name,
+            position: index + 1,
+            estimatedDuration: null,
+            arasaacPictogramId: step.arasaacPictogramId
+          })),
           estimatedDuration: null,
-          arasaacPictogramId: step.arasaacPictogramId,
-          sequenceId: this.isEditMode ? (this.sequenceId ?? 0) : 0,
-        })),
-        estimatedDuration: null,
-        allowGoBack: false,
-        frontPage: formValue.frontPage != null ? formValue.frontPage : this.steps.length > 0 ? this.steps.at(0).get('arasaacPictogramId')?.value : null,
-      };
+          allowGoBack: false,
+          frontPage: formValue.frontPage != null ? formValue.frontPage : this.steps.length > 0 ? this.steps.at(0).get('arasaacPictogramId')?.value : null,
+        };
 
-      const request$ = this.isEditMode 
-        ? this.secuenciasService.update(this.sequenceId!, newSequence) 
-        : this.secuenciasService.create(newSequence);
+        const request$ = this.isEditMode
+          ? this.secuenciasService.update(this.sequenceId!, newSequence)
+          : this.secuenciasService.create(newSequence);
 
-      request$.subscribe( (res) => {},
-      (err) => {
-        console.error('Error al guardar la secuencia:', err);
+        request$.subscribe((res) => { },
+          (err) => {
+            console.error('Error al guardar la secuencia:', err);
+            alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
+          }
+        )
+
+
+        localStorage.setItem('infoMessage', this.isEditMode ? 'Secuencia modificada correctamente' : 'Secuencia creada correctamente');
+        this.router.navigate(["/sequences"]);
+
+      } catch (error) {
+        console.error('Error al guardar la secuencia:', error);
         alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
       }
-    )
 
-
-      localStorage.setItem('infoMessage', this.isEditMode ? 'Secuencia modificada correctamente' : 'Secuencia creada correctamente');
-      this.router.navigate(["/sequences"]);
-      
-    } catch (error) {
-      console.error('Error al guardar la secuencia:', error);
-      alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
+    } else {
+      this.sequenceForm.markAllAsTouched();
     }
-
-  } else {
-    this.sequenceForm.markAllAsTouched();
   }
-}
 }

@@ -4,6 +4,7 @@ import { catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'r
 import { ArasaacService } from '../../../logic/services/extras/arasaac-service';
 import { LoadingComponent } from "../shared/loading-component/loading-component";
 import { ArasaacPictogram } from '../../../logic/interfaces/extras/content/arasaac-interface';
+import { CreateStepRequest, UpdateStepRequest } from '../../../logic/interfaces/secuencias-interface';
 
 @Component({
   selector: 'app-step-modal-component',
@@ -12,10 +13,10 @@ import { ArasaacPictogram } from '../../../logic/interfaces/extras/content/arasa
   styleUrl: './step-modal-component.css',
 })
 export class StepModalComponent implements OnInit {
-  isVisible = input<Boolean>(false);
+  isVisible = input<boolean>(false);
   close = output<void>();
-  save = output<{ title: string, arasaacPictogramId: number}>();
-  stepData = input<{ title: string, arasaacPictogramId: number} | null>(null);
+  save = output<CreateStepRequest | UpdateStepRequest>();
+  stepData = input<UpdateStepRequest | null>(null);
   isEdit: boolean = false;
 
   selectedCategory: string = 'Todas';
@@ -24,7 +25,7 @@ export class StepModalComponent implements OnInit {
   loading = false;
 
   stepForm = new FormGroup({
-    title: new FormControl('', Validators.required),
+    name: new FormControl('', Validators.required),
     arasaacPictogramId: new FormControl<number | null>(null, Validators.required)
   });
 
@@ -46,12 +47,12 @@ export class StepModalComponent implements OnInit {
     if (this.stepData() !== null) {
       this.isEdit = true;
       this.stepForm.patchValue({
-        title: this.stepData()!.title,
+        name: this.stepData()!.name,
         arasaacPictogramId: this.stepData()!.arasaacPictogramId
       });
 
       this.loading = true;
-      this.arasaacService.getPictogramsBySearch(this.stepData()!.title).pipe(
+      this.arasaacService.getPictogramsBySearch(this.stepData()!.name).pipe(
         catchError(() => of([]))
       ).subscribe(results => {
         this.pictograms = results;
@@ -100,10 +101,23 @@ export class StepModalComponent implements OnInit {
 
   onSave() {
     if (this.stepForm.valid) {
-      this.save.emit({
-        title: this.stepForm.value.title!,
-        arasaacPictogramId: this.stepForm.value.arasaacPictogramId!
-      });
+      if (this.isEdit && this.stepData() !== null) {
+        const updateRequest: UpdateStepRequest = {
+          name: this.stepForm.value.name!,
+          arasaacPictogramId: this.stepForm.value.arasaacPictogramId!,
+          position: (this.stepData() as UpdateStepRequest).position,
+          estimatedDuration: (this.stepData() as UpdateStepRequest).estimatedDuration
+        };
+        this.save.emit(updateRequest);
+      } else {
+        const createRequest: CreateStepRequest = {
+          name: this.stepForm.value.name!,
+          position: 0,
+          estimatedDuration: null,
+          arasaacPictogramId: this.stepForm.value.arasaacPictogramId!
+        };
+        this.save.emit(createRequest);
+      }
       this.stepForm.reset();
       this.searchControl.reset();
       this.pictograms = [];

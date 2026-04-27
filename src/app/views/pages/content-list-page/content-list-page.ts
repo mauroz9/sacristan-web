@@ -256,11 +256,7 @@ export class ContentListPage implements OnInit, AfterViewInit {
     } else {
       console.log("Something went wrong loading content list page data");
     }
-
-    console.log("Contenido cargado:");
-    console.log(this.content);
     
-
     this.loading = false;
   }
 
