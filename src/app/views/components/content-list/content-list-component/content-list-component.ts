@@ -69,26 +69,24 @@ export class ContentListComponent {
 
   async sortContent() {
     let r;
+    
+    // Build params object, only including non-default values
+    const params: any = { query: this.searchTerm };
+    if (this.sortBy) params.sortBy = this.sortBy;
+    if (this.direction !== 'asc') params.sortDir = this.direction;
 
-    if (this.content()?.kind == "alumno") {
-      r = await firstValueFrom(this.alumnosService.list({
-        query: this.searchTerm,
-        sortBy: this.sortBy,
-        sortDir: this.direction
-      }));
+    if (this.content()?.kind == "student") {
+      r = await firstValueFrom(this.alumnosService.list(params));
 
       for (let student of r.content) {
         student.kind = "student";
       }
 
       this.content()!.contentList = r.content
+      
 
     } else if (this.content()?.kind == "sequence") {
-      r = await firstValueFrom(this.secuenciasService.list({
-        query: this.searchTerm,
-        sortBy: this.sortBy,
-        sortDir: this.direction
-      }));
+      r = await firstValueFrom(this.secuenciasService.list(params));
 
       for (let sequence of r.content) {
         sequence.kind = "sequence";
@@ -96,23 +94,15 @@ export class ContentListComponent {
 
       this.content()!.contentList = r.content
 
-    } else if (this.content()?.kind == "profesor") {
-      r = await firstValueFrom(this.profesoresService.list({
-        query: this.searchTerm,
-        sortBy: this.sortBy,
-        sortDir: this.direction
-    }));
+    } else if (this.content()?.kind == "teacher") {
+      r = await firstValueFrom(this.profesoresService.list(params));
       for (let teacher of r.content) {
         teacher.kind = "teacher";
       }
 
       this.content()!.contentList = r.content
-    } else if (this.content()?.kind == "rutina") {
-      r = await firstValueFrom(this.rutinasService.list({
-        query: this.searchTerm,
-        sortBy: this.sortBy,
-        sortDir: this.direction
-      }));
+    } else if (this.content()?.kind == "routine") {
+      r = await firstValueFrom(this.rutinasService.list(params));
       for (let routine of r.content) {
         routine.kind = "routine";
       }
@@ -132,6 +122,7 @@ export class ContentListComponent {
   async toggleSort() {
     this.isAscending = !this.isAscending;
     this.sortTooltip = this.isAscending ? 'Orden ascendente' : 'Orden descendente';
+    console.log(this.sortTooltip)
     this.direction = this.isAscending ? 'asc' : 'desc';
     await this.sortContent()
   }

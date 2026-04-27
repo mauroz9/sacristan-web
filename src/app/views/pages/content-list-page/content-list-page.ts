@@ -97,7 +97,7 @@ export class ContentListPage implements OnInit, AfterViewInit {
         this.routineList = (await firstValueFrom(this.rutinasService.list())).content;
         this.sortParams = await firstValueFrom(this.rutinasService.getSortParams());
       }
-      this.loadData();
+      this.formatData();
     } catch (error: any) {
       console.error("Error loading data for content list page:", error);      
       
@@ -169,16 +169,18 @@ export class ContentListPage implements OnInit, AfterViewInit {
       }
 
       this.isLoading = false;
-      this.loadData();
+      this.formatData();
   }
 
   onSortChanged(params: { query: string, sortBy: string, sortDir: string }) {
+    
+    console.log("Sorted");
+    
     this.currentQuery = params.query;
     this.currentSortBy = params.sortBy;
     this.currentSortDir = params.sortDir;
     this.page = 0;
     this.allLoaded = false;
-    this.loadData();
   }
 
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
@@ -192,7 +194,7 @@ export class ContentListPage implements OnInit, AfterViewInit {
     observer.observe(this.scrollAnchor.nativeElement);
   }
 
-  loadData() {
+  formatData() {
     if (this.url.includes('/sequences')) {
       const sequencesWithKind = this.sequenceList.map(seq => ({ ...seq, kind: "sequence" as SequenceListResponse["kind"] }));
 
