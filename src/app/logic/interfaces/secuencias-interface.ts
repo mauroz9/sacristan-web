@@ -16,7 +16,7 @@ export interface SequenceListResponse {
     description: string;
     category: string | null;
     stepCount: number;
-    kind: 'sequence';
+    kind: 'secuencia';
 }
 
 export interface StepResponse {

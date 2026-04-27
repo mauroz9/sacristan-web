@@ -4,7 +4,7 @@ export interface StudentListResponse {
     lastName: string;
     sequencesCount: number;
     routinesCount: number;
-    kind: 'student';
+    kind: 'estudiante';
 }
 
 export interface SequenceResponse {

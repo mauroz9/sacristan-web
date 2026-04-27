@@ -27,7 +27,6 @@ export class SequenceRowComponent {
           this.onDelete.emit();
         },
         error: (error) => {
-          console.error('Error al eliminar la secuencia:', error);
           alert('Error al eliminar la secuencia');
         }
       });
@@ -62,7 +61,6 @@ export class SequenceRowComponent {
         this.router.navigate(['/sequences/modify', newSequenceId]);
       },
       error: (error) => {
-        console.error('Error al duplicar la secuencia:', error);
         alert('Error al duplicar la secuencia');
       }
     });

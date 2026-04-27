@@ -4,7 +4,7 @@ export interface TeacherListResponse {
     name: string;
     lastName: string;
     studentCount: number;
-    kind: 'teacher';
+    kind: 'profesor';
 }
 
 export interface AssignedStudentResponse {

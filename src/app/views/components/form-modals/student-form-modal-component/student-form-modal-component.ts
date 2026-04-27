@@ -37,17 +37,14 @@ export class StudentFormModalComponent {
       
       this.alumnosService.sendStudent(formData).subscribe({
         next: (data) => {
-          console.log("Student data sent successfully", data);
           this.modalService.dismissAll();
           this.router.navigate(['/students']);
         },
         error: (error) => {
-          console.error("Error sending student data: ");
           if (error.status == 400) {
             this.alumnosService.handleFormErrors(error.error["invalid-params"], this.userFormComponent.userFormGroup);
           } else {
             alert("Ha sucedido un error inesperado, pongase en contacto con el soporte.");
-            console.error(error);
           }
         }
       });

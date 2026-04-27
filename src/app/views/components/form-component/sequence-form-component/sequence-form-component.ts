@@ -50,7 +50,6 @@ export class SequenceFormComponent implements OnInit {
         this.categories = req.content;
       },
       error: (err) => {
-        console.error('Error al cargar las categorías:', err);
         alert('No se pudieron cargar las categorías. Intente nuevamente más tarde.');
       }
     });
@@ -95,7 +94,6 @@ export class SequenceFormComponent implements OnInit {
 
         this.loading = false;
       },
-      error: (err) => console.error('Error al cargar la secuencia:', err)
     });
   }
 
@@ -233,13 +231,16 @@ export class SequenceFormComponent implements OnInit {
         localStorage.setItem('infoMessage', this.isEditMode ? 'Secuencia modificada correctamente' : 'Secuencia creada correctamente');
         this.router.navigate(["/sequences"]);
 
-      } catch (error) {
-        console.error('Error al guardar la secuencia:', error);
+      request$.subscribe( (res) => {},
+      (err) => {
         alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
       }
 
-    } else {
-      this.sequenceForm.markAllAsTouched();
+      localStorage.setItem('infoMessage', this.isEditMode ? 'Secuencia modificada correctamente' : 'Secuencia creada correctamente');
+      this.router.navigate(["/sequences"]);
+      
+    } catch (error) {
+      alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
     }
   }
 }

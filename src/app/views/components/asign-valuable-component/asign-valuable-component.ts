@@ -94,7 +94,6 @@ export class AsignSequencesComponent implements AfterViewInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar estudiante', error);
       }
     });
   }
@@ -107,7 +106,6 @@ export class AsignSequencesComponent implements AfterViewInit {
         this.loadingRoutines = false;
       },
       error: (error) => {
-        console.error('Error al cargar secuencias disponibles:', error);
       }
     });
 
@@ -116,7 +114,6 @@ export class AsignSequencesComponent implements AfterViewInit {
         this.assignedRoutines = data;
       },
       error: (error) => {
-        console.error("Error al cargar secuencias asignadas:", error);
       }
     });
   }
@@ -132,7 +129,6 @@ export class AsignSequencesComponent implements AfterViewInit {
         this.loadRoutines(this.studentId!);
       },
       error: (error) => {
-        console.error('Error al asignar secuencia:', error);
         alert('Error al asignar secuencia. Por favor, intenta de nuevo.')
       }
     });
@@ -145,7 +141,6 @@ export class AsignSequencesComponent implements AfterViewInit {
 
       },
       error: (error) => {
-        console.error('Error al desasignar secuencia:', error);
         alert('Error al eliminar la secuencia.  Por favor, intenta de nuevo.');
       }
     });
@@ -159,7 +154,6 @@ export class AsignSequencesComponent implements AfterViewInit {
         this.loadingSequences = false;
       },
       error: (error) => {
-        console.error('Error al cargar secuencias disponibles:', error);
       }
     });
 
@@ -168,7 +162,6 @@ export class AsignSequencesComponent implements AfterViewInit {
         this.assignedSequences = data;
       },
       error: (error) => {
-        console.error("Error al cargar secuencias asignadas:", error);
       }
     });
   }
@@ -184,7 +177,6 @@ export class AsignSequencesComponent implements AfterViewInit {
         this.loadSequences(this.studentId!);
       },
       error: (error) => {
-        console.error('Error al asignar secuencia:', error);
         alert('Error al asignar secuencia. Por favor, intenta de nuevo.')
       }
     });
@@ -197,7 +189,6 @@ export class AsignSequencesComponent implements AfterViewInit {
 
       },
       error: (error) => {
-        console.error('Error al desasignar secuencia:', error);
         alert('Error al eliminar la secuencia.  Por favor, intenta de nuevo.');
       }
     });

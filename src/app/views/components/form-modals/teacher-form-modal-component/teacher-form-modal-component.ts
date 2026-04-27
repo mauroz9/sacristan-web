@@ -37,18 +37,14 @@ export class TeacherFormModalComponent {
       
       this.profesoresService.sendTeacher(formData).subscribe({
         next: (data) => {
-          console.log("Teacher data sent successfully", data);
           this.modalService.dismissAll();
           this.router.navigate(['/teachers']);
         },
         error: (error) => {
-          console.error("Error sending teacher data: ");
-          console.log(error); 
           if (error.status == 400) {
             this.profesoresService.handleFormErrors(error.error["invalid-params"], this.userFormComponent.userFormGroup);
           } else {
             alert("Ha sucedido un error inesperado, pongase en contacto con el soporte.");
-            console.error(error);
           }
         }
       });

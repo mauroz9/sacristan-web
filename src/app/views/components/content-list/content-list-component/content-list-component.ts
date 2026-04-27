@@ -75,36 +75,36 @@ export class ContentListComponent {
     if (this.sortBy) params.sortBy = this.sortBy;
     if (this.direction !== 'asc') params.sortDir = this.direction;
 
-    if (this.content()?.kind == "student") {
+    if (this.content()?.kind == "estudiante") {
       r = await firstValueFrom(this.alumnosService.list(params));
 
       for (let student of r.content) {
-        student.kind = "student";
+        student.kind = "estudiante";
       }
 
       this.content()!.contentList = r.content
       
 
-    } else if (this.content()?.kind == "sequence") {
+    } else if (this.content()?.kind == "secuencia") {
       r = await firstValueFrom(this.secuenciasService.list(params));
 
       for (let sequence of r.content) {
-        sequence.kind = "sequence";
+        sequence.kind = "secuencia";
       }
 
       this.content()!.contentList = r.content
 
-    } else if (this.content()?.kind == "teacher") {
+    } else if (this.content()?.kind == "profesor") {
       r = await firstValueFrom(this.profesoresService.list(params));
       for (let teacher of r.content) {
-        teacher.kind = "teacher";
+        teacher.kind = "profesor";
       }
 
       this.content()!.contentList = r.content
-    } else if (this.content()?.kind == "routine") {
+    } else if (this.content()?.kind == "rutina") {
       r = await firstValueFrom(this.rutinasService.list(params));
       for (let routine of r.content) {
-        routine.kind = "routine";
+        routine.kind = "rutina";
       }
       this.content()!.contentList = r.content;
     }
