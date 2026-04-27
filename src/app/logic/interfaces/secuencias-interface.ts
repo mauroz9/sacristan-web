@@ -3,7 +3,7 @@ export interface SequenceDetailResponse {
     id: number;
     title: string;
     description: string;
-    category: string | null;
+    category: CategoryResponse | null;
     estimatedDuration: string | null;
     allowGoBack: boolean;
     frontPage: number | null;
@@ -61,4 +61,9 @@ export interface UpdateSequenceRequest {
     allowGoBack: boolean;
     frontPage: number | null;
     steps: UpdateStepRequest[];
+}
+
+export interface CategoryResponse {
+    id: number;
+    name: string;
 }
