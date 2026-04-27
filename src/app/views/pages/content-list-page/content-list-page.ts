@@ -46,6 +46,7 @@ export class ContentListPage implements OnInit, AfterViewInit {
   currentQuery = '';
   currentSortBy = '';
   currentSortDir = 'asc';
+  sortChangeTimeout: number | null = null;
 
   content: Content = {
     kind: "secuencia",
@@ -81,23 +82,33 @@ export class ContentListPage implements OnInit, AfterViewInit {
 
     try {
       this.url = this.router.url;
+      
+      const params: QuerySortParameters = {
+        page: this.page,
+        query: this.currentQuery,
+        sortBy: this.currentSortBy || undefined,
+        sortDir: this.currentSortDir
+      };
+
       if (this.url.includes('/students')) {
-        this.studentList = (await firstValueFrom(this.alumnosService.list())).content;
+        this.studentList = (await firstValueFrom(this.alumnosService.list(params))).content;
         
         this.sortParams = await firstValueFrom(this.alumnosService.getSortParams());
         
       } else if (this.url.includes('/teachers')) {
-        this.teacherList = (await firstValueFrom(this.profesoresService.list())).content;
+        this.teacherList = (await firstValueFrom(this.profesoresService.list(params))).content;
         this.sortParams = await firstValueFrom(this.profesoresService.getSortParams());
       } else if (this.url.includes('/sequences')) {
-        this.sequenceList = (await firstValueFrom(this.secuenciasService.list())).content;
+        this.sequenceList = (await firstValueFrom(this.secuenciasService.list(params))).content;
         this.sortParams = await firstValueFrom(this.secuenciasService.getSortParams());
       } else if(this.url.includes('/routines')){
-        this.routineList = (await firstValueFrom(this.rutinasService.list())).content;
+        this.routineList = (await firstValueFrom(this.rutinasService.list(params))).content;
         this.sortParams = await firstValueFrom(this.rutinasService.getSortParams());
       }
       this.formatData();
     } catch (error: any) {
+    } finally {
+      this.isLoading = false;
     }
     
   }
@@ -159,20 +170,29 @@ export class ContentListPage implements OnInit, AfterViewInit {
   }
 
   onSortChanged(params: { query: string, sortBy: string, sortDir: string }) {
-    
-    console.log("Sorted");
-    
+    // Debounce sort changes to prevent multiple rapid API calls
+    if (this.sortChangeTimeout) {
+      clearTimeout(this.sortChangeTimeout);
+    }
+
     this.currentQuery = params.query;
     this.currentSortBy = params.sortBy;
     this.currentSortDir = params.sortDir;
-    this.page = 0;
-    this.allLoaded = false;
+    
+    this.sortChangeTimeout = setTimeout(() => {
+      this.isLoading = true;
+      this.page = 0;
+      this.allLoaded = false;
+      this.getData();
+      this.sortChangeTimeout = null;
+    }, 300); // Wait 300ms for sort changes to settle
   }
 
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
   ngAfterViewInit() {
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
+      // Only call if not currently loading initial data and element is intersecting
+      if (entries[0].isIntersecting && !this.loading && !this.isLoading) {
         this.callPage();
       }
     }, { threshold: 0.1 });
