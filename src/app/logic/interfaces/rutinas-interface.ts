@@ -13,7 +13,7 @@ export interface RoutineListResponse {
     category: CategoryDetailResponse;
     daysOfTheWeek: string[];
     sequenceCount: number;
-    kind: 'routine';
+    kind: 'rutina';
 }
 
 export interface CategoryDetailResponse {

@@ -50,7 +50,6 @@ export class SequenceFormComponent implements OnInit {
         this.categories = req.content;
       },
       error: (err) => {
-        console.error('Error al cargar las categorías:', err);
         alert('No se pudieron cargar las categorías. Intente nuevamente más tarde.');
       }
     });
@@ -92,7 +91,6 @@ export class SequenceFormComponent implements OnInit {
         
         this.loading = false;
       },
-      error: (err) => console.error('Error al cargar la secuencia:', err)
     });
   }
 
@@ -217,7 +215,6 @@ export class SequenceFormComponent implements OnInit {
 
       request$.subscribe( (res) => {},
       (err) => {
-        console.error('Error al guardar la secuencia:', err);
         alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
       }
     )
@@ -227,7 +224,6 @@ export class SequenceFormComponent implements OnInit {
       this.router.navigate(["/sequences"]);
       
     } catch (error) {
-      console.error('Error al guardar la secuencia:', error);
       alert('Error al guardar la secuencia. Por favor, inténtelo de nuevo.');
     }
 
