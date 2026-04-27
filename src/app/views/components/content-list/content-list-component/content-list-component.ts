@@ -18,6 +18,7 @@ import { Content } from '../../../../logic/interfaces/extras/content/content-int
 import { SequenceRowComponent } from '../sequence-row-component/sequence-row-component';
 import { AsignSequencesComponent } from "../../asign-valuable-component/asign-valuable-component";
 import { AsignStudentComponent } from "../../asign-student-component/asign-student-component";
+import { StudentListResponse } from '../../../../logic/interfaces/alumnos-interface';
 
 @Component({
   selector: 'app-content-list-component',
@@ -38,6 +39,7 @@ export class ContentListComponent {
   loading = input<boolean>();
   reload = output<void>();
   sortChanged = output<{ query: string, sortBy: string, sortDir: string }>();
+  onStudentSelected = output<StudentListResponse>();
   loadingContent = signal<boolean>(false);
   functionality = "";
   searchTerm: string = '';
@@ -129,6 +131,10 @@ export class ContentListComponent {
 
   reloadContent() {
     this.reload.emit();
+  }
+
+  onStudentDetail(id: number) {
+    this.router.navigate(['/students/detail', id]);
   }
 
 }

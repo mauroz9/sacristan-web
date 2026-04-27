@@ -18,6 +18,7 @@ export class StudentRowComponent {
   student = input<StudentListResponse>();
   onDelete = output<void>();
   loading: boolean = false;
+  onViewDetail = output<void>();
 
   editStudent() {
     // Hacer un router navigate a la pagina de modificar estudiante pasandolle el ID de estudiante.
@@ -49,6 +50,14 @@ export class StudentRowComponent {
         }
       });
     }
+  }
+
+  onRowClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.closest('app-action-buttons-component')) {
+      return;
+    }
+    this.onViewDetail.emit();
   }
 
 }
