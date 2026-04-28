@@ -8,7 +8,7 @@ import { RutinasService } from '../../../../logic/services/rutinas-service';
 import { ExtraService } from '../../../../logic/services/extras-service';
 import { SecuenciasService } from '../../../../logic/services/secuencias-service';
 import { ListCategoryResponse } from '../../../../logic/interfaces/extras-interface';
-import { CreateRoutineRequest, UpdateRoutineRequest } from '../../../../logic/interfaces/rutinas-interface';
+import { CreateRoutineRequest, RoutineSegmentResponse, UpdateRoutineRequest } from '../../../../logic/interfaces/rutinas-interface';
 import { SequenceListResponse } from '../../../../logic/interfaces/secuencias-interface';
 
 @Component({
@@ -80,20 +80,20 @@ export class RoutineFormComponent implements OnInit {
   }
 
   loadRoutineData(id: number) {
-    this.rutinasService.read(id).subscribe(routine => {
+    this.rutinasService.read(id).subscribe(routine => {      
       this.routineForm.patchValue({
         name: routine.name,
-        categoryId: routine.category?.id
+        categoryId: routine.category?.id,
       });
 
       this.daysList.forEach((day, index) => {
         if (routine.daysOfTheWeek.includes(day.value)) {
           this.daysFormArray.at(index).setValue(true);
         }
-      });
+      });      
 
-      routine.sequences.forEach((rs: any) => {
-        this.addSequenceToForm(rs.id, rs.sequence.id, rs.startTime, rs.endTime);
+      routine.sequences.forEach((rs: RoutineSegmentResponse) => {
+        this.addSequenceToForm(rs.id, rs.sequenceId, rs.startTime, rs.endTime);
       });
     });
   }
@@ -101,9 +101,9 @@ export class RoutineFormComponent implements OnInit {
   get daysFormArray() { return this.routineForm.get('daysOfTheWeek') as FormArray; }
   get sequencesFormArray() { return this.routineForm.get('sequences') as FormArray; }
 
-  addSequenceToForm(id: number | null = null, sequenceId: number | null = null, start: string = '09:00', end: string = '10:00') {
+  addSequenceToForm(id: number | null = null, sequenceId: number | null = null, start: string = '09:00', end: string = '10:00') {    
     this.sequencesFormArray.push(new FormGroup({
-      id: new FormControl(id),
+      routineSegmentId: new FormControl(id),
       sequenceId: new FormControl(sequenceId, Validators.required),
       startTime: new FormControl(start, Validators.required),
       endTime: new FormControl(end, Validators.required)
