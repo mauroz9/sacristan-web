@@ -30,8 +30,8 @@ export interface StudentDashboardResponse {
 }
 
 export interface StudentStatsDTO {
-    secuenciasCompletadas: number;
-    secuenciasEnProgreso: number;
+    secuenciasCompletadasHoy: number;
+    secuenciasPendientesHoy: number;
     tasaExito: number;
     tiempoPromedio: number;
     racha: number;

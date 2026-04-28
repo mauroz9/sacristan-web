@@ -43,7 +43,7 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
   activityData?: ActivityPageResponse;
 
   stats: StudentStatsDTO = {
-    secuenciasCompletadas: 0, secuenciasEnProgreso: 0, tasaExito: 0,
+    secuenciasCompletadasHoy: 0, secuenciasPendientesHoy: 0, tasaExito: 0,
     tiempoPromedio: 0, racha: 0, ultimaActividad: '...'
   };
   
