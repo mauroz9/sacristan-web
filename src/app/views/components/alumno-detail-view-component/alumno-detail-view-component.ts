@@ -214,6 +214,14 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
   }
 
   initWeeklyChart(): void {
+    if (this.progresoSemanal.length === 0) {
+      if (this.weeklyChart) {
+        this.weeklyChart.destroy();
+        this.weeklyChart = null;
+      }
+      return;
+    }
+
     const ctxWeekly = document.getElementById('weeklyChart') as HTMLCanvasElement;
     if (!ctxWeekly) {
       setTimeout(() => this.initWeeklyChart(), 50);
@@ -253,6 +261,14 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
   }
 
   initCategoryChart(): void {
+    if (this.categoriasTrabajadas.length === 0) {
+      if (this.categoryChart) {
+        this.categoryChart.destroy();
+        this.categoryChart = null;
+      }
+      return;
+    }
+
     const ctxCategory = document.getElementById('categoryChart') as HTMLCanvasElement;
     if (!ctxCategory) {
       setTimeout(() => this.initCategoryChart(), 50);

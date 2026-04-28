@@ -67,9 +67,17 @@
                     <i class="bi bi-graph-up me-2" style="color: var(--primary-blue);"></i>
                     Progreso Semanal
                 </h2>
-                <div style="position: relative; height: 260px; width: 100%;">
-                    <canvas id="weeklyChart"></canvas>
-                </div>
+                @if (progresoSemanal.length > 0) {
+                    <div style="position: relative; height: 260px; width: 100%;">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                } @else {
+                    <div class="d-flex flex-column align-items-center justify-content-center text-muted"
+                        style="min-height: 260px;">
+                        <i class="bi bi-graph-down fs-1 mb-2"></i>
+                        <p class="mb-0">No hay datos de progreso semanal disponibles.</p>
+                    </div>
+                }
             </div>
         </div>
 
@@ -79,9 +87,17 @@
                     <i class="bi bi-pie-chart-fill me-2" style="color: var(--primary-blue);"></i>
                     Categorías Más Trabajadas
                 </h2>
-                <div style="position: relative; height: 260px; width: 100%; display: flex; justify-content: center;">
-                    <canvas id="categoryChart"></canvas>
-                </div>
+                @if (categoriasTrabajadas.length > 0) {
+                    <div style="position: relative; height: 260px; width: 100%; display: flex; justify-content: center;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                } @else {
+                    <div class="d-flex flex-column align-items-center justify-content-center text-muted"
+                        style="min-height: 260px;">
+                        <i class="bi bi-pie-chart fs-1 mb-2"></i>
+                        <p class="mb-0">No hay datos de categorías disponibles.</p>
+                    </div>
+                }
             </div>
         </div>
     </div>
