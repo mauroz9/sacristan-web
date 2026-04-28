@@ -1,3 +1,5 @@
+import { Page } from "./extras/utils/page-interface";
+
 export interface StudentListResponse {
     id: number;
     name: string;
@@ -61,3 +63,7 @@ export interface RecentActivityDTO {
     duracion: string;
     completada: boolean;
 }
+
+export type AgendaPageResponse = Page<AssignedSequenceProgressDTO>;
+
+export type ActivityPageResponse = Page<RecentActivityDTO>;

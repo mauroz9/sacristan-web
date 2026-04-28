@@ -1,10 +1,21 @@
-import { Component, input, output, signal, SimpleChanges, OnInit, OnChanges, inject } from '@angular/core';
+import { Component, input, output, signal, SimpleChanges, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AssignedSequenceProgressDTO, CategoryStatDTO, DailyProgressDTO, RecentActivityDTO, StudentDashboardResponse, StudentStatsDTO } from '../../../logic/interfaces/alumnos-interface';
+import { 
+  AssignedSequenceProgressDTO, 
+  CategoryStatDTO, 
+  DailyProgressDTO, 
+  RecentActivityDTO, 
+  StudentStatsDTO,
+  AgendaPageResponse,
+  ActivityPageResponse
+} from '../../../logic/interfaces/alumnos-interface';
 import { AlumnosService } from '../../../logic/services/alumnos-service';
+
+
+import { Chart, registerables } from 'chart.js';
 import { LoadingComponent } from '../shared/loading-component/loading-component';
-import Chart from 'chart.js/auto';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-alumno-detail-view-component',
@@ -18,10 +29,18 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
   alumnoInput = input<any>(undefined, { alias: 'alumno' }); 
   alumno = signal<any>(null); 
   onClose = output<void>();
+  onEdit = output<any>();
   isLoading = signal<boolean>(true);
-  chartMax = 20;
+  
   weeklyChart: any;
   categoryChart: any;
+
+  agendaCurrentPage = 0;
+  actividadCurrentPage = 0;
+  pageSize = 5;
+
+  agendaData?: AgendaPageResponse;
+  activityData?: ActivityPageResponse;
 
   stats: StudentStatsDTO = {
     secuenciasCompletadas: 0, secuenciasEnProgreso: 0, tasaExito: 0,
@@ -73,37 +92,84 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
 
   fetchDashboardData(studentId: number): void {
     this.isLoading.set(true);
-    this.alumnosService.getStudentDashboard(studentId).subscribe({
-      next: (data: StudentDashboardResponse) => {
-        this.stats = data.stats;
-        this.progresoSemanal = data.progresoSemanal;
-        this.categoriasTrabajadas = data.categoriasTrabajadas;
-        this.secuenciasAsignadas = data.secuenciasAsignadas;
-        this.actividadReciente = data.actividadReciente;
-      
+
+    this.alumnosService.getStudentStats(studentId).subscribe({
+      next: (data) => {
+        this.stats = data;
         this.isLoading.set(false);
-        setTimeout(() => this.initCharts(), 50);
       },
-      error: (error) => {
-        console.error('Error al cargar analíticas', error);
-        this.isLoading.set(false);
-      }
+      error: () => this.isLoading.set(false)
     });
+
+    this.alumnosService.getWeeklyProgress(studentId).subscribe(data => {
+      this.progresoSemanal = data;
+      setTimeout(() => this.initWeeklyChart(), 50);
+    });
+
+    this.alumnosService.getCategoryStats(studentId).subscribe(data => {
+      this.categoriasTrabajadas = data;
+      setTimeout(() => this.initCategoryChart(), 50);
+    });
+
+    this.agendaCurrentPage = 0;
+    this.actividadCurrentPage = 0;
+    this.loadAgenda(studentId);
+    this.loadActivity(studentId);
   }
 
-  initCharts(): void {
-    const ctxWeekly = document.getElementById('weeklyChart') as HTMLCanvasElement;
-    const ctxCategory = document.getElementById('categoryChart') as HTMLCanvasElement;
+  loadAgenda(studentId: number): void {
+    this.alumnosService.getStudentAgenda(studentId, this.agendaCurrentPage, this.pageSize)
+      .subscribe(res => {
+        this.agendaData = res;
+        this.secuenciasAsignadas = res.content;
+      });
+  }
 
-    if (!ctxWeekly || !ctxCategory) {
-        setTimeout(() => this.initCharts(), 50);
+  prevAgenda(): void {
+    if (this.agendaCurrentPage > 0) {
+      this.agendaCurrentPage--;
+      this.loadAgenda(this.alumno().id);
+    }
+  }
+
+  nextAgenda(): void {
+    if (this.agendaData && this.agendaCurrentPage < this.agendaData.page.totalPages - 1) {
+      this.agendaCurrentPage++;
+      this.loadAgenda(this.alumno().id);
+    }
+  }
+
+  loadActivity(studentId: number): void {
+    this.alumnosService.getStudentActivity(studentId, this.actividadCurrentPage, this.pageSize)
+      .subscribe(res => {
+        this.activityData = res;
+        this.actividadReciente = res.content;
+      });
+  }
+
+  prevActividad(): void {
+    if (this.actividadCurrentPage > 0) {
+      this.actividadCurrentPage--;
+      this.loadActivity(this.alumno().id);
+    }
+  }
+
+  nextActividad(): void {
+    if (this.activityData && this.actividadCurrentPage < this.activityData.page.totalPages - 1) {
+      this.actividadCurrentPage++;
+      this.loadActivity(this.alumno().id);
+    }
+  }
+
+  initWeeklyChart(): void {
+    const ctxWeekly = document.getElementById('weeklyChart') as HTMLCanvasElement;
+    if (!ctxWeekly) {
+        setTimeout(() => this.initWeeklyChart(), 50);
         return;
     }
 
     if (this.weeklyChart) this.weeklyChart.destroy();
-    if (this.categoryChart) this.categoryChart.destroy();
     
-    // 1. Gráfico Semanal
     this.weeklyChart = new Chart(ctxWeekly, {
       type: 'bar',
       data: {
@@ -132,6 +198,16 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
         }
       }
     });
+  }
+
+  initCategoryChart(): void {
+    const ctxCategory = document.getElementById('categoryChart') as HTMLCanvasElement;
+    if (!ctxCategory) {
+        setTimeout(() => this.initCategoryChart(), 50);
+        return;
+    }
+
+    if (this.categoryChart) this.categoryChart.destroy();
 
     this.categoryChart = new Chart(ctxCategory, {
       type: 'doughnut',
@@ -161,5 +237,4 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
   getInitials(name?: string, lastName?: string): string {
     return `${name?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase();
   }
-
 }

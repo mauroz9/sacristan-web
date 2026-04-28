@@ -89,81 +89,121 @@
     <div class="row g-3">
 
         <div class="col-12 col-lg-6">
-            <div class="dash-card h-100">
+            <div class="dash-card h-100 d-flex flex-column">
                 <h2 class="card-section-title">
                     <i class="bi bi-calendar-check me-2" style="color: var(--primary-blue);"></i>
                     Agenda de Hoy
                 </h2>
-                <div class="sequence-list">
+                <div class="sequence-list flex-grow-1">
                     @if (secuenciasAsignadas.length === 0) {
-                    <div class="d-flex flex-column align-items-center justify-content-center text-muted"
-                        style="min-height: 150px;">
-                        <i class="bi bi-cup-hot fs-1 mb-2"></i>
-                        <p>No hay rutinas programadas para hoy.</p>
-                    </div>
-                    } @else {
-                    @for (sec of secuenciasAsignadas; track sec.id) {
-                    <div class="sequence-row" [ngStyle]="{'opacity': sec.estado === 'CADUCADA' ? '0.6' : '1'}">
-
-                        <div class="rank-badge" [ngStyle]="{
-                        'background-color': sec.estado === 'COMPLETADA' ? '#10b981' : (sec.estado === 'CADUCADA' ? '#ef4444' : '#94a3b8')
-                    }">
-                            <i class="bi" [ngClass]="{
-                            'bi-check-lg': sec.estado === 'COMPLETADA', 
-                            'bi-x-lg': sec.estado === 'CADUCADA', 
-                            'bi-clock': sec.estado === 'PENDIENTE'
-                        }"></i>
+                        <div class="d-flex flex-column align-items-center justify-content-center text-muted"
+                            style="min-height: 150px;">
+                            <i class="bi bi-cup-hot fs-1 mb-2"></i>
+                            <p>No hay rutinas programadas para hoy.</p>
                         </div>
+                    } @else {
+                        @for (sec of secuenciasAsignadas; track sec.id) {
+                        <div class="sequence-row" [ngStyle]="{'opacity': sec.estado === 'CADUCADA' ? '0.6' : '1'}">
 
-                        <div class="sequence-info">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="sequence-name"
-                                    [ngClass]="{'text-decoration-line-through text-muted': sec.estado === 'CADUCADA'}">
-                                    {{ sec.nombre }}
-                                </span>
-
-                                <span class="status-badge" [ngClass]="{
-                                'badge-completed': sec.estado === 'COMPLETADA',
-                                'bg-danger-subtle text-danger': sec.estado === 'CADUCADA',
-                                'bg-secondary-subtle text-secondary': sec.estado === 'PENDIENTE'
+                            <div class="rank-badge" [ngStyle]="{
+                                'background-color': sec.estado === 'COMPLETADA' ? '#10b981' : (sec.estado === 'CADUCADA' ? '#ef4444' : '#94a3b8')
                             }">
-                                    {{ sec.estado === 'COMPLETADA' ? 'Hecho' : (sec.estado === 'CADUCADA' ? 'No
-                                    completado' : 'Pendiente') }}
+                                <i class="bi" [ngClass]="{
+                                    'bi-check-lg': sec.estado === 'COMPLETADA', 
+                                    'bi-x-lg': sec.estado === 'CADUCADA', 
+                                    'bi-clock': sec.estado === 'PENDIENTE'
+                                }"></i>
+                            </div>
+
+                            <div class="sequence-info">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="sequence-name"
+                                        [ngClass]="{'text-decoration-line-through text-muted': sec.estado === 'CADUCADA'}">
+                                        {{ sec.nombre }}
+                                    </span>
+
+                                    <span class="status-badge" [ngClass]="{
+                                        'badge-completed': sec.estado === 'COMPLETADA',
+                                        'bg-danger-subtle text-danger': sec.estado === 'CADUCADA',
+                                        'bg-secondary-subtle text-secondary': sec.estado === 'PENDIENTE'
+                                    }">
+                                        {{ sec.estado === 'COMPLETADA' ? 'Hecho' : (sec.estado === 'CADUCADA' ? 'No completado' : 'Pendiente') }}
+                                    </span>
+                                </div>
+                                <span class="sequence-uses mt-1">
+                                    <i class="bi bi-clock me-1"></i> {{ sec.franjaHoraria }} &nbsp;•&nbsp; {{ sec.categoria }}
                                 </span>
                             </div>
-                            <span class="sequence-uses mt-1">
-                                <i class="bi bi-clock me-1"></i> {{ sec.franjaHoraria }} &nbsp;•&nbsp; {{ sec.categoria
-                                }}
-                            </span>
                         </div>
-                    </div>
-                    }
+                        }
                     }
                 </div>
+
+                @if (agendaData && agendaData.page.totalPages > 1) {
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <button class="btn btn-light btn-sm shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 34px; height: 34px;" 
+                                [disabled]="agendaCurrentPage === 0" (click)="prevAgenda()">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <span class="text-muted small fw-medium">
+                            Página {{ agendaCurrentPage + 1 }} de {{ agendaData.page.totalPages }}
+                        </span>
+                        <button class="btn btn-light btn-sm shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 34px; height: 34px;" 
+                                [disabled]="agendaCurrentPage >= agendaData.page.totalPages - 1" (click)="nextAgenda()">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                }
             </div>
         </div>
 
         <div class="col-12 col-lg-6">
-            <div class="dash-card h-100">
+            <div class="dash-card h-100 d-flex flex-column">
                 <h2 class="card-section-title">
                     <i class="bi bi-activity me-2" style="color: var(--primary-blue);"></i>
                     Actividad Reciente
                 </h2>
-                <div class="activity-list">
-                    @for (act of actividadReciente; track act.id) {
-                    <div class="activity-row">
-                        <div class="avatar">{{ getInitials(act.secuencia) }}</div>
-                        <div class="activity-info">
-                            <span class="activity-name">{{ act.secuencia }}</span>
-                            <span class="activity-sequence">{{ act.fecha }} • <i class="bi bi-stopwatch"></i> {{
-                                act.duracion }}</span>
+                <div class="activity-list flex-grow-1">
+                    @if (actividadReciente.length === 0) {
+                        <div class="d-flex flex-column align-items-center justify-content-center text-muted"
+                            style="min-height: 150px;">
+                            <p>No hay actividad registrada aún.</p>
                         </div>
-                        <span class="status-badge" [ngClass]="act.completada ? 'badge-completed' : 'badge-progress'">
-                            {{ act.completada ? 'Completada' : 'Abandonada' }}
-                        </span>
-                    </div>
+                    } @else {
+                        @for (act of actividadReciente; track act.id) {
+                        <div class="activity-row">
+                            <div class="avatar">{{ getInitials(act.secuencia) }}</div>
+                            <div class="activity-info">
+                                <span class="activity-name">{{ act.secuencia }}</span>
+                                <span class="activity-sequence">{{ act.fecha }} • <i class="bi bi-stopwatch"></i> {{ act.duracion }}</span>
+                            </div>
+                            <span class="status-badge" [ngClass]="act.completada ? 'badge-completed' : 'badge-progress'">
+                                {{ act.completada ? 'Completada' : 'Abandonada' }}
+                            </span>
+                        </div>
+                        }
                     }
                 </div>
+
+                @if (activityData && activityData.page.totalPages > 1) {
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <button class="btn btn-light btn-sm shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 34px; height: 34px;" 
+                                [disabled]="actividadCurrentPage === 0" (click)="prevActividad()">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <span class="text-muted small fw-medium">
+                            Página {{ actividadCurrentPage + 1 }} de {{ activityData.page.totalPages }}
+                        </span>
+                        <button class="btn btn-light btn-sm shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 34px; height: 34px;" 
+                                [disabled]="actividadCurrentPage >= activityData.page.totalPages - 1" (click)="nextActividad()">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                }
             </div>
         </div>
 
