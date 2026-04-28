@@ -4,7 +4,7 @@ import { API_URL } from "../env";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CreateUserRequest, ReadUserResponse, UpdateUserRequest } from "../interfaces/extras/users-interface";
-import { StudentListResponse, SequenceResponse, RoutineResponse } from "../interfaces/alumnos-interface";
+import { StudentListResponse, SequenceResponse, RoutineResponse, StudentDashboardResponse } from "../interfaces/alumnos-interface";
 import { UserService } from "./extras/user-service";
 import { FormGroup } from "@angular/forms";
 import { SortParam } from "../interfaces/extras/content/content-interface";
@@ -102,4 +102,7 @@ export class AlumnosService{
         this.userService.handleFormErrors(errors, formGroup);
     }
 
+    getStudentDashboard(studentId: number): Observable<StudentDashboardResponse> {
+        return this.http.get<StudentDashboardResponse>(`${this.API_URL}/${studentId}/dashboard`);
+    }
 }

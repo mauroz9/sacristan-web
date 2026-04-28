@@ -73,7 +73,7 @@
                     @if (item.kind == 'secuencia') {
                         <app-sequence-row-component [sequence]="item" (onDelete)="reloadContent()"></app-sequence-row-component>
                         } @else if (item.kind == 'estudiante') {
-                            <app-student-row-component [student]="item" (onDelete)="reloadContent()"></app-student-row-component>
+                            <app-student-row-component [student]="item" (onDelete)="reloadContent()" (onViewDetail)="onStudentDetail(item.id)"></app-student-row-component>
                         } @else if (item.kind == 'profesor') {
                             <app-teacher-row-component [teacher]="item" (onDelete)="reloadContent()"></app-teacher-row-component>
                         } @else if(item.kind == "rutina"){

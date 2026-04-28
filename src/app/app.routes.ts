@@ -7,12 +7,13 @@ import { authGuard } from './logic/guards/auth-guard';
 import { ContentNotFoundPage } from './views/pages/content-not-found-page/content-not-found-page';
 import { RoutineFormComponent } from './views/components/form-component/routine-form-component/routine-form-component';
 import { DashboardPage } from './views/pages/dashboard-page/dashboard-page';
+import { AlumnoDetailViewComponent } from './views/components/alumno-detail-view-component/alumno-detail-view-component';
 
 export const routes: Routes = [
     // --- RUTA PÚBLICA (LOGIN) ---
-    { 
-        path: 'login', 
-        component: LoginPage, 
+    {
+        path: 'login',
+        component: LoginPage,
         data: { showMenu: false }
     },
 
@@ -25,7 +26,7 @@ export const routes: Routes = [
 
     // --- RUTAS PROTEGIDAS (Sequences) ---
     {
-        path: 'sequences', 
+        path: 'sequences',
         component: ContentListPage,
         canActivate: [authGuard]
     },
@@ -76,7 +77,7 @@ export const routes: Routes = [
     },
     {
         path: 'students/new',
-        component: ContentListPage, 
+        component: ContentListPage,
         canActivate: [authGuard]
     },
     {
@@ -86,7 +87,7 @@ export const routes: Routes = [
     },
     {
         path: 'students/assign-valuable/:id',
-        component: ContentListPage, 
+        component: ContentListPage,
         canActivate: [authGuard]
     },
     {
@@ -95,16 +96,22 @@ export const routes: Routes = [
         canActivate: [authGuard],
         data: { showMenu: false }
     },
+    {
+        path: 'students/detail/:id',
+        component: AlumnoDetailViewComponent,
+        canActivate: [authGuard],
+        data: { showMenu: false }
+    },
 
     // --- RUTAS PROTEGIDAS (Routines) ---
     {
-        path: 'routines', 
+        path: 'routines',
         component: ContentListPage,
         canActivate: [authGuard]
     },
     {
         path: 'routines/new',
-        component: RoutineFormComponent, 
+        component: RoutineFormComponent,
         canActivate: [authGuard],
         data: { showMenu: false }
     },
@@ -117,13 +124,13 @@ export const routes: Routes = [
 
     // --- REDIRECCIONES ---
     {
-        path: '', 
-        redirectTo: '/login', 
+        path: '',
+        redirectTo: '/login',
         pathMatch: 'full'
     },
     {
-        path: '**', 
-        redirectTo: '/not-found', 
+        path: '**',
+        redirectTo: '/not-found',
         pathMatch: 'full'
     },
 ];

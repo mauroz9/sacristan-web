@@ -1,0 +1,144 @@
+<div class="dashboard container py-4">
+
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" 
+                        style="width: 40px; height: 40px;" (click)="volver()">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <h1 class="dashboard-title m-0">{{ alumno()?.name }} {{ alumno()?.lastName }}</h1>
+            </div>
+            <p class="dashboard-subtitle ms-5 ps-2">
+                <i class="bi bi-envelope me-1"></i> {{ alumno()?.email }} &nbsp;&nbsp;|&nbsp;&nbsp; 
+                <i class="bi bi-at me-1"></i> {{ alumno()?.username }}
+            </p>
+        </div>
+    </div>
+
+    @if (!isLoading()) {
+        
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+                    <div class="stat-value">{{ stats.secuenciasCompletadas }}</div>
+                    <div class="stat-label">Completadas Totales</div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-clock-fill"></i></div>
+                    <div class="stat-value">{{ stats.secuenciasEnProgreso }}</div>
+                    <div class="stat-label">En Progreso</div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                    <div class="stat-value">{{ stats.tasaExito }}%</div>
+                    <div class="stat-label">Tasa de Éxito</div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-stopwatch-fill"></i></div>
+                    <div class="stat-value">{{ stats.tiempoPromedio }}</div>
+                    <div class="stat-label">Minutos Promedio</div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-fire"></i></div>
+                    <div class="stat-value">{{ stats.racha }}</div>
+                    <div class="stat-label">Días de Racha</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-lg-7">
+                <div class="dash-card h-100">
+                    <h2 class="card-section-title">
+                        <i class="bi bi-graph-up me-2" style="color: var(--primary-blue);"></i>
+                        Progreso Semanal
+                    </h2>
+                    <div style="position: relative; height: 260px; width: 100%;">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-5">
+                <div class="dash-card h-100">
+                    <h2 class="card-section-title">
+                        <i class="bi bi-pie-chart-fill me-2" style="color: var(--primary-blue);"></i>
+                        Categorías Más Trabajadas
+                    </h2>
+                    <div style="position: relative; height: 260px; width: 100%; display: flex; justify-content: center;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            
+            <div class="col-12 col-lg-6">
+                <div class="dash-card h-100">
+                    <h2 class="card-section-title">
+                        <i class="bi bi-journal-check me-2" style="color: var(--primary-blue);"></i>
+                        Progreso en Asignaciones
+                    </h2>
+                    <div class="sequence-list">
+                        @for (sec of secuenciasAsignadas; track sec.id) {
+                        <div class="sequence-row">
+                            <div class="rank-badge"><i class="bi bi-card-checklist"></i></div>
+                            <div class="sequence-info">
+                                <span class="sequence-name">{{ sec.nombre }}</span>
+                                <span class="sequence-uses">{{ sec.completadas }} de {{ sec.total }} completadas • {{ sec.categoria }}</span>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="dash-card h-100">
+                    <h2 class="card-section-title">
+                        <i class="bi bi-activity me-2" style="color: var(--primary-blue);"></i>
+                        Actividad Reciente
+                    </h2>
+                    <div class="activity-list">
+                        @for (act of actividadReciente; track act.id) {
+                        <div class="activity-row">
+                            <div class="avatar">{{ getInitials(act.secuencia) }}</div>
+                            <div class="activity-info">
+                                <span class="activity-name">{{ act.secuencia }}</span>
+                                <span class="activity-sequence">{{ act.fecha }} • <i class="bi bi-stopwatch"></i> {{ act.duracion }}</span>
+                            </div>
+                            <span class="status-badge" [ngClass]="act.completada ? 'badge-completed' : 'badge-progress'">
+                                {{ act.completada ? 'Completada' : 'Abandonada' }}
+                            </span>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    } @else {
+        
+        <div class="dash-card d-flex flex-column justify-content-center align-items-center" style="min-height: 400px;">
+            <app-loading-component></app-loading-component>
+            <p class="dashboard-subtitle mt-3 fw-medium">Cargando estadísticas de {{ alumno()?.name }}...</p>
+        </div>
+        
+    }
+</div>
