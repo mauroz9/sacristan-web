@@ -50,9 +50,8 @@ export interface AssignedSequenceProgressDTO {
     id: number;
     nombre: string;
     categoria: string;
-    completadas: number;
-    total: number;
-    ultimaVez: string;
+    franjaHoraria: string;
+    estado: 'COMPLETADA' | 'PENDIENTE' | 'CADUCADA';
 }
 
 export interface RecentActivityDTO {
