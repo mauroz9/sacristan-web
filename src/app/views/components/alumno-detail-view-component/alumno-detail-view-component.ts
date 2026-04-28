@@ -2,11 +2,11 @@ import { Component, input, output, signal, SimpleChanges, OnInit, OnChanges } fr
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, forkJoin, finalize, of } from 'rxjs';
-import { 
-  AssignedSequenceProgressDTO, 
-  CategoryStatDTO, 
-  DailyProgressDTO, 
-  RecentActivityDTO, 
+import {
+  AssignedSequenceProgressDTO,
+  CategoryStatDTO,
+  DailyProgressDTO,
+  RecentActivityDTO,
   StudentStatsDTO,
   AgendaPageResponse,
   ActivityPageResponse
@@ -26,13 +26,13 @@ Chart.register(...registerables);
   styleUrl: './alumno-detail-view-component.css',
 })
 export class AlumnoDetailViewComponent implements OnInit, OnChanges {
-  
-  alumnoInput = input<any>(undefined, { alias: 'alumno' }); 
-  alumno = signal<any>(null); 
+
+  alumnoInput = input<any>(undefined, { alias: 'alumno' });
+  alumno = signal<any>(null);
   onClose = output<void>();
   onEdit = output<any>();
   isLoading = signal<boolean>(true);
-  
+
   weeklyChart: any;
   categoryChart: any;
 
@@ -47,7 +47,7 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
     secuenciasCompletadasHoy: 0, secuenciasPendientesHoy: 0, tasaExito: 0,
     tiempoPromedio: 0, racha: 0, ultimaActividad: '...'
   };
-  
+
   progresoSemanal: DailyProgressDTO[] = [];
   categoriasTrabajadas: CategoryStatDTO[] = [];
   secuenciasAsignadas: AssignedSequenceProgressDTO[] = [];
@@ -57,11 +57,11 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
     private alumnosService: AlumnosService,
     private route: ActivatedRoute,
     private router: Router
-  ){}
+  ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    
+
     if (id) {
       this.loadStudentAndData(+id);
     }
@@ -157,9 +157,16 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
 
   loadAgenda(studentId: number): void {
     this.alumnosService.getStudentAgenda(studentId, this.agendaCurrentPage, this.pageSize)
-      .subscribe(res => {
-        this.agendaData = res;
-        this.secuenciasAsignadas = res.content;
+      .subscribe({
+        next: (res) => {
+          this.agendaData = res;
+          this.secuenciasAsignadas = res.content;
+        },
+        error: (err) => {
+          console.error('Error al cargar la agenda del alumno', err);
+          this.agendaData = null as any;
+          this.secuenciasAsignadas = [];
+        }
       });
   }
 
@@ -179,9 +186,16 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
 
   loadActivity(studentId: number): void {
     this.alumnosService.getStudentActivity(studentId, this.actividadCurrentPage, this.pageSize)
-      .subscribe(res => {
-        this.activityData = res;
-        this.actividadReciente = res.content;
+      .subscribe({
+        next: (res) => {
+          this.activityData = res;
+          this.actividadReciente = res.content;
+        },
+        error: (err) => {
+          console.error('Error al cargar la actividad reciente', err);
+          this.activityData = null as any;
+          this.actividadReciente = [];
+        }
       });
   }
 
@@ -202,12 +216,12 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
   initWeeklyChart(): void {
     const ctxWeekly = document.getElementById('weeklyChart') as HTMLCanvasElement;
     if (!ctxWeekly) {
-        setTimeout(() => this.initWeeklyChart(), 50);
-        return;
+      setTimeout(() => this.initWeeklyChart(), 50);
+      return;
     }
 
     if (this.weeklyChart) this.weeklyChart.destroy();
-    
+
     this.weeklyChart = new Chart(ctxWeekly, {
       type: 'bar',
       data: {
@@ -215,7 +229,7 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
         datasets: [{
           label: 'Completadas',
           data: this.progresoSemanal.map(d => d.completed),
-          backgroundColor: '#1f3c8b', 
+          backgroundColor: '#1f3c8b',
           borderRadius: 6,
           barPercentage: 0.5
         }]
@@ -225,13 +239,13 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          y: { 
-            beginAtZero: true, 
-            border: { dash: [5, 5] }, 
-            grid: { color: '#e2e8f0' } 
+          y: {
+            beginAtZero: true,
+            border: { dash: [5, 5] },
+            grid: { color: '#e2e8f0' }
           },
-          x: { 
-            grid: { display: false } 
+          x: {
+            grid: { display: false }
           }
         }
       }
@@ -241,8 +255,8 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
   initCategoryChart(): void {
     const ctxCategory = document.getElementById('categoryChart') as HTMLCanvasElement;
     if (!ctxCategory) {
-        setTimeout(() => this.initCategoryChart(), 50);
-        return;
+      setTimeout(() => this.initCategoryChart(), 50);
+      return;
     }
 
     if (this.categoryChart) this.categoryChart.destroy();
