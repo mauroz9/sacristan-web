@@ -4,7 +4,7 @@ import { API_URL } from "../env";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CreateUserRequest, ReadUserResponse, UpdateUserRequest } from "../interfaces/extras/users-interface";
-import { StudentListResponse, SequenceResponse, RoutineResponse, StudentDashboardResponse, StudentStatsDTO, DailyProgressDTO, CategoryStatDTO, AgendaPageResponse, ActivityPageResponse } from "../interfaces/alumnos-interface";
+import { StudentListResponse, SequenceResponse, RoutineResponse, StudentStatsDTO, DailyProgressDTO, CategoryStatDTO, AgendaPageResponse, ActivityPageResponse } from "../interfaces/alumnos-interface";
 import { UserService } from "./extras/user-service";
 import { FormGroup } from "@angular/forms";
 import { SortParam } from "../interfaces/extras/content/content-interface";
