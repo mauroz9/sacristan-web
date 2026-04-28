@@ -1,6 +1,7 @@
 import { Component, input, output, signal, SimpleChanges, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, forkJoin, finalize, of } from 'rxjs';
 import { 
   AssignedSequenceProgressDTO, 
   CategoryStatDTO, 
@@ -93,28 +94,65 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
   fetchDashboardData(studentId: number): void {
     this.isLoading.set(true);
 
-    this.alumnosService.getStudentStats(studentId).subscribe({
-      next: (data) => {
-        this.stats = data;
-        this.isLoading.set(false);
-      },
-      error: () => this.isLoading.set(false)
-    });
-
-    this.alumnosService.getWeeklyProgress(studentId).subscribe(data => {
-      this.progresoSemanal = data;
-      setTimeout(() => this.initWeeklyChart(), 50);
-    });
-
-    this.alumnosService.getCategoryStats(studentId).subscribe(data => {
-      this.categoriasTrabajadas = data;
-      setTimeout(() => this.initCategoryChart(), 50);
-    });
-
     this.agendaCurrentPage = 0;
     this.actividadCurrentPage = 0;
-    this.loadAgenda(studentId);
-    this.loadActivity(studentId);
+
+    forkJoin({
+      stats: this.alumnosService.getStudentStats(studentId).pipe(
+        catchError((err) => {
+          console.error('Error al cargar las estadísticas del alumno', err);
+          alert('No se pudieron cargar las estadísticas del alumno.');
+          return of(this.stats);
+        })
+      ),
+      weekly: this.alumnosService.getWeeklyProgress(studentId).pipe(
+        catchError((err) => {
+          console.error('Error al cargar el progreso semanal', err);
+          return of([] as DailyProgressDTO[]);
+        })
+      ),
+      categories: this.alumnosService.getCategoryStats(studentId).pipe(
+        catchError((err) => {
+          console.error('Error al cargar las categorías trabajadas', err);
+          return of([] as CategoryStatDTO[]);
+        })
+      ),
+      agenda: this.alumnosService.getStudentAgenda(studentId, this.agendaCurrentPage, this.pageSize).pipe(
+        catchError((err) => {
+          console.error('Error al cargar la agenda del alumno', err);
+          return of({
+            content: [],
+            page: { number: 0, size: this.pageSize, totalElements: 0, totalPages: 0 }
+          } as AgendaPageResponse);
+        })
+      ),
+      activity: this.alumnosService.getStudentActivity(studentId, this.actividadCurrentPage, this.pageSize).pipe(
+        catchError((err) => {
+          console.error('Error al cargar la actividad reciente', err);
+          return of({
+            content: [],
+            page: { number: 0, size: this.pageSize, totalElements: 0, totalPages: 0 }
+          } as ActivityPageResponse);
+        })
+      )
+    }).pipe(
+      finalize(() => this.isLoading.set(false))
+    ).subscribe({
+      next: ({ stats, weekly, categories, agenda, activity }) => {
+        this.stats = stats;
+        this.progresoSemanal = weekly;
+        this.categoriasTrabajadas = categories;
+        this.agendaData = agenda;
+        this.secuenciasAsignadas = agenda.content;
+        this.activityData = activity;
+        this.actividadReciente = activity.content;
+
+        setTimeout(() => {
+          this.initWeeklyChart();
+          this.initCategoryChart();
+        }, 50);
+      }
+    });
   }
 
   loadAgenda(studentId: number): void {
