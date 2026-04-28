@@ -4,7 +4,7 @@ import { API_URL } from "../env";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CreateUserRequest, ReadUserResponse, UpdateUserRequest } from "../interfaces/extras/users-interface";
-import { StudentListResponse, SequenceResponse, RoutineResponse, StudentDashboardResponse } from "../interfaces/alumnos-interface";
+import { StudentListResponse, SequenceResponse, RoutineResponse, StudentStatsDTO, DailyProgressDTO, CategoryStatDTO, AgendaPageResponse, ActivityPageResponse } from "../interfaces/alumnos-interface";
 import { UserService } from "./extras/user-service";
 import { FormGroup } from "@angular/forms";
 import { SortParam } from "../interfaces/extras/content/content-interface";
@@ -13,11 +13,11 @@ import { QuerySortParameters } from "../interfaces/extras/utils/sort-params-inte
 @Injectable({
     providedIn: 'root',
 })
-export class AlumnosService{
+export class AlumnosService {
 
     private API_URL = API_URL + "/api/v1/admin/alumnos";
 
-    constructor (private http:HttpClient, private userService: UserService) {}
+    constructor(private http: HttpClient, private userService: UserService) { }
 
     create(createUser: CreateUserRequest): Observable<void> {
         return this.http.post<void>(this.API_URL, createUser);
@@ -37,7 +37,7 @@ export class AlumnosService{
 
     sendStudent(formData: any): Observable<void> {
         let originalId = formData.id || null
-        if(originalId){
+        if (originalId) {
             return this.update(originalId, this.userService.convertToUpdateUser(formData));
         } else {
             return this.create(this.userService.convertToCreateUser(formData));
@@ -50,8 +50,8 @@ export class AlumnosService{
         sortDir = "asc",
         page = 0
     }: QuerySortParameters = {}): Observable<Page<StudentListResponse>> {
-        console.log(this.API_URL + "?q="+query+"&sort="+sortBy+","+sortDir+"&page="+page)
-        return this.http.get<Page<StudentListResponse>>(this.API_URL + "?q="+query+"&sort="+sortBy+","+sortDir+"&page="+page);
+        console.log(this.API_URL + "?q=" + query + "&sort=" + sortBy + "," + sortDir + "&page=" + page)
+        return this.http.get<Page<StudentListResponse>>(this.API_URL + "?q=" + query + "&sort=" + sortBy + "," + sortDir + "&page=" + page);
     }
 
     getSortParams(): Observable<SortParam[]> {
@@ -102,7 +102,23 @@ export class AlumnosService{
         this.userService.handleFormErrors(errors, formGroup);
     }
 
-    getStudentDashboard(studentId: number): Observable<StudentDashboardResponse> {
-        return this.http.get<StudentDashboardResponse>(`${this.API_URL}/${studentId}/dashboard`);
+    getStudentStats(id: number): Observable<StudentStatsDTO> {
+        return this.http.get<StudentStatsDTO>(`${this.API_URL}/${id}/stats`);
+    }
+
+    getWeeklyProgress(id: number): Observable<DailyProgressDTO[]> {
+        return this.http.get<DailyProgressDTO[]>(`${this.API_URL}/${id}/weekly-progress`);
+    }
+
+    getCategoryStats(id: number): Observable<CategoryStatDTO[]> {
+        return this.http.get<CategoryStatDTO[]>(`${this.API_URL}/${id}/categories`);
+    }
+
+    getStudentAgenda(id: number, page: number, size: number): Observable<AgendaPageResponse> {
+        return this.http.get<AgendaPageResponse>(`${this.API_URL}/${id}/agenda?page=${page}&size=${size}`);
+    }
+
+    getStudentActivity(id: number, page: number, size: number): Observable<ActivityPageResponse> {
+        return this.http.get<ActivityPageResponse>(`${this.API_URL}/${id}/activity?page=${page}&size=${size}`);
     }
 }

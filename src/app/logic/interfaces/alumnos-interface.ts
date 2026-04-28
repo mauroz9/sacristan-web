@@ -1,3 +1,5 @@
+import { Page } from "./extras/utils/page-interface";
+
 export interface StudentListResponse {
     id: number;
     name: string;
@@ -28,8 +30,8 @@ export interface StudentDashboardResponse {
 }
 
 export interface StudentStatsDTO {
-    secuenciasCompletadas: number;
-    secuenciasEnProgreso: number;
+    secuenciasCompletadasHoy: number;
+    secuenciasPendientesHoy: number;
     tasaExito: number;
     tiempoPromedio: number;
     racha: number;
@@ -50,9 +52,8 @@ export interface AssignedSequenceProgressDTO {
     id: number;
     nombre: string;
     categoria: string;
-    completadas: number;
-    total: number;
-    ultimaVez: string;
+    franjaHoraria: string;
+    estado: 'COMPLETADA' | 'PENDIENTE' | 'CADUCADA';
 }
 
 export interface RecentActivityDTO {
@@ -62,3 +63,7 @@ export interface RecentActivityDTO {
     duracion: string;
     completada: boolean;
 }
+
+export type AgendaPageResponse = Page<AssignedSequenceProgressDTO>;
+
+export type ActivityPageResponse = Page<RecentActivityDTO>;

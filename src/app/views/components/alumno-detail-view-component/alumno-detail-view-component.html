@@ -3,118 +3,191 @@
     <div class="d-flex justify-content-between align-items-start mb-4">
         <div>
             <div class="d-flex align-items-center gap-3 mb-2">
-                <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" 
-                        style="width: 40px; height: 40px;" (click)="volver()">
+                <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center"
+                    style="width: 40px; height: 40px;" (click)="volver()">
                     <i class="bi bi-arrow-left"></i>
                 </button>
                 <h1 class="dashboard-title m-0">{{ alumno()?.name }} {{ alumno()?.lastName }}</h1>
             </div>
             <p class="dashboard-subtitle ms-5 ps-2">
-                <i class="bi bi-envelope me-1"></i> {{ alumno()?.email }} &nbsp;&nbsp;|&nbsp;&nbsp; 
+                <i class="bi bi-envelope me-1"></i> {{ alumno()?.email }} &nbsp;&nbsp;|&nbsp;&nbsp;
                 <i class="bi bi-at me-1"></i> {{ alumno()?.username }}
             </p>
         </div>
     </div>
 
     @if (!isLoading()) {
-        
-        <div class="row g-3 mb-4">
-            <div class="col-6 col-md-4 col-lg">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
-                    <div class="stat-value">{{ stats.secuenciasCompletadas }}</div>
-                    <div class="stat-label">Completadas Totales</div>
-                </div>
-            </div>
-            
-            <div class="col-6 col-md-4 col-lg">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="bi bi-clock-fill"></i></div>
-                    <div class="stat-value">{{ stats.secuenciasEnProgreso }}</div>
-                    <div class="stat-label">En Progreso</div>
-                </div>
-            </div>
 
-            <div class="col-6 col-md-4 col-lg">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
-                    <div class="stat-value">{{ stats.tasaExito }}%</div>
-                    <div class="stat-label">Tasa de Éxito</div>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-4 col-lg">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="bi bi-stopwatch-fill"></i></div>
-                    <div class="stat-value">{{ stats.tiempoPromedio }}</div>
-                    <div class="stat-label">Minutos Promedio</div>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-4 col-lg">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="bi bi-fire"></i></div>
-                    <div class="stat-value">{{ stats.racha }}</div>
-                    <div class="stat-label">Días de Racha</div>
-                </div>
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+                <div class="stat-value">{{ stats.secuenciasCompletadasHoy }}</div>
+                <div class="stat-label">Completadas Hoy</div>
             </div>
         </div>
 
-        <div class="row g-3 mb-4">
-            <div class="col-12 col-lg-7">
-                <div class="dash-card h-100">
-                    <h2 class="card-section-title">
-                        <i class="bi bi-graph-up me-2" style="color: var(--primary-blue);"></i>
-                        Progreso Semanal
-                    </h2>
+        <div class="col-6 col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="bi bi-clock-fill"></i></div>
+                <div class="stat-value">{{ stats.secuenciasPendientesHoy }}</div>
+                <div class="stat-label">Pendiendes Hoy</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <div class="stat-value">{{ stats.tasaExito }}%</div>
+                <div class="stat-label">Tasa de Éxito Hoy</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="bi bi-stopwatch-fill"></i></div>
+                <div class="stat-value">{{ stats.tiempoPromedio }}</div>
+                <div class="stat-label">Minutos Promedio</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="bi bi-fire"></i></div>
+                <div class="stat-value">{{ stats.racha }}</div>
+                <div class="stat-label">Días de Racha</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-lg-7">
+            <div class="dash-card h-100">
+                <h2 class="card-section-title">
+                    <i class="bi bi-graph-up me-2" style="color: var(--primary-blue);"></i>
+                    Progreso Semanal
+                </h2>
+                @if (progresoSemanal.length > 0) {
                     <div style="position: relative; height: 260px; width: 100%;">
                         <canvas id="weeklyChart"></canvas>
                     </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-lg-5">
-                <div class="dash-card h-100">
-                    <h2 class="card-section-title">
-                        <i class="bi bi-pie-chart-fill me-2" style="color: var(--primary-blue);"></i>
-                        Categorías Más Trabajadas
-                    </h2>
-                    <div style="position: relative; height: 260px; width: 100%; display: flex; justify-content: center;">
-                        <canvas id="categoryChart"></canvas>
+                } @else {
+                    <div class="d-flex flex-column align-items-center justify-content-center text-muted"
+                        style="min-height: 260px;">
+                        <i class="bi bi-graph-down fs-1 mb-2"></i>
+                        <p class="mb-0">No hay datos de progreso semanal disponibles.</p>
                     </div>
-                </div>
+                }
             </div>
         </div>
 
-        <div class="row g-3">
-            
-            <div class="col-12 col-lg-6">
-                <div class="dash-card h-100">
-                    <h2 class="card-section-title">
-                        <i class="bi bi-journal-check me-2" style="color: var(--primary-blue);"></i>
-                        Progreso en Asignaciones
-                    </h2>
-                    <div class="sequence-list">
+        <div class="col-12 col-lg-5">
+            <div class="dash-card h-100">
+                <h2 class="card-section-title">
+                    <i class="bi bi-pie-chart-fill me-2" style="color: var(--primary-blue);"></i>
+                    Categorías Más Trabajadas
+                </h2>
+                @if (categoriasTrabajadas.length > 0) {
+                    <div style="position: relative; height: 260px; width: 100%; display: flex; justify-content: center;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                } @else {
+                    <div class="d-flex flex-column align-items-center justify-content-center text-muted"
+                        style="min-height: 260px;">
+                        <i class="bi bi-pie-chart fs-1 mb-2"></i>
+                        <p class="mb-0">No hay datos de categorías disponibles.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+
+        <div class="col-12 col-lg-6">
+            <div class="dash-card h-100 d-flex flex-column">
+                <h2 class="card-section-title">
+                    <i class="bi bi-calendar-check me-2" style="color: var(--primary-blue);"></i>
+                    Agenda de Hoy
+                </h2>
+                <div class="sequence-list flex-grow-1">
+                    @if (secuenciasAsignadas.length === 0) {
+                        <div class="d-flex flex-column align-items-center justify-content-center text-muted"
+                            style="min-height: 150px;">
+                            <i class="bi bi-cup-hot fs-1 mb-2"></i>
+                            <p>No hay rutinas programadas para hoy.</p>
+                        </div>
+                    } @else {
                         @for (sec of secuenciasAsignadas; track sec.id) {
-                        <div class="sequence-row">
-                            <div class="rank-badge"><i class="bi bi-card-checklist"></i></div>
+                        <div class="sequence-row" [ngStyle]="{'opacity': sec.estado === 'CADUCADA' ? '0.6' : '1'}">
+
+                            <div class="rank-badge" [ngStyle]="{
+                                'background-color': sec.estado === 'COMPLETADA' ? '#10b981' : (sec.estado === 'CADUCADA' ? '#ef4444' : '#94a3b8')
+                            }">
+                                <i class="bi" [ngClass]="{
+                                    'bi-check-lg': sec.estado === 'COMPLETADA', 
+                                    'bi-x-lg': sec.estado === 'CADUCADA', 
+                                    'bi-clock': sec.estado === 'PENDIENTE'
+                                }"></i>
+                            </div>
+
                             <div class="sequence-info">
-                                <span class="sequence-name">{{ sec.nombre }}</span>
-                                <span class="sequence-uses">{{ sec.completadas }} de {{ sec.total }} completadas • {{ sec.categoria }}</span>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="sequence-name"
+                                        [ngClass]="{'text-decoration-line-through text-muted': sec.estado === 'CADUCADA'}">
+                                        {{ sec.nombre }}
+                                    </span>
+
+                                    <span class="status-badge" [ngClass]="{
+                                        'badge-completed': sec.estado === 'COMPLETADA',
+                                        'bg-danger-subtle text-danger': sec.estado === 'CADUCADA',
+                                        'bg-secondary-subtle text-secondary': sec.estado === 'PENDIENTE'
+                                    }">
+                                        {{ sec.estado === 'COMPLETADA' ? 'Hecho' : (sec.estado === 'CADUCADA' ? 'No completado' : 'Pendiente') }}
+                                    </span>
+                                </div>
+                                <span class="sequence-uses mt-1">
+                                    <i class="bi bi-clock me-1"></i> {{ sec.franjaHoraria }} &nbsp;•&nbsp; {{ sec.categoria }}
+                                </span>
                             </div>
                         </div>
                         }
-                    </div>
+                    }
                 </div>
-            </div>
 
-            <div class="col-12 col-lg-6">
-                <div class="dash-card h-100">
-                    <h2 class="card-section-title">
-                        <i class="bi bi-activity me-2" style="color: var(--primary-blue);"></i>
-                        Actividad Reciente
-                    </h2>
-                    <div class="activity-list">
+                @if (agendaData && agendaData.page.totalPages > 1) {
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <button class="btn btn-light btn-sm shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 34px; height: 34px;" 
+                                [disabled]="agendaCurrentPage === 0" (click)="prevAgenda()">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <span class="text-muted small fw-medium">
+                            Página {{ agendaCurrentPage + 1 }} de {{ agendaData.page.totalPages }}
+                        </span>
+                        <button class="btn btn-light btn-sm shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 34px; height: 34px;" 
+                                [disabled]="agendaCurrentPage >= agendaData.page.totalPages - 1" (click)="nextAgenda()">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="dash-card h-100 d-flex flex-column">
+                <h2 class="card-section-title">
+                    <i class="bi bi-activity me-2" style="color: var(--primary-blue);"></i>
+                    Actividad Reciente
+                </h2>
+                <div class="activity-list flex-grow-1">
+                    @if (actividadReciente.length === 0) {
+                        <div class="d-flex flex-column align-items-center justify-content-center text-muted"
+                            style="min-height: 150px;">
+                            <p>No hay actividad registrada aún.</p>
+                        </div>
+                    } @else {
                         @for (act of actividadReciente; track act.id) {
                         <div class="activity-row">
                             <div class="avatar">{{ getInitials(act.secuencia) }}</div>
@@ -127,18 +200,37 @@
                             </span>
                         </div>
                         }
-                    </div>
+                    }
                 </div>
-            </div>
 
+                @if (activityData && activityData.page.totalPages > 1) {
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <button class="btn btn-light btn-sm shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 34px; height: 34px;" 
+                                [disabled]="actividadCurrentPage === 0" (click)="prevActividad()">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <span class="text-muted small fw-medium">
+                            Página {{ actividadCurrentPage + 1 }} de {{ activityData.page.totalPages }}
+                        </span>
+                        <button class="btn btn-light btn-sm shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 34px; height: 34px;" 
+                                [disabled]="actividadCurrentPage >= activityData.page.totalPages - 1" (click)="nextActividad()">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                }
+            </div>
         </div>
+
+    </div>
 
     } @else {
-        
-        <div class="dash-card d-flex flex-column justify-content-center align-items-center" style="min-height: 400px;">
-            <app-loading-component></app-loading-component>
-            <p class="dashboard-subtitle mt-3 fw-medium">Cargando estadísticas de {{ alumno()?.name }}...</p>
-        </div>
-        
+
+    <div class="dash-card d-flex flex-column justify-content-center align-items-center" style="min-height: 400px;">
+        <app-loading-component></app-loading-component>
+        <p class="dashboard-subtitle mt-3 fw-medium">Cargando estadísticas de {{ alumno()?.name }}...</p>
+    </div>
+
     }
 </div>
