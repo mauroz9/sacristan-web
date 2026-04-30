@@ -305,4 +305,8 @@ export class AlumnoDetailViewComponent implements OnInit, OnChanges {
   getInitials(name?: string, lastName?: string): string {
     return `${name?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase();
   }
+
+  viewReproductionDetail(reproductionId: number): void {
+    this.router.navigate(['/reproductions', reproductionId]);
+  }
 }

@@ -8,6 +8,7 @@ import { ContentNotFoundPage } from './views/pages/content-not-found-page/conten
 import { RoutineFormComponent } from './views/components/form-component/routine-form-component/routine-form-component';
 import { DashboardPage } from './views/pages/dashboard-page/dashboard-page';
 import { AlumnoDetailViewComponent } from './views/components/alumno-detail-view-component/alumno-detail-view-component';
+import { ReproductionDetailViewComponent } from './views/components/reproduction-detail-view-component/reproduction-detail-view-component';
 
 export const routes: Routes = [
     // --- RUTA PÚBLICA (LOGIN) ---
@@ -99,6 +100,12 @@ export const routes: Routes = [
     {
         path: 'students/detail/:id',
         component: AlumnoDetailViewComponent,
+        canActivate: [authGuard],
+        data: { showMenu: false }
+    },
+    {
+        path: 'reproductions/:id',
+        component: ReproductionDetailViewComponent,
         canActivate: [authGuard],
         data: { showMenu: false }
     },
