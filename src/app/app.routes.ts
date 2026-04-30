@@ -106,6 +106,7 @@ export const routes: Routes = [
     {
         path: 'reproductions/:id',
         component: ReproductionDetailViewComponent,
+        canActivate: [authGuard],
         data: { showMenu: false }
     },
 

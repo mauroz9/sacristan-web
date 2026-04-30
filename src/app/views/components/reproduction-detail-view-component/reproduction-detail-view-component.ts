@@ -23,20 +23,26 @@ export class ReproductionDetailViewComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.alumnosService.getReproductionDetail(+id).subscribe({
-        next: (data) => {
-          this.detail = data;
-          this.isLoading.set(false);
-        },
-        error: () => this.goBack()
-      });
+    if (!id) {
+      this.isLoading.set(false);
+      this.goBack();
+      return;
     }
-  }
 
-  getInitials(name?: string) {
-    if (!name) return '';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    const reproductionId = Number(id);
+    if (Number.isNaN(reproductionId)) {
+      this.isLoading.set(false);
+      this.goBack();
+      return;
+    }
+
+    this.alumnosService.getReproductionDetail(reproductionId).subscribe({
+      next: (data) => {
+        this.detail = data;
+        this.isLoading.set(false);
+      },
+      error: () => this.goBack()
+    });
   }
 
   goBack() { this.location.back(); }
