@@ -9,6 +9,7 @@ import { UserService } from "./extras/user-service";
 import { FormGroup } from "@angular/forms";
 import { SortParam } from "../interfaces/extras/content/content-interface";
 import { QuerySortParameters } from "../interfaces/extras/utils/sort-params-interface";
+import { ReproductionDetailDTO } from "../interfaces/reproducciones-interface";
 
 @Injectable({
     providedIn: 'root',
@@ -121,4 +122,8 @@ export class AlumnosService {
     getStudentActivity(id: number, page: number, size: number): Observable<ActivityPageResponse> {
         return this.http.get<ActivityPageResponse>(`${this.API_URL}/${id}/activity?page=${page}&size=${size}`);
     }
+
+    getReproductionDetail(reproductionId: number): Observable<ReproductionDetailDTO> {
+    return this.http.get<ReproductionDetailDTO>(`${this.API_URL}/reproductions/${reproductionId}/detail`);
+  }
 }

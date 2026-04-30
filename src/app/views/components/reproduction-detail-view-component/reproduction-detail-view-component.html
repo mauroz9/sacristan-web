@@ -1,0 +1,141 @@
+<div class="dashboard container py-4">
+    @if (isLoading()) {
+        <div class="dash-block d-flex flex-column justify-content-center align-items-center" style="min-height: 400px;">
+            <app-loading-component></app-loading-component>
+            <p class="text-muted mt-3 fw-medium">Cargando informe de la sesión...</p>
+        </div>
+    } @else if (detail) {
+
+        <!-- ================= BLOQUE 1: DETALLES BASE ================= -->
+        <div class="dash-block mb-4">
+            
+            <!-- Cabecera Superior -->
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-back rounded-circle d-flex align-items-center justify-content-center" (click)="goBack()">
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
+                    
+                    <!-- CAMBIADO: detail.status === 'COMPLETADA' -->
+                    <div class="status-circle" [ngClass]="detail.status === 'COMPLETADA' ? 'status-success' : 'status-warning'">
+                        <i class="bi" [ngClass]="detail.status === 'COMPLETADA' ? 'bi-check-lg' : 'bi-x-lg'"></i>
+                    </div>
+                    
+                    <div>
+                        <h1 class="sequence-title mb-0">{{ detail.sequenceTitle }}</h1>
+                        <p class="sequence-meta mb-0 mt-1">
+                            {{ detail.startedAt }}<br>
+                            Alumno: <span class="fw-medium">{{ detail.studentName }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- CAMBIADO: detail.status === 'COMPLETADA' y 'ABANDONADA' -->
+                <div class="badge-status fw-bold" [ngClass]="detail.status === 'COMPLETADA' ? 'badge-success' : 'badge-warning'">
+                    {{ detail.status === 'COMPLETADA' ? 'COMPLETADA' : (detail.status === 'ABANDONADA' ? 'ABANDONADA' : 'EN CURSO') }}
+                </div>
+            </div>
+
+            <!-- Cajas de Tiempos -->
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <div class="timing-box">
+                        <span class="t-label">Hora de Inicio</span>
+                        <span class="t-value">{{ detail.startedAt.split(' ')[1] || detail.startedAt }}</span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="timing-box">
+                        <span class="t-label">Hora de Fin</span>
+                        <span class="t-value">{{ detail.endedAt.split(' ')[1] || detail.endedAt }}</span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="timing-box">
+                        <span class="t-label">Duración Total</span>
+                        <span class="t-value">{{ detail.duration }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= BLOQUE 2: ACTIVIDAD POR PASO ================= -->
+        <div class="dash-block mb-4">
+            <h2 class="block-title">
+                <i class="bi bi-play-circle me-2 text-primary-custom"></i> Actividad por Paso
+            </h2>
+
+            <!-- Contenedor con scroll bloqueado internamente -->
+            <div class="steps-scroll-container mt-4">
+                @for (step of detail.steps; track step.stepIndex) {
+                    <div class="step-row d-flex align-items-center justify-content-between">
+                        
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="step-number">{{ step.stepIndex }}</div>
+                            <div>
+                                <h3 class="step-name mb-1">{{ step.text || 'Paso visual' }}</h3>
+                                <div class="step-stats">
+                                    <span class="text-muted">Veces reproducido:</span> <span class="fw-medium text-dark">{{ step.viewCount }}x</span> 
+                                    <span class="ms-3 text-muted">Tiempo gastado:</span> <span class="fw-medium text-dark">{{ step.timeActive }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-pill">
+                            {{ step.viewCount }} reproducciones
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+
+
+        <!-- ================= BLOQUE 3: INTERACCIONES BOTONES ================= -->
+        <div class="dash-block">
+            <h2 class="block-title">
+                <i class="bi bi-check-square me-2 text-primary-custom"></i> Interacciones con Botones
+            </h2>
+
+            <div class="row g-3 mt-3">
+                <!-- Abandonar -->
+                <div class="col-6 col-md-3">
+                    <div class="interaction-card inter-red">
+                        <div class="inter-icon"><i class="bi bi-x-circle-fill"></i></div>
+                        <div class="inter-value">{{ detail.buttonClicks.exit }}</div>
+                        <div class="inter-label">Abandonar</div>
+                    </div>
+                </div>
+
+                <!-- Anterior -->
+                <div class="col-6 col-md-3">
+                    <div class="interaction-card inter-orange">
+                        <div class="inter-icon"><i class="bi bi-skip-backward-fill"></i></div>
+                        <div class="inter-value">{{ detail.buttonClicks.previous }}</div>
+                        <div class="inter-label">Anterior</div>
+                    </div>
+                </div>
+
+                <!-- Siguiente -->
+                <div class="col-6 col-md-3">
+                    <div class="interaction-card inter-blue">
+                        <div class="inter-icon"><i class="bi bi-skip-forward-fill"></i></div>
+                        <div class="inter-value">{{ detail.buttonClicks.next }}</div>
+                        <div class="inter-label">Siguiente</div>
+                    </div>
+                </div>
+
+                <!-- Completar -->
+                <div class="col-6 col-md-3">
+                    <div class="interaction-card inter-green">
+                        <div class="inter-icon"><i class="bi bi-check-circle-fill"></i></div>
+                        <div class="inter-value">{{ detail.buttonClicks.complete }}</div>
+                        <div class="inter-label">Completar</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
